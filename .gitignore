@@ -1,0 +1,10 @@
+__pycache__/
+archive/
+skripsi/
+output/
+outputs/
+.venv/
+venv/
+.env
+*.zip
+.DS_Store

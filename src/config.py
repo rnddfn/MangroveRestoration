@@ -1,0 +1,23 @@
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+RASTER_PATH = ROOT / "data" / "processed" / "kelas_barito_64x32.npy"
+
+BUDGET = 10
+DISPERSAL_DISTANCE = 5.0
+TIMESTEPS = 50_000
+SEEDS = [0, 1, 2]
+N_EVAL = 20
+INVALID_PENALTY = 0.05
+REPEAT_INVALID_LIMIT = 3
+MIN_STEPS = 300
+STEPS_PER_BUDGET = 30
+GAMMA = 1.0
+ENT_COEF = 0.01
+NET_ARCH = [256, 256]
+REWARD_SCALE = 100.0
+N_ENVS = 4
+
+MANGROVE_CODES = [5, 76]
+RESTORABLE_CODES = [13, 21]
+LOCKED_CODES = [31, 40, 33, 0]
