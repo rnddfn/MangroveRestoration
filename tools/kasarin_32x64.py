@@ -14,8 +14,8 @@ from pathlib import Path
 
 import numpy as np
 
-TARGET_H = 32
-TARGET_W = 64
+TARGET_H = 48
+TARGET_W = 96
 
 
 def mayoritas_blok(arr: np.ndarray, h: int, w: int) -> np.ndarray:
@@ -57,8 +57,8 @@ def simpan_tif(path, data, crs, transform, nodata):
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--input", required=True, help="GeoTIFF hasil clip")
-    p.add_argument("--out-tif", default="kelas_mahakam_32x64.tif")
-    p.add_argument("--out-npy", default="kelas_mahakam_64x32.npy")
+    p.add_argument("--out-tif", default="KualaLupak.tif")
+    p.add_argument("--out-npy", default="KualaLupak.npy")
     p.add_argument("--tinggi", type=int, default=TARGET_H)
     p.add_argument("--lebar", type=int, default=TARGET_W)
     args = p.parse_args()

@@ -5,6 +5,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.vec_env import DummyVecEnv
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.wrappers import ActionMasker
+from pathlib import Path
 
 from src.env import RestorasiEnv
 from src.config import GAMMA, ENT_COEF, NET_ARCH, N_ENVS, REWARD_SCALE, TIMESTEPS
@@ -48,23 +49,40 @@ class ProgressLatih(BaseCallback):
         return True
 
 
-def _env_ppo():
-    return RestorasiEnv(pakai_penalti=True, reward_scale=REWARD_SCALE)
+def _factory(jenis, env_kw, reward_scale):
+    def buat():
+        kw = dict(env_kw or {})
+        if jenis == "ppo":
+            return RestorasiEnv(pakai_penalti=True, reward_scale=reward_scale, **kw)
+        env = RestorasiEnv(pakai_penalti=False, reward_scale=reward_scale, **kw)
+        return ActionMasker(env, lambda e: e.mask_aksi())
+
+    return buat
 
 
-def _env_mask():
-    env = RestorasiEnv(pakai_penalti=False, reward_scale=REWARD_SCALE)
-    return ActionMasker(env, lambda e: e.mask_aksi())
+def latih(jenis, seed, env_kw=None, timesteps=None, reward_scale=REWARD_SCALE):
+    steps = TIMESTEPS if timesteps is None else timesteps
+    Algo, nama = (PPO, "PPO") if jenis == "ppo" else (MaskablePPO, "MaskablePPO")
+    vec = DummyVecEnv([_factory(jenis, env_kw, reward_scale) for _ in range(N_ENVS)])
+    log_dir = Path(__file__).resolve().parents[1] / "outputs" / "tb"
+    log_dir.mkdir(parents=True, exist_ok=True)
 
-
-def latih(jenis, seed):
-    Algo, factory, nama = (PPO, _env_ppo, "PPO") if jenis == "ppo" else (MaskablePPO, _env_mask, "MaskablePPO")
-    vec = DummyVecEnv([factory for _ in range(N_ENVS)])
     model = Algo(
-        "MlpPolicy", vec, seed=seed, verbose=0, n_steps=256,
-        gamma=GAMMA, ent_coef=ENT_COEF, policy_kwargs=dict(net_arch=NET_ARCH),
+        "MlpPolicy",
+        vec,
+        seed=seed,
+        verbose=0,
+        n_steps=256,
+        gamma=GAMMA,
+        ent_coef=ENT_COEF,
+        policy_kwargs=dict(net_arch=NET_ARCH),
+        tensorboard_log=str(log_dir),
     )
     t0 = time.time()
-    model.learn(total_timesteps=TIMESTEPS, callback=ProgressLatih(TIMESTEPS, f"{nama} seed={seed}"))
+    model.learn(
+        total_timesteps=steps,
+        callback=ProgressLatih(steps, f"{nama} seed={seed}"),
+        tb_log_name=f"{nama}_seed{seed}",
+    )
     print()
     return model, time.time() - t0

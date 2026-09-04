@@ -44,3 +44,11 @@ def hitung_iic(habitat, luas_lanskap, jarak_max=DISPERSAL_DISTANCE):
     nilai = np.outer(luas, luas) / (1.0 + hop)
     nilai[np.isinf(hop)] = 0.0
     return float(nilai.sum()) / (luas_lanskap ** 2)
+
+
+def statistik_petak(habitat):
+    lbl, n_patch = label(habitat, structure=np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
+    if n_patch == 0:
+        return 0, 0
+    luas = np.bincount(lbl.ravel())[1:]
+    return int(n_patch), int(luas.max())
