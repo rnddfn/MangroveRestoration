@@ -27,8 +27,12 @@ class RestorasiEnv(gym.Env):
         biaya=None,
         pakai_penalti=False,
         reward_scale=1.0,
+        jarak_max=None,
+        reward_akhir=False,
+        ukuran_blok=1,
     ):
         super().__init__()
+        from src.config import DISPERSAL_DISTANCE
         kelas = np.load(path)
         self.kelas = kelas.astype(np.int16)
         self.H, self.W = kelas.shape
@@ -43,6 +47,9 @@ class RestorasiEnv(gym.Env):
         self.budget_awal = float(budget)
         self.pakai_penalti = pakai_penalti
         self.reward_scale = reward_scale
+        self.jarak_max = DISPERSAL_DISTANCE if jarak_max is None else float(jarak_max)
+        self.reward_akhir = bool(reward_akhir)
+        self.ukuran_blok = max(1, int(ukuran_blok))
         self.luas_lanskap = float((self.mangrove | self.restorable).sum())
         self.batas_langkah = max(MIN_STEPS, int(budget) * STEPS_PER_BUDGET)
         self.action_space = spaces.Discrete(self.n_sel)
@@ -59,7 +66,7 @@ class RestorasiEnv(gym.Env):
         self.biaya_terpakai = 0.0
         self.n_tanam = 0
         self.urutan = []
-        self.iic_awal = hitung_iic(self.habitat, self.luas_lanskap)
+        self.iic_awal = hitung_iic(self.habitat, self.luas_lanskap, self.jarak_max)
         self.iic = self.iic_awal
         self.n_invalid = 0
         self.langkah_ke = 0
@@ -110,21 +117,59 @@ class RestorasiEnv(gym.Env):
             and self.biaya_peta[r, c] <= self.sisa_budget
         )
 
+    def blok_dari(self, r, c):
+        """Sel bersebelahan yang ditanam dari jangkar (r, c), terikat budget."""
+        if not self._sah(r, c):
+            return []
+        sisa = self.sisa_budget
+        ambil = []
+        dilihat = set()
+        antrian = [(r, c)]
+        dilihat.add((r, c))
+        while antrian and len(ambil) < self.ukuran_blok:
+            y, x = antrian.pop(0)
+            hrg = float(self.biaya_peta[y, x])
+            if hrg > sisa:
+                continue
+            ambil.append((y, x))
+            sisa -= hrg
+            for dy, dx in TETANGGA:
+                ny, nx = y + dy, x + dx
+                if not (0 <= ny < self.H and 0 <= nx < self.W):
+                    continue
+                if (ny, nx) in dilihat:
+                    continue
+                dilihat.add((ny, nx))
+                if (
+                    self.restorable[ny, nx]
+                    and self.sudah_restore[ny, nx] == 0
+                    and (self.frontier[ny, nx] or (y, x) in ambil)
+                    and float(self.biaya_peta[ny, nx]) <= sisa
+                ):
+                    antrian.append((ny, nx))
+        return ambil
+
     def step(self, action):
         r, c = divmod(int(action), self.W)
-        valid = self._sah(r, c)
+        blok = self.blok_dari(r, c)
+        valid = len(blok) > 0
         if valid:
-            cost = float(self.biaya_peta[r, c])
-            self.sudah_restore[r, c] = 1
-            self.habitat[r, c] = True
+            cost = 0.0
+            for y, x in blok:
+                hrg = float(self.biaya_peta[y, x])
+                self.sudah_restore[y, x] = 1
+                self.habitat[y, x] = True
+                cost += hrg
+                self.n_tanam += 1
+                self.urutan.append(y * self.W + x)
+                self._buka_tetangga(y, x)
             self.sisa_budget -= cost
             self.biaya_terpakai += cost
-            self.n_tanam += 1
-            self.urutan.append(int(action))
-            self._buka_tetangga(r, c)
-            iic_baru = hitung_iic(self.habitat, self.luas_lanskap)
+            iic_baru = hitung_iic(self.habitat, self.luas_lanskap, self.jarak_max)
             reward = iic_baru - self.iic
             self.iic = iic_baru
+            if self.reward_akhir:
+                reward = 0.0
             self._aksi_invalid_beruntun = 0
             self._aksi_invalid_terakhir = None
         else:
@@ -139,6 +184,8 @@ class RestorasiEnv(gym.Env):
             self._aksi_invalid_beruntun >= REPEAT_INVALID_LIMIT
             or self.langkah_ke >= self.batas_langkah
         )
+        if self.reward_akhir and (selesai or trunc):
+            reward = self.iic - self.iic_awal
         return self._obs(), reward * self.reward_scale, selesai, trunc, self._info(valid)
 
     def _info(self, valid):

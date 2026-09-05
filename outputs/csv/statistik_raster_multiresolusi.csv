@@ -1,0 +1,4 @@
+resolusi,tinggi,lebar,total_sel,jumlah_mangrove,persen_mangrove,jumlah_restorable,persen_restorable,jumlah_patch,patch_terbesar,frontier_awal,jumlah_komponen_konektivitas,dispersal_distance,budget,iic_awal,kode_tidak_dikenali,jumlah_sel_tidak_dikenali,status,catatan,raster_path
+32x64,32,64,2048,293,14.306640625,339,16.552734375,29,118,101,3,5.0,20,0.10568322153742661,,0,AMAN,,C:\Users\lenov\Mangrove\data\processed\multires\kelas_kualalupak_32x64.npy
+48x96,48,96,4608,672,14.583333333333334,789,17.122395833333336,44,257,209,2,7.5,45,0.10520857127285455,35,1,PERLU_REVIEW,kelas_tidak_dikenali,C:\Users\lenov\Mangrove\data\processed\multires\kelas_kualalupak_48x96.npy
+64x128,64,128,8192,1179,14.39208984375,1476,18.017578125,70,457,370,3,10.0,80,0.1009545622739788,35,2,PERLU_REVIEW,kelas_tidak_dikenali,C:\Users\lenov\Mangrove\data\processed\multires\kelas_kualalupak_64x128.npy

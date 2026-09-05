@@ -60,7 +60,15 @@ def _factory(jenis, env_kw, reward_scale):
     return buat
 
 
-def latih(jenis, seed, env_kw=None, timesteps=None, reward_scale=REWARD_SCALE):
+def latih(
+    jenis,
+    seed,
+    env_kw=None,
+    timesteps=None,
+    reward_scale=REWARD_SCALE,
+    model_path=None,
+    run_name=None,
+):
     steps = TIMESTEPS if timesteps is None else timesteps
     Algo, nama = (PPO, "PPO") if jenis == "ppo" else (MaskablePPO, "MaskablePPO")
     vec = DummyVecEnv([_factory(jenis, env_kw, reward_scale) for _ in range(N_ENVS)])
@@ -82,7 +90,12 @@ def latih(jenis, seed, env_kw=None, timesteps=None, reward_scale=REWARD_SCALE):
     model.learn(
         total_timesteps=steps,
         callback=ProgressLatih(steps, f"{nama} seed={seed}"),
-        tb_log_name=f"{nama}_seed{seed}",
+        tb_log_name=run_name or f"{nama}_seed{seed}",
     )
     print()
+    if model_path is not None:
+        model_path = Path(model_path)
+        model_path.parent.mkdir(parents=True, exist_ok=True)
+        model.save(model_path)
+        print(f"Model tersimpan: {model_path}")
     return model, time.time() - t0

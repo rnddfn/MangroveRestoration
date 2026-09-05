@@ -2,7 +2,7 @@ import numpy as np
 from scipy.ndimage import label
 from scipy.spatial import cKDTree
 from scipy.sparse import csr_matrix
-from scipy.sparse.csgraph import shortest_path
+from scipy.sparse.csgraph import connected_components, shortest_path
 
 from src.config import DISPERSAL_DISTANCE
 
@@ -52,3 +52,33 @@ def statistik_petak(habitat):
         return 0, 0
     luas = np.bincount(lbl.ravel())[1:]
     return int(n_patch), int(luas.max())
+
+
+def jumlah_komponen_konektivitas(habitat, jarak_max=DISPERSAL_DISTANCE):
+    """Jumlah grup patch yang terhubung pada ambang dispersal tertentu."""
+    _, n_komponen = label_komponen_konektivitas(habitat, jarak_max)
+    return n_komponen
+
+
+def label_komponen_konektivitas(habitat, jarak_max=DISPERSAL_DISTANCE):
+    """Label komponen konektivitas per sel habitat; nonhabitat bernilai 0."""
+    lbl, n_patch = label(
+        habitat,
+        structure=np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]]),
+    )
+    if n_patch == 0:
+        return np.zeros_like(habitat, dtype=np.int32), 0
+    edges = _patch_edges(lbl, jarak_max)
+    if len(edges) == 0:
+        label_patch = np.arange(n_patch, dtype=np.int32)
+        n_komponen = n_patch
+    else:
+        graph = csr_matrix(
+            (np.ones(len(edges)), (edges[:, 0], edges[:, 1])),
+            shape=(n_patch, n_patch),
+        )
+        n_komponen, label_patch = connected_components(graph, directed=False)
+    label_sel = np.zeros_like(lbl, dtype=np.int32)
+    mask = lbl > 0
+    label_sel[mask] = label_patch[lbl[mask] - 1] + 1
+    return label_sel, int(n_komponen)

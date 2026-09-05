@@ -3,10 +3,40 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RASTER_PATH = ROOT / "data" / "processed" / "kelas_clip2.npy"
 
-BUDGET = 8
+RESOLUTION_CONFIG = {
+    "32x64": {
+        "raster_path": ROOT
+        / "data"
+        / "processed"
+        / "multires"
+        / "kelas_kualalupak_32x64.npy",
+        "dispersal_distance": 5.0,
+        "budget": 20,
+    },
+    "48x96": {
+        "raster_path": ROOT
+        / "data"
+        / "processed"
+        / "multires"
+        / "kelas_kualalupak_48x96.npy",
+        "dispersal_distance": 7.5,
+        "budget": 45,
+    },
+    "64x128": {
+        "raster_path": ROOT
+        / "data"
+        / "processed"
+        / "multires"
+        / "kelas_kualalupak_64x128.npy",
+        "dispersal_distance": 10.0,
+        "budget": 80,
+    },
+}
+
+BUDGET = 20
 DISPERSAL_DISTANCE = 5.0
 TIMESTEPS = 50_000
-SEEDS = [0, 1, 2]
+SEEDS = [0]
 N_EVAL = 20
 INVALID_PENALTY = 0.05
 REPEAT_INVALID_LIMIT = 3
@@ -22,15 +52,15 @@ MANGROVE_CODES = [5, 76]
 RESTORABLE_CODES = [13, 21]
 LOCKED_CODES = [31, 40, 33, 0]
 
-# 13 = tumbuhan non-hutan lain, 21 = pertanian lain
+# Kelas biaya restorasi
 KODE_MURAH = 13
 KODE_MAHAL = 21
 BIAYA_MURAH = 1
-BIAYA_MAHAL = 1
+BIAYA_MAHAL = 2
 
 BIAYA_DEFAULT = {KODE_MURAH: BIAYA_MURAH, KODE_MAHAL: BIAYA_MAHAL}
 
-# skenario uji
+# Skenario biaya
 SKENARIO_BIAYA = {
     "1:1": {13: 1, 21: 1},
     "1:2": {13: 1, 21: 2},

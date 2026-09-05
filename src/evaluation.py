@@ -1,8 +1,10 @@
+import heapq
+
 import numpy as np
 import pandas as pd
 
 from src.env import RestorasiEnv
-from src.iic import hitung_iic
+from src.iic import hitung_iic, label_komponen_konektivitas
 from src.config import N_EVAL
 
 
@@ -13,17 +15,28 @@ def aksi_acak(env, obs=None):
     return int(np.random.choice(pilihan))
 
 
+def _coba_blok(env, a):
+    r, c = divmod(int(a), env.W)
+    blok = env.blok_dari(r, c) if hasattr(env, "blok_dari") else [(r, c)]
+    if not blok:
+        return None, 0.0
+    coba = env.habitat.copy()
+    cost = 0.0
+    for y, x in blok:
+        coba[y, x] = True
+        cost += float(env.biaya_peta[y, x])
+    d = hitung_iic(coba, env.luas_lanskap, getattr(env, "jarak_max", 5.0)) - env.iic
+    return d, max(cost, 1e-9)
+
+
 def aksi_greedy(env, obs=None):
     pilihan = np.flatnonzero(env.mask_aksi())
     if pilihan.size == 0:
         return 0
     terbaik, dmax = int(pilihan[0]), -1e18
     for a in pilihan:
-        r, c = divmod(int(a), env.W)
-        coba = env.habitat.copy()
-        coba[r, c] = True
-        d = hitung_iic(coba, env.luas_lanskap) - env.iic
-        if d > dmax:
+        d, _ = _coba_blok(env, a)
+        if d is not None and d > dmax:
             dmax, terbaik = d, int(a)
     return terbaik
 
@@ -34,14 +47,96 @@ def aksi_greedy_biaya(env, obs=None):
         return 0
     terbaik, rasio_max = int(pilihan[0]), -1e18
     for a in pilihan:
-        r, c = divmod(int(a), env.W)
-        cost = max(float(env.biaya_peta[r, c]), 1e-9)
-        coba = env.habitat.copy()
-        coba[r, c] = True
-        d = hitung_iic(coba, env.luas_lanskap) - env.iic
+        d, cost = _coba_blok(env, a)
+        if d is None:
+            continue
         rasio = d / cost
         if rasio > rasio_max:
             rasio_max, terbaik = rasio, int(a)
+    return terbaik
+
+
+def _kandidat_rute_bridge(env):
+    """Frontier pada rute termurah yang menghubungkan dua komponen berbeda."""
+    label_komponen, n_komponen = label_komponen_konektivitas(
+        env.habitat,
+        env.jarak_max,
+    )
+    if n_komponen <= 1:
+        return []
+
+    h, w = env.H, env.W
+    n_sel = h * w
+    habitat = env.habitat.ravel()
+    tersedia = (
+        env.restorable & (env.sudah_restore == 0)
+    ).ravel()
+    bisa_dilalui = habitat | tersedia
+    biaya = env.biaya_peta.ravel()
+    pemilik = np.full(n_sel, -1, dtype=np.int32)
+    jarak = np.full(n_sel, np.inf, dtype=np.float64)
+    pendahulu = np.full(n_sel, -1, dtype=np.int64)
+    antrean = []
+
+    for idx in np.flatnonzero(habitat):
+        owner = int(label_komponen.ravel()[idx] - 1)
+        pemilik[idx] = owner
+        jarak[idx] = 0.0
+        heapq.heappush(antrean, (0.0, int(idx), owner))
+
+    terbaik = np.inf
+    pertemuan = None
+    while antrean:
+        d, u, owner = heapq.heappop(antrean)
+        if d != jarak[u] or owner != pemilik[u]:
+            continue
+        if d > terbaik:
+            break
+        y, x = divmod(u, w)
+        for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            ny, nx = y + dy, x + dx
+            if not (0 <= ny < h and 0 <= nx < w):
+                continue
+            v = ny * w + nx
+            if not bisa_dilalui[v]:
+                continue
+            tambah = 0.0 if habitat[v] else float(biaya[v])
+            nd = d + tambah
+            if pemilik[v] == -1 or (pemilik[v] == owner and nd < jarak[v]):
+                pemilik[v] = owner
+                jarak[v] = nd
+                pendahulu[v] = u
+                heapq.heappush(antrean, (nd, v, owner))
+            elif pemilik[v] != owner:
+                total = d + jarak[v]
+                if total < terbaik:
+                    terbaik = total
+                    pertemuan = (u, v)
+
+    if pertemuan is None or terbaik > env.sisa_budget:
+        return []
+
+    rute = set()
+    for awal in pertemuan:
+        u = awal
+        while u >= 0:
+            if not habitat[u]:
+                rute.add(int(u))
+            u = int(pendahulu[u])
+    return [a for a in rute if env._sah(*divmod(a, w))]
+
+
+def aksi_bridge(env, obs=None):
+    """Ambil langkah frontier menuju bridge termurah antarkomponen."""
+    kandidat = _kandidat_rute_bridge(env)
+    if not kandidat:
+        return aksi_greedy_biaya(env, obs)
+    terbaik, skor_max = kandidat[0], -1e18
+    for a in kandidat:
+        d, cost = _coba_blok(env, a)
+        skor = -1e18 if d is None else d / cost
+        if skor > skor_max:
+            terbaik, skor_max = int(a), skor
     return terbaik
 
 
