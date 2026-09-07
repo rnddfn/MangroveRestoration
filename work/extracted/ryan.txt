@@ -1,0 +1,3659 @@
+ANALISIS PENGARUH PERGANTIAN FUNGSI AKTIVASI
+PADA YOLOV8 UNTUK DETEKSI SAMPAH TERAPUNG DI
+
+           SUNGAI KERUH DI KOTA BANJARMASIN
+
+                                   SKRIPSI
+
+                                    OLEH:
+              MUHAMMAD RYAN RIZKY RAHMADI
+
+                            NIM. 2210817310001
+         PROGRAM STUDI TEKNOLOGI INFORMASI
+
+                           FAKULTAS TEKNIK
+            UNIVERSITAS LAMBUNG MANGKURAT
+
+                      BANJARMASIN, JUNI 2026
+ANALISIS PENGARUH PERGANTIAN FUNGSI AKTIVASI
+PADA YOLOV8 UNTUK DETEKSI SAMPAH TERAPUNG DI
+
+           SUNGAI KERUH DI KOTA BANJARMASIN
+
+                                     Skripsi
+
+                    Diajukan Untuk Memenuhi Salah Satu Syarat
+                          Sarjana Strata-1 Teknologi Informasi
+
+                                    OLEH:
+              MUHAMMAD RYAN RIZKY RAHMADI
+
+                            NIM. 2210817310001
+         PROGRAM STUDI TEKNOLOGI INFORMASI
+
+                           FAKULTAS TEKNIK
+            UNIVERSITAS LAMBUNG MANGKURAT
+
+                      BANJARMASIN, JUNI 2026
+                  PERNYATAAN
+
+Saya yang bertanda tangan dibawah ini:
+
+Nama              : Muhammad Ryan Rizky Rahmadi
+
+NIM               : 2210817310001
+
+Fakultas          : Teknik
+
+Prodi             : Teknologi Informasi
+
+Judul             : Analisis Pengaruh Pergantian Fungsi Aktivasi
+                  Pada YOLOv8 Untuk Deteksi Sampah
+                  Terapung Di Sungai Keruh Di Kota
+                  Banjarmasin
+
+Pembimbing Utama  : Dr. Ir. Yuslena Sari, S.Kom., M.Kom., IPM.
+
+Pembimbing Pendamping : Ir. Muhammad Alkaff S.Kom., M.Kom. Ph.D
+
+Dengan ini saya menyatakan bahwa dalam Skripsi ini tidak terdapat karya yang
+
+pernah diajukan untuk memperoleh gelar akademik di suatu perguruan tinggi, dan
+
+sepanjang pengetahuan saya, juga tidak terdapat karya atau pendapat yang pernah
+
+ditulis atau diterbitkan oleh orang lain, kecuali secara tertulis diacu dalam naskah
+
+ini dan disebutkan dalam daftar rujukan.
+
+                                             Banjarmasin, 04 Juni 2026
+
+                                             Penulis,
+
+                                             Muhammad Ryan Rizky Rahmadi
+                                             NIM. 2210817310001
+
+                                          i
+                               LEMBAR PENGESAHAN
+
+               SKRIPSI PROGRAM STUDI S-1 TEKNOLOGI INFORMASI
+       Analisis Pengaruh Pergantian Fungsi Aktivasi Pada YOLOv8 Untuk Deteksi
+
+                  Sampah Terapung Di Sungai Keruh Di Kota Banjarmasin
+                                                     Oleh
+
+                       Muhammad Ryan Rizky Rahmadi (2210817310001)
+
+       Telah dipertahankan di depan Tim Penguji pada 05 Juni 2026 dan dinyatakan
+                                                LULUS
+
+Komite Penguji :
+
+Ketua       : Muti'a Maulida, S.Kom, M.T.I
+
+                  NIP. 198810272019032013                         ............................
+
+Anggota 1   : Muhammad Fajrian Noor, S.Kom., M.Kom
+
+                  NIP. 199611092023211009                         ............................
+
+Anggota 2   : Andreyan Rizky Baskara, S.Kom., M.Kom.
+
+                  NIP. 199307032019031011                         ............................
+
+Pembimbing  : Dr. Ir. Yuslena Sari, S.Kom., M.Kom., IPM.
+
+Utama             NIP. 198411202015042002                         ............................
+
+Pembimbing  : Ir. Muhammad Alkaff S.Kom., M.Kom. Ph.D
+
+Pendamping        NIP. 198606132015041001                         ............................
+
+                         Banjarbaru,............................
+
+                         Diketahui dan disahkan oleh:
+
+Wakil Dekan Bidang Akademik  Koordinator Program Studi
+
+Fakultas Teknik ULM,         S-1 Teknologi Informasi,
+
+Dr. Mahmud, S.T., M.T.          Andreyan Rizky Baskara, S.Kom., M.Kom.
+NIP. 197401071998021001         NIP. 199307032019031011
+
+                             ii
+              PERSETUJUAN MAJU SIDANG SKRIPSI
+
+ANALISIS PENGARUH PERGANTIAN FUNGSI AKTIVASI PADA YOLOV8
+  UNTUK DETEKSI SAMPAH TERAPUNG DI SUNGAI KERUH DI KOTA
+                                       BANJARMASIN
+
+                                             OLEH
+                       MUHAMMAD RYAN RIZKY RAHMADI
+
+                                    NIM. 2210817310001
+
+             Telah diperiksa dan terpenuhi semua persyaratan akademik,
+              administrasi, dan disetujui untuk dipertahankan di hadapan
+
+                                         dewan penguji
+
+                                         Banjarmasin,
+                                          07 Mei 2026
+                                    Pembimbing Utama,
+
+                       Dr.Ir.Yuslena Sari, S.Kom., M.Kom., IPM
+                                NIP. 198411202015042002
+                                Pembimbing Pendamping,
+
+                    Ir. Muhammad Alkaff, S.Kom., M.Kom., Ph.D
+                                NIP. 198606132015041001
+
+                                                iii
+                                   ABSTRAK
+
+Pencemaran sungai akibat keberadaan sampah mengapung dan pertumbuhan
+tanaman air menjadi salah satu permasalahan lingkungan yang perlu mendapat
+perhatian serius. Kondisi sungai yang keruh serta kompleksitas visual lingkungan
+menyebabkan proses identifikasi objek menjadi lebih sulit jika dilakukan secara
+manual. Oleh karena itu, penelitian ini bertujuan untuk mengembangkan model
+deteksi objek berbasis YOLOv8 dalam mendeteksi sampah mengapung dan
+tanaman sungai, serta menganalisis pengaruh penggunaan fungsi aktivasi terhadap
+performa model. Penelitian ini menggunakan empat variasi fungsi aktivasi, yaitu
+SiLU, ReLU, LeakyReLU, dan HardSwish. Dataset yang digunakan merupakan
+dataset lokal yang dikumpulkan langsung dari lingkungan sungai keruh, dengan
+proses anotasi dilakukan secara manual menggunakan bounding box. Hasil
+penelitian menunjukkan bahwa model YOLOv8 mampu melakukan deteksi objek
+dengan baik pada kondisi lingkungan yang kompleks, dengan nilai mAP@0.5 di
+atas 0.65 pada seluruh variasi fungsi aktivasi. Aktivasi HardSwish menghasilkan
+nilai mAP@0.5 tertinggi sebesar 0.6793, sedangkan ReLU menghasilkan nilai
+precision tertinggi sebesar 0.6728 dan mAP@0.5:0.95 tertinggi sebesar 0.3027.
+Aktivasi LeakyReLU menunjukkan nilai recall tertinggi sebesar 0.6756. Perbedaan
+performa antar fungsi aktivasi tidak terlalu signifikan, namun menunjukkan adanya
+karakteristik masing-masing dalam menyeimbangkan nilai precision dan recall.
+Selain itu, hasil penelitian juga dipengaruhi oleh karakteristik dataset lokal yang
+memiliki kompleksitas visual tinggi serta proses anotasi manual yang dapat
+memengaruhi kualitas data.
+Kata kunci: deteksi objek, fungsi aktivasi, sampah mengapung, sungai keruh,
+YOLOv8
+
+                                                iv
+                                   ABSTRACT
+
+River pollution caused by floating waste and aquatic plants has become an
+environmental issue that requires serious attention. The turbid condition of river
+water and the complexity of the surrounding environment make object identification
+difficult when performed manually. Therefore, this study aims to develop an object
+detection model based on YOLOv8 to detect floating waste and river plants, as well
+as to analyze the effect of different activation functions on model performance. This
+study uses four activation functions, namely SiLU, ReLU, LeakyReLU, and
+HardSwish. The dataset used is a locally collected dataset from turbid river
+environments, with manual annotation performed using bounding boxes. The
+results show that the YOLOv8 model is capable of detecting objects effectively in
+complex conditions, achieving mAP@0.5 values above 0.65 across all activation
+functions. The HardSwish activation achieves the highest mAP@0.5 value of
+0.6793, while ReLU provides the highest precision of 0.6728 and the highest
+mAP@0.5:0.95 value of 0.3027. Meanwhile, LeakyReLU achieves the highest
+recall of 0.6756. Although the performance differences among activation functions
+are not significant, each function shows distinct characteristics in balancing
+precision and recall. In addition, the results are influenced by the complexity of the
+local dataset and the manual annotation process.
+Keywords: activation function, floating waste, object detection, turbid river,
+YOLOv8
+
+                                                 v
+                      HALAMAN PERSEMBAHAN
+
+Penulis mempersembahkan Skripsi ini kepada:
+    1. Denny Rahmadi (Papah), Layla Zulfa Naily (Mama), Nia Danila Dwi
+         Rahmadi (Ading), Alvin Ghaniya Nur Rahmadi (Dede) dan keluarga yang
+         sangat telah membantu dan memberikan semangat serta doa yang tidak
+         pernah putus dalam menyelesaikan skripsi ini.
+    2. Ibu Dr. Ir. Yuslena Sari, S.Kom., M.Kom., IPM selaku dosen pembimbing
+         utama yang telah meluangkan waktu, tenaga, dan pikiran dalam
+         memberikan arahan, masukan, serta bimbingan kepada penulis selama
+         proses penyusunan Skripsi ini.
+    3. Bapak Ir. Muhammad Alkaff, S.Kom., M.Kom., Ph.D selaku dosen
+         pembimbing pendamping yang telah memberikan masukan, arahan, serta
+         dukungan kepada penulis selama proses penelitian dan penyusunan Skripsi
+         ini.
+    4. Abang Adid dan Kaka Erika yang telah banyak memberikan arahan,
+         bantuan, pengalaman, dan dukungan kepada penulis selama masa
+         perkuliahan hingga penyusunan Skripsi ini.
+    5. Bapak Andreyan Rizky Baskara, S.Kom., M.Kom selaku Koordinator
+         Program Studi Teknologi Informasi yang telah memberikan arahan,
+         masukan, serta perhatian kepada penulis selama menempuh pendidikan
+         hingga penyelesaian Skripsi ini.
+    6. Tim Kece "ShootBro", yaitu Zaki, Zein, Shandy, Abang Syauqi, dan Abang
+         Renald, yang selalu menemani, berbagi cerita, saling membantu, serta
+         memberikan semangat selama masa perkuliahan dan penyusunan Skripsi
+         ini.
+    7. Sahabat penulis, Irfan, yang sedang menempuh pendidikan di Sekolah
+         Tinggi Ilmu Statistik (STIS), yang memberikan dukungan dan semangat
+         walau jarak sangat jauh.
+    8. Diri sendiri yang telah mampu bertahan, bangkit, dan terus berjuang dalam
+         melewati berbagai tantangan selama masa perkuliahan hingga akhirnya
+         dapat menyelesaikan Skripsi ini. Serta seluruh pihak yang telah memberikan
+         bantuan, dukungan, dan doa yang tidak dapat disebutkan satu per satu.
+
+                                                vi
+                            KATA PENGANTAR
+
+     Puji dan syukur penulis panjatkan ke hadirat Allah SWT yang telah
+melimpahkan rahmat, kesehatan, dan kekuatan, sehingga penulis dapat
+menyelesaikan skripsi yang berjudul "Analisis Pengaruh Pergantian Fungsi
+Aktivasi pada YOLOv8 untuk Deteksi Sampah Terapung di Sungai Keruh di Kota
+Banjarmasin" dengan baik. Shalawat serta salam semoga tercurah kepada
+junjungan kita Nabi Besar Muhammad SAW yang telah membawa umat manusia
+dari zaman kegelapan menuju zaman yang penuh ilmu pengetahuan.
+
+     Skripsi ini disusun sebagai salah satu syarat untuk memperoleh gelar Sarjana
+Strata-1 (S1) pada Program Studi Teknologi Informasi, Fakultas Teknik,
+Universitas Lambung Mangkurat, Banjarmasin. Penulis menyadari bahwa
+penyusunan skripsi ini tidak terlepas dari dukungan, bantuan, dan bimbingan dari
+berbagai pihak. Oleh karena itu, penulis ingin menyampaikan rasa terima kasih
+yang sebesar-besarnya kepada:
+
+    1. Allah Subhanahu Wa Ta'ala atas segala nikmat, kesehatan, dan kesempatan
+         yang diberikan sehingga penulis dapat menyelesaikan skripsi ini dengan
+         baik.
+
+    2. Orang tua, saudara dan seluruh keluarga yang selalu memberikan doa,
+         dukungan, dan semangat kepada penulis selama proses penyusunan skripsi
+         ini.
+
+    3. Ibu Dr. Ir. Yuslena Sari, S.Kom., M.Kom., IPM selaku Pembimbing Utama
+         yang telah meluangkan waktu, tenaga, dan pikiran dalam memberikan
+         bimbingan serta arahan kepada penulis hingga skripsi ini dapat
+         terselesaikan.
+
+    4. Bapak Ir. Muhammad Alkaff, S.Kom., M.Kom., Ph.D selaku Pembimbing
+         Pendamping yang telah memberikan masukan, arahan, dan dukungan
+         selama proses penelitian.
+
+    5. Seluruh dosen dan staf Program Studi Teknologi Informasi yang telah
+         memberikan ilmu dan bantuan selama penulis menempuh pendidikan.
+
+    6. Teman-teman seperjuangan yang telah memberikan dukungan, motivasi,
+         dan kebersamaan selama masa perkuliahan dan penyusunan skripsi.
+
+    Penulis menyadari bahwa skripsi ini masih jauh dari sempurna. Oleh karena itu,
+
+                                                vii
+penulis sangat mengharapkan kritik dan saran yang membangun untuk perbaikan di
+masa yang akan datang. Akhir kata, penulis berharap skripsi ini dapat memberikan
+manfaat bagi pembaca serta menjadi referensi bagi penelitian selanjutnya,
+khususnya di bidang deteksi objek dan pengolahan citra berbasis deep learning.
+
+    Skripsi ini terdiri dari beberapa bab dengan sistematika penulisan sebagai
+berikut:
+
+    · BAB I: Pendahuluan, yang mencakup latar belakang, rumusan masalah,
+         batasan masalah, tujuan penelitian, dan manfaat penelitian.
+
+    · BAB II: Tinjauan Pustaka, berisi landasan teori, penelitian terkait, dan
+         kerangka pemikiran.
+
+    · BAB III: Metodologi Penelitian, meliputi alat dan bahan serta alur
+         penelitian.
+
+    · BAB IV: Hasil dan Pembahasan, yang memaparkan hasil penelitian serta
+         analisisnya.
+
+    · BAB V: Kesimpulan dan Saran, yang berisi kesimpulan dari hasil penelitian
+         serta saran untuk pengembangan lebih lanjut.
+
+                                                   Banjarmasin, 04 Juni 2026
+                                                   Penulis,
+
+                                                   Muhammad Ryan Rizky Rahmadi
+                                                   NIM. 2210817310001
+
+                                                viii
+                                    DAFTAR ISI
+
+PERNYATAAN....................................................................................................... i
+LEMBAR PENGESAHAN .................................................................................... ii
+PERSETUJUAN MAJU SIDANG SKRIPSI ........................................................ iii
+ABSTRAK ............................................................................................................. iv
+ABSTRACT .............................................................................................................. v
+HALAMAN PERSEMBAHAN............................................................................. vi
+KATA PENGANTAR .......................................................................................... vii
+DAFTAR ISI.......................................................................................................... ix
+DAFTAR GAMBAR ............................................................................................ xii
+DAFTAR TABEL................................................................................................ xiv
+DAFTAR LAMPIRAN ......................................................................................... xv
+DAFTAR RIWAYAT HIDUP............................................................................. xvi
+BAB I PENDAHULUAN ....................................................................................... 1
+
+  1.1 Latar Belakang ........................................................................................ 1
+  1.2 Rumusan Masalah ................................................................................... 7
+  1.3 Batasan Masalah...................................................................................... 7
+  1.4 Tujuan Penelitian .................................................................................... 8
+  1.5 Manfaat Penelitian .................................................................................. 8
+BAB II TINJAUAN PUSTAKA........................................................................... 10
+  2.1 Penelitian Terkait .................................................................................. 10
+
+     2.1.1 An Enhanced YOLOv8 Model for Accurate Detection of Solid Floating
+     Waste 10
+     2.1.2 Adaptive Water Waste Processing Using Computer Vision and Monte
+     Carlo Simulation............................................................................................ 11
+     2.1.3 Real-time Detection of Floating Debris in Waterways Using YOLOv8
+
+                                                ix
+               12
+     2.1.4 A Comparative Analysis of Activation Functions in Neural Networks
+     Unveiling Categories ..................................................................................... 13
+     2.1.5 A Comparative Study of Modern Activation Functions on Multi-Label
+     CNNs to Predict Genres Based on Movie Posters......................................... 14
+  2.2 Landasan Teori...................................................................................... 18
+     2.2.1 Sampah Mengapung.......................................................................... 18
+     2.2.2 Sungai Keruh..................................................................................... 19
+     2.2.3 Computer Vision ............................................................................... 20
+     2.2.4 YOLOv8............................................................................................ 21
+     2.2.5 Fungsi Aktivasi ................................................................................. 24
+     2.2.6 Evaluasi Metrics................................................................................ 27
+  2.3 Kerangka Pemikiran.............................................................................. 29
+BAB III METODOLOGI PENELITIAN.............................................................. 30
+  3.1 Alat dan Bahan ...................................................................................... 30
+  3.2 Lokasi/Objek Penelitian ........................................................................ 31
+     3.2.1 Lokasi ................................................................................................ 31
+     3.2.2 Objek ................................................................................................. 31
+  3.3 Alur Penelitian ...................................................................................... 32
+     3.3.1 Identifikasi Masalah .......................................................................... 32
+     3.3.2 Studi Literatur ................................................................................... 33
+     3.3.3 Pengumpulan Data ............................................................................ 34
+     3.3.4 Pre-Processing Data ......................................................................... 37
+     3.3.5 Pembelajaran Pembuatan Model....................................................... 39
+     3.3.6 Evaluasi Model ................................................................................. 41
+     3.3.7 Analisis Hasil .................................................................................... 42
+
+                                                 x
+BAB IV HASIL DAN PEMBAHASAN ............................................................. 44
+  4.1 Pengumpulan Data ................................................................................ 44
+  4.2 Pre-processing Data ............................................................................. 45
+     4.2.1 Resize ................................................................................................ 45
+     4.2.2 Anotasi Data...................................................................................... 46
+     4.2.3 Pembagian Dataset ............................................................................ 48
+  4.3 Implementasi Model.............................................................................. 48
+     4.3.1 Arsitektur Model ............................................................................... 49
+     4.3.2 Konfigurasi Pelatihan........................................................................ 49
+  4.4 Eksperimen Model ................................................................................ 50
+     4.4.1 Pelatihan Model SiLU....................................................................... 51
+     4.4.2 Pelatihan Model ReLU...................................................................... 52
+     4.4.3 Pelatihan Model LeakyReLU ............................................................ 55
+     4.4.4 Pelatihan Model HardSwish.............................................................. 57
+  4.5 Evaluasi Model ..................................................................................... 59
+  4.6 Analisis Hasil ........................................................................................ 61
+
+BAB V KESIMPULAN DAN SARAN................................................................ 63
+  5.1 Kesimpulan ........................................................................................... 63
+  5.2 Saran...................................................................................................... 64
+
+DAFTAR PUSTAKA ........................................................................................... 65
+LAMPIRAN.......................................................................................................... 71
+
+                                                xi
+                               DAFTAR GAMBAR
+
+Gambar 1.1 Sampah Sungai .................................................................................... 1
+Gambar 2.1 Sampah Mengapung .......................................................................... 18
+Gambar 2.2 Sungai Keruh..................................................................................... 19
+Gambar 2.3 Computer Vision................................................................................ 20
+Gambar 2.4 Struktur Arsitektur YOLOv8 ............................................................ 22
+Gambar 2.5 Kerangka Pemikiran .......................................................................... 29
+Gambar 3.1 Objek Sampah Terapung ................................................................... 31
+Gambar 3.2 Alur Penelitian................................................................................... 32
+Gambar 3.3 Alur Pengumpulan Data .................................................................... 34
+Gambar 3.4 Dataset Public.................................................................................... 35
+Gambar 3.5 Contoh Dataset Lokal........................................................................ 36
+Gambar 3.6 Alur Pre-Prosessing........................................................................... 37
+Gambar 3.7 Anotasi pada Dataset ......................................................................... 38
+Gambar 3.8 Ilustrasi Modifikasi Arsitektur YOLOv8 dengan Penggantian Fungsi
+Aktivasi ................................................................................................................. 39
+Gambar 4. 1 Citra Dataset ..................................................................................... 44
+Gambar 4. 2 Perbandingan Ukuran Citra Sebelum dan Sesudah Resize............... 46
+Gambar 4. 3 Anotasi Data pada Dataset ............................................................... 47
+Gambar 4. 4 Pembagian Dataset ........................................................................... 48
+Gambar 4. 5 Modifikasi Arsitektur ....................................................................... 49
+Gambar 4. 6 Hasil Pelatihan Model YOLOv8 dengan Aktivasi SiLU ................. 51
+Gambar 4. 7 Hasil Pelatihan Model YOLOv8 dengan Aktivasi ReLU ................ 52
+Gambar 4. 8 Hasil Validasi Model YOLOv8 dengan Aktivasi ReLU.................. 54
+
+                                                xii
+Gambar 4. 9 Hasil Pelatihan Model YOLOv8 dengan Aktivasi LeakyReLU ...... 55
+Gambar 4. 10 Hasil Validasi Model YOLOv8 dengan Aktivasi LeakyReLU ...... 56
+Gambar 4. 11 Hasil Pelatihan Model YOLOv8 dengan Aktivasi HardSwish ...... 57
+Gambar 4. 12 Hasil Validasi Model YOLOv8 dengan Aktivasi HardSwish........ 58
+
+                                                xiii
+                                 DAFTAR TABEL
+
+Tabel 2.1 Penelitian Terkait .................................................................................. 15
+Tabel 3.1 Alat dan Bahan Penelitian..................................................................... 30
+Tabel 3.2 Spesifikasi Perangkat Pelatihan ............................................................ 40
+Tabel 3.3 Parameter Pelatihan ............................................................................. 41
+Tabel 3.4 Evaluasi Model ..................................................................................... 42
+Tabel 4. 1 Pembagian Dataset ............................................................................... 48
+Tabel 4. 2 Parameter Pelatihan ............................................................................. 50
+Tabel 4. 3 Hasil Pelatihan Model YOLOv8 dengan Aktivasi SiLU ..................... 52
+Tabel 4. 4 Hasil Pelatihan Model YOLOv8 dengan Aktivasi ReLU .................... 53
+Tabel 4. 5 Hasil Pelatihan Model YOLOv8 dengan Aktivasi LeakyReLU .......... 56
+Tabel 4. 6 Hasil Pelatihan Model YOLOv8 dengan Aktivasi Hardswish ............ 58
+Tabel 4. 7 Hasil Evaluasi Model YOLOv8 pada Data Test .................................. 59
+Tabel 4. 8 Selisih Performa Antar Fungsi Aktivasi (Dibandingkan SiLU) .......... 61
+
+                                                xiv
+                              DAFTAR LAMPIRAN
+
+Lampiran 1. Lembar Konsultasi............................................................................ 71
+Lampiran 2. Validasi Datasets .............................................................................. 72
+Lampiran 3. Source Code Training Model ........................................................... 74
+Lampiran 4. Source Code Test Model .................................................................. 94
+
+                                                xv
+                    DAFTAR RIWAYAT HIDUP
+
+                    Nama Lengkap  : Muhammad Ryan Rizky Rahmadi
+
+                    TTL           : Banjarmasin, 19 Desember 2003
+
+                    Alamat        : Jl. Simpang Belitung No.38, RT/RW
+
+                                  001/001, Kuin Selatan, Banjarmasin
+
+                                  Barat, Kota Banjarmasin, Kalimantan
+
+                                  Selatan
+
+Agama                       : Islam
+Kewarganegaraan             : Indonesia
+Riwayat Pendidikan          : SDN SN Pasar Lama 1
+
+                               SMPN 1 Banjarmasin
+                               SMAN 1 Banjarmasin
+
+                            xvi
+                       1 BAB I
+                    PENDAHULUAN
+
+1.1 Latar Belakang
+
+     Sampah menjadi salah satu permasalahan lingkungan yang paling menonjol
+di berbagai negara, termasuk Indonesia. Peningkatan jumlah penduduk,
+pertumbuhan kawasan perkotaan, serta perubahan pola konsumsi berkontribusi
+terhadap meningkatnya volume sampah setiap tahunnya [1], [2]. Keberagaman
+jenis sampah seperti organik, plastik, logam, kaca, dan residu berbahaya
+menjadikan pengelolaan sampah sebagai tantangan yang kompleks dan
+memerlukan sistem penanganan yang terencana [3]. Di Indonesia, sekitar 35,67%
+atau ±11,3 juta ton sampah tidak terkelola dengan baik setiap tahun sehingga
+berpotensi mencemari lingkungan dan menurunkan kualitas ekosistem perairan
+[4]. Sungai merupakan jalur utama perpindahan sampah dari daratan menuju laut
+[5]. Penelitian menunjukkan bahwa 1,15 hingga 2,41 juta ton sampah plastik
+masuk ke laut melalui aliran sungai setiap tahun, dan sekitar 1.000 sungai dunia
+menyumbang hampir 80% total emisi sampah plastik ke lautan [5], [6].
+Keberadaan sampah terapung ini memberikan dampak negatif bagi aliran air,
+kualitas lingkungan, kesehatan masyarakat, serta menurunkan estetika perkotaan
+[7], [8]. Indonesia, sebagai salah satu kontributor utama sampah laut global,
+menghadapi tantangan besar dalam mengendalikan sampah di wilayah sungai [6].
+
+                                        Gambar 1.1 Sampah Sungai
+
+       Kota Banjarmasin, yang dikenal sebagai Kota Seribu Sungai, memiliki
+jaringan sungai yang sangat vital bagi aktivitas sosial dan ekonomi masyarakat
+[9]. Namun, sungai-sungai tersebut menghadapi tekanan pencemaran akibat
+
+                                               1
+                                                                                                2
+
+aktivitas domestik, perdagangan, serta kebiasaan pembuangan sampah langsung
+ke badan air [10]. Tingkat kekeruhan air yang tinggi turut memperburuk kondisi
+tersebut. Pada Sungai Martapura, parameter Total Suspended Solids (TSS)
+menunjukkan nilai yang masih berada dalam kisaran baku mutu, namun tetap
+berperan dalam menurunkan kejernihan air. Warna air yang tampak cokelat pekat
+terutama disebabkan oleh tingginya beban sedimen halus, zat organik, serta bahan
+pencemar domestik yang berkontribusi terhadap kekeruhan sungai. Kondisi ini
+selaras dengan hasil penelitian yang menunjukkan bahwa Sungai Martapura
+berada pada kategori tercemar berat berdasarkan metode STORET, yang
+dipengaruhi oleh tingginya konsentrasi bahan organik, nutrien, dan kontaminan
+lain di sepanjang alirannya [11]. Selain itu, keberadaan sampah makro seperti
+plastik, styrofoam, dan ranting memperburuk kondisi fisik sungai dengan
+menghambat aliran air serta menambah risiko banjir [12] .
+
+       Lingkungan sungai dengan tingkat kekeruhan tinggi menjadi tantangan
+dalam proses pemantauan sampah. Pantulan cahaya, riak air, bayangan, serta ciri
+visual objek yang menyatu dengan latar belakang membuat sampah terapung sulit
+dikenali melalui pengamatan langsung [13]. Sebagian besar dataset publik yang
+digunakan pada penelitian deteksi sampah terapung sebelumnya dikumpulkan
+pada perairan dengan tingkat kejernihan relatif baik dan visibilitas yang lebih
+stabil, sehingga belum sepenuhnya merepresentasikan kondisi sungai keruh
+dengan gangguan visual tinggi [13], [14], [15]. Kondisi ini menyebabkan banyak
+objek terlewat, terutama saat pencahayaan berubah-ubah, sehingga metode
+pemantauan manual tidak mampu menyediakan data yang akurat dan konsisten.
+Waktu pengamatan yang terbatas membuat fluktuasi sampah bersifat episodik,
+seperti setelah hujan deras, sering tidak tercatat [16]. Akurasi pengamatan juga
+dipengaruhi oleh cuaca, sudut pandang, dan subjektivitas [13], [17]. Keterbatasan
+tersebut menunjukkan perlunya pendekatan teknologi yang lebih objektif dan
+stabil. Perkembangan artificial intelligence, khususnya Computer Vision,
+menawarkan solusi yang lebih efektif karena mampu mengenali objek secara
+otomatis dari citra atau video [17]. Teknologi ini memungkinkan proses
+pemantauan yang lebih konsisten dan dapat diandalkan pada kondisi visual yang
+kompleks seperti sungai keruh.
+                                                                                                3
+
+       Kemajuan artificial intelligence, khususnya dalam bidang Computer Vision,
+membuka peluang baru dalam sistem pemantauan sampah. Computer Vision
+memungkinkan komputer mengenali dan memahami objek pada citra atau video
+dengan cara mengekstraksi fitur visual secara otomatis [13], [18]. Teknologi ini
+telah banyak digunakan dalam berbagai bidang, termasuk pemantauan lingkungan
+dan deteksi sampah di perairan [13], [14]. Salah satu algoritma yang banyak
+digunakan dalam deteksi objek adalah You Only Look Once (YOLO) [14]. YOLO
+mampu melakukan deteksi objek dalam satu tahap pemrosesan sehingga cepat,
+efisien, dan cocok untuk aplikasi real-time [14], [19]. Tantangan utama dalam
+implementasi YOLO terletak pada kemampuan generalisasi model [15].
+Generalisasi mengacu pada kemampuan model mendeteksi objek pada kondisi
+yang berbeda dari data pelatihan. Berbagai penelitian menunjukkan penurunan
+akurasi model deteksi ketika diterapkan pada lingkungan dengan pencahayaan
+tidak stabil, visibilitas rendah, dan latar belakang dinamis[13], [15]. Pada sungai
+keruh, bentuk dan warna sampah sering menyatu dengan latar belakang sehingga
+fitur objek sulit dibedakan secara konsisten [13]. Sebagian besar penelitian
+sebelumnya terkait deteksi sampah belum secara khusus menargetkan lingkungan
+sungai keruh [13]. Penelitian yang dikembangkan oleh Qiao et al, misalnya,
+menggunakan dataset yang berasal dari sungai dengan tingkat visibilitas yang
+relatif baik sehingga tidak merepresentasikan kondisi ekstrem seperti di
+Banjarmasin [13]. Penelitian Jeong et al. yang memanfaatkan sensor multispektral
+untuk deteksi sampah di laut pun tidak mempertimbangkan gangguan visual khas
+air keruh [20]. Demikian pula penelitian Kim et al. yang menargetkan sampah
+terapung menggunakan Computer Vision, namun kondisi sungai dalam penelitian
+tersebut tidak memiliki tingkat kekeruhan setinggi sungai-sungai di Kalimantan
+Selatan [19]. Keterbatasan ini menunjukkan bahwa isu generalisasi masih menjadi
+permasalahan utama pada model deteksi objek berbasis deep learning [15].
+
+       Penelitian ini berfokus pada kondisi sungai di Kota Banjarmasin yang
+secara umum mengalami tingkat pencemaran dan kekeruhan [9], [11]. Berbagai
+kajian lingkungan menunjukkan bahwa sungai-sungai di wilayah ini menerima
+beban limbah domestik dan aktivitas permukiman yang signifikan, sehingga
+berdampak langsung terhadap kualitas air [11]. Kondisi tersebut tercermin dari
+                                                                                                4
+
+tingginya konsentrasi total suspended solids (TSS), sedimen halus, serta bahan
+organik yang menyebabkan air sungai berwarna cokelat pekat dan memiliki
+visibilitas rendah [11]. Nilai TSS yang tinggi menjadi indikator utama kekeruhan
+sungai dan berperan dalam menurunkan kejernihan air serta kualitas ekosistem
+perairan [11], [21]. Selain kekeruhan, keberadaan sampah terapung merupakan
+permasalahan yang umum ditemukan pada sungai-sungai di Kota Banjarmasin
+[21], [22]. Sampah berupa plastik sekali pakai, styrofoam, botol, dan material
+ringan lainnya banyak berasal dari aktivitas rumah tangga, pasar, serta kawasan
+padat penduduk di sekitar bantaran sungai [9], [15], [21], [23]. Penelitian-
+penelitian sebelumnya melaporkan bahwa akumulasi sampah tersebut tidak hanya
+mencemari lingkungan perairan, tetapi juga memperburuk kondisi fisik sungai
+dengan menghambat aliran air dan meningkatkan risiko banjir [13], [14].
+Kombinasi antara tingginya TSS dan keberadaan sampah terapung menciptakan
+kondisi visual sungai yang kompleks, di mana objek buatan manusia sering
+menyatu dengan latar belakang air keruh dan vegetasi alami [11], [21], [24], [25].
+Berdasarkan kondisi tersebut, data penelitian ini diperoleh melalui pengambilan
+citra langsung pada permukaan sungai di Kota Banjarmasin untuk
+merepresentasikan karakteristik sungai keruh secara nyata. Data dikumpulkan
+pada berbagai kondisi pencahayaan, tingkat kekeruhan, serta variasi objek yang
+umum dijumpai di lapangan. Pendekatan ini dilakukan karena dataset publik yang
+ada umumnya berasal dari perairan dengan visibilitas lebih baik dan belum
+sepenuhnya mencerminkan kondisi sungai keruh seperti di Banjarmasin [13],
+[20]. Oleh karena itu, dataset lokal disusun sebagai representasi kondisi aktual
+sungai. Dalam penelitian ini, objek pada dataset dikelompokkan ke dalam dua
+kelas utama, yaitu sampah terapung dan tanaman sungai, untuk membedakan
+material buatan manusia dengan elemen alami yang dominan pada permukaan
+sungai keruh. Pemilihan data dan pengelompokan objek ini diharapkan dapat
+meningkatkan relevansi data pelatihan serta mendukung evaluasi performa dan
+generalisasi model [15].
+
+       Pendekatan optimalisasi yang relevan adalah pengembangan YOLOv8 yang
+dirancang untuk meningkatkan proses ekstraksi fitur serta loss function agar lebih
+adaptif terhadap kondisi lingkungan yang beragam [15]. Penelitian model ini diuji
+                                                                                                5
+
+menggunakan dataset yang terdiri dari 2.711 gambar dengan 9.088 anotasi,
+mencakup 12 kelas objek dan berbagai kondisi visual seperti hujan, mendung, dan
+glare kuat di permukaan air [15]. Hasil eksperimen menunjukkan peningkatan
+performa yang signifikan dibanding YOLOv8 standar, dengan mAP@0.5
+meningkat 5,4% dan mAP@0.5:0.95 meningkat 6,1%. Model ini juga
+menunjukkan stabilitas yang lebih baik ketika diuji pada dataset publik serta tetap
+unggul dibandingkan beberapa model populer seperti SSD, Faster R-CNN,
+YOLOv5s, YOLOv9s, hingga YOLOv11s misalnya, meskipun SSD memiliki
+presisi tinggi, nilai recall yang rendah menyebabkan mAP tidak maksimal [15].
+
+       YOLOv8 masih memiliki ruang peningkatan kinerja, baik dari sisi
+kemampuan ekstraksi fitur maupun adaptasi terhadap karakteristik data yang
+kompleks [26]. Beberapa penelitian terbaru juga menunjukkan bahwa
+peningkatan performa YOLOv8 dapat dilakukan melalui penambahan modul
+atensi pada proses ekstraksi fitur [15], [27]. Salah satu pendekatan yang digunakan
+adalah Efficient Multiscale Attention (EMA), yang dirancang untuk memperkuat
+representasi fitur dengan menekankan informasi spasial dan kanal yang relevan
+pada berbagai skala [15], [28]. Modul EMA memungkinkan model lebih adaptif
+terhadap objek berukuran kecil dan latar belakang kompleks dengan biaya
+komputasi yang relatif rendah [29], [30]. Penerapan EMA pada arsitektur
+YOLOv8 dilaporkan mampu meningkatkan akurasi deteksi pada lingkungan
+visual yang menantang, termasuk kondisi kontras rendah dan gangguan visual
+tinggi seperti pantulan cahaya dan kekeruhan air [15]. Pendekatan ini
+menunjukkan bahwa optimalisasi internal YOLOv8 tidak hanya terbatas pada
+fungsi aktivasi, tetapi juga dapat dilakukan melalui mekanisme atensi untuk
+memperkaya kualitas fitur yang dipelajari model [27]. Kondisi ini semakin
+menegaskan perlunya peninjauan kembali komponen internal YOLOv8,
+khususnya fungsi aktivasi yang digunakan secara default, yaitu SiLU [26], [31].
+Meskipun SiLU mampu menghasilkan gradien yang halus dan stabil, beberapa
+studi menunjukkan bahwa fungsi ini memiliki beban komputasi yang lebih tinggi
+serta pada kondisi tertentu masih rentan mengalami penurunan gradien (gradient
+degradation) ketika model bekerja pada data dengan kontras rendah atau
+gangguan visual yang kuat, seperti yang umum ditemukan pada lingkungan sungai
+                                                                                                6
+
+keruh [13], [31], [32], [33]. Keterbatasan tersebut membuka peluang untuk
+mengevaluasi fungsi aktivasi lain yang dinilai lebih efisien dan stabil dalam proses
+pelatihan [32], [34]. Sejumlah penelitian mengidentifikasi beberapa aktivasi
+alternatif yang berpotensi memberikan performa lebih baik dibandingkan SiLU
+[34]. ReLU merupakan salah satu aktivasi yang paling banyak direkomendasikan
+karena memiliki stabilitas gradien lebih tinggi, tidak mengalami saturasi, serta
+jauh lebih ringan secara komputasi sehingga proses pelatihan dapat berlangsung
+lebih cepat dan stabil [31]. Aktivasi LeakyReLU menawarkan keunggulan dalam
+mencegah dead neuron pada nilai negatif, menjaga aliran gradien tetap konsisten
+meskipun menghadapi variasi intensitas yang ekstrem [33]. Sementara itu,
+HardSwish dikembangkan sebagai varian Swish yang lebih efisien secara
+komputasi serta lebih ramah terhadap perangkat bersumber daya terbatas,
+sehingga menjadi alternatif potensial untuk aplikasi real-time berbasis YOLO
+pada lingkungan lapangan [31]. Hasil-hasil tersebut menunjukkan bahwa
+pemilihan fungsi aktivasi memiliki kontribusi yang penting dalam menjaga
+stabilitas pelatihan dan konsistensi aliran gradien, khususnya pada kondisi visual
+yang kompleks seperti kekeruhan tinggi, pantulan cahaya, riak air, serta
+keberadaan objek kecil yang sulit dibedakan dari latar belakang [13], [33].
+Temuan ini menegaskan bahwa fungsi aktivasi default SiLU tidak selalu
+memberikan kinerja paling optimal ketika model bekerja pada lingkungan sungai
+keruh [32]. Oleh karena itu, diperlukan analisis terhadap penggunaan fungsi
+aktivasi alternatif seperti ReLU, LeakyReLU, dan HardSwish untuk mengetahui
+apakah ketiganya dapat memberikan proses pelatihan yang lebih stabil dan
+meningkatkan kemampuan YOLOv8 dalam mendeteksi sampah terapung pada
+berbagai kondisi perairan keruh [26], [35].
+
+       Berdasarkan keseluruhan permasalahan tersebut, terlihat bahwa tantangan
+utama dalam deteksi sampah terapung di sungai keruh tidak hanya terletak pada
+kondisi visual lingkungan, tetapi juga pada keterbatasan model YOLOv8 dalam
+melakukan generalisasi ketika dihadapkan pada distribusi data yang berbeda dari
+dataset pelatihan. Penggunaan dataset lokal yang merepresentasikan karakteristik
+sungai Kota Banjarmasin menjadi langkah penting untuk meningkatkan relevansi
+data pelatihan. Di sisi lain, kelemahan fungsi aktivasi default YOLOv8, yaitu
+                                                                                                 7
+
+SiLU, terhadap beban komputasi dan kestabilan gradien pada kondisi visual yang
+kompleks turut menunjukkan perlunya optimalisasi pada komponen internal
+model. Dengan mempertimbangkan temuan empiris serta rekomendasi penelitian
+sebelumnya, penggantian fungsi aktivasi dengan alternatif yang lebih efisien
+seperti ReLU, LeakyReLU, dan HardSwish menjadi pendekatan potensial untuk
+meningkatkan sensitivitas dan kemampuan generalisasi model. Oleh karena itu,
+penelitian ini berfokus pada evaluasi penggunaan dataset lokal sungai keruh serta
+analisis pengaruh pergantian fungsi aktivasi pada YOLOv8 untuk memperoleh
+performa deteksi yang lebih akurat, stabil, dan adaptif terhadap kondisi visual
+alami di sungai-sungai Kota Banjarmasin.
+
+1.2 Rumusan Masalah
+
+      Berdasarkan latar belakang yang telah diuraikan, maka rumusan masalah
+dalam penelitian ini adalah sebagai berikut:
+
+   1. Berapa nilai precision, recall, F1-score, dan mean Average Precision
+        (mAP) yang dihasilkan model YOLOv8 ketika diterapkan pada dataset
+        lokal sungai keruh di Kota Banjarmasin?
+
+   2. Bagaimana analisis pengaruh penggunaan fungsi aktivasi SiLU, ReLU,
+        LeakyReLU, dan HardSwish terhadap performa model YOLOv8 pada
+        dataset lokal sungai keruh di Kota Banjarmasin?
+
+1.3 Batasan Masalah
+
+      Batasan Agar penelitian tetap terfokus dan terarah, batasan masalah dalam
+penelitian ini ditetapkan sebagai berikut:
+
+   1. Model yang digunakan adalah YOLOv8, dengan modifikasi pada fungsi
+        aktivasi yang diganti dari SiLU menjadi ReLU, LeakyReLU, dan
+        HardSwish pada lapisan tertentu untuk keperluan pengujian.
+
+   2. Objek yang dideteksi merupakan sampah mengapung pada permukaan air.
+
+   3. Data berupa citra statis, bukan video real-time atau streaming, sehingga
+        evaluasi dilakukan pada image-based detection murni.
+
+   4. Penelitian ini tidak membandingkan YOLOv8 dengan model deteksi objek
+        lain, melainkan hanya menganalisis pengaruh variasi fungsi aktivasi dan
+                                                                                                  8
+
+         penggunaan dataset lokal terhadap performa YOLOv8.
+
+    5. Evaluasi performa model menggunakan empat metrik utama, yaitu mAP,
+         precision, recall, dan F1-score.
+
+    6. Penelitian ini tidak mencakup segmentasi atau tracking objek, melainkan
+         hanya fokus pada deteksi sampah terapung.
+
+1.4 Tujuan Penelitian
+
+       Tujuan dari penelitian ini adalah:
+
+     1. Untuk memperoleh nilai mAP, precision, recall, dan F1-score dari model
+          YOLOv8 ketika diterapkan pada dataset lokal yang merepresentasikan
+          kondisi sungai keruh di Kota Banjarmasin.
+
+     2. Untuk menganalisis pengaruh penggunaan fungsi aktivasi SiLU, ReLU,
+          LeakyReLU, dan HardSwish terhadap performa model YOLOv8 pada
+          dataset lokal sungai keruh di Kota Banjarmasin.
+
+1.5 Manfaat Penelitian
+
+     1. Manfaat Teoritis
+          Penelitian ini memberikan kontribusi dalam pengembangan studi deteksi
+          objek berbasis deep learning, khususnya terkait pengaruh fungsi aktivasi
+          dan pentingnya penggunaan dataset berbasis lingkungan lokal pada
+          kondisi perairan keruh.
+
+      2. Manfaat Praktis
+          a) Bagi Penulis
+              Penelitian ini menambah pengetahuan dan pengalaman penulis dalam
+              penerapan YOLOv8 serta analisis fungsi aktivasi pada kasus deteksi
+              sampah terapung.
+          b) Bagi Penelitian Berikutnya
+              Hasil penelitian dapat dijadikan referensi bagi peneliti selanjutnya yang
+              ingin melakukan studi terkait deteksi sampah perairan, modifikasi
+              arsitektur YOLOv8, atau evaluasi fungsi aktivasi pada kondisi visual
+              yang kompleks.
+          c) Bagi Pemangku Kepentingan
+                                                                                    9
+
+Penelitian ini dapat menjadi bahan pertimbangan bagi instansi seperti
+Dinas Lingkungan Hidup (DLH) Kota Banjarmasin dalam
+pengembangan sistem pemantauan sampah berbasis AI, terutama pada
+wilayah sungai dengan tingkat kekeruhan tinggi.
+                                   2 BAB II
+                             TINJAUAN PUSTAKA
+
+2.1 Penelitian Terkait
+
+       Pada penelitian ini dilakukan kajian pustaka terhadap beberapa penelitian
+terdahulu yang memiliki kesamaan dalam aspek metode, data, dan tujuan
+penelitian.
+
+2.1.1 An Enhanced YOLOv8 Model for Accurate Detection of Solid Floating
+         Waste
+
+        Penelitian yang dilakukan oleh Zhenhao Di, Li Zhang, Qian Wang, dan
+Haoran Li pada tahun 2025 memberikan kontribusi penting dalam pengembangan
+sistem deteksi sampah terapung pada lingkungan perairan dengan tingkat
+kompleksitas visual yang tinggi. Para peneliti menemukan bahwa model YOLOv8
+standar mengalami penurunan akurasi secara signifikan ketika diterapkan pada
+kondisi sungai yang memiliki kekeruhan tinggi, glare, riakan permukaan air,
+bayangan pepohonan, serta keberadaan objek kecil yang mudah menyatu dengan
+latar belakang. Fenomena ini menunjukkan bahwa kemampuan generalisasi
+YOLOv8 masih terbatas ketika dihadapkan pada distribusi data yang berbeda dari
+data pelatihannya. Untuk mengatasi permasalahan tersebut, para peneliti
+mengembangkan Enhanced YOLOv8 (ES-YOLOv8) dengan beberapa modifikasi
+arsitektural utama. Komponen Efficient Multiscale Attention (EMA) ditambahkan
+untuk meningkatkan fokus model pada fitur penting dan mengurangi gangguan latar
+belakang. Selain itu, ES-YOLOv8 menambahkan skala deteksi baru berukuran
+160×160 piksel yang dirancang untuk meningkatkan sensitivitas model terhadap
+objek berukuran kecil. Penelitian ini juga mengusulkan penggunaan Shape-IoU
+Loss yang terbukti lebih efektif dalam regresi bounding box untuk objek dengan
+bentuk tidak beraturan seperti sampah terapung. Hasil pengujian menunjukkan
+bahwa ES-YOLOv8 mampu meningkatkan performa secara signifikan
+dibandingkan YOLOv8 standar. Peningkatan kinerja terlihat pada mAP@0.5 yang
+naik sebesar 5,4% dan mAP@0.5:0.95 yang meningkat sebesar 6,1%. Model ini
+juga memperlihatkan stabilitas yang lebih baik ketika diuji pada dataset publik
+maupun dataset dengan distribusi berbeda, sehingga menunjukkan kapasitas
+
+                                                10
+                                                                                                 11
+
+generalisasi yang lebih kuat [15]
+
+2.1.2 Adaptive Water Waste Processing Using Computer Vision and Monte
+         Carlo Simulation
+
+        Penelitian yang dilakukan oleh Kim, Lee, dan Park pada tahun 2025
+berfokus pada pengembangan sistem pemrosesan sampah terapung menggunakan
+kombinasi Computer Vision, perencanaan rute, serta Monte Carlo Simulation untuk
+meningkatkan efisiensi pengambilan sampah di perairan terbuka. Studi ini
+mengintegrasikan model deteksi objek berbasis YOLOv7 sebagai komponen utama
+untuk mengidentifikasi keberadaan sampah terapung pada sungai dan kanal dengan
+tingkat visibilitas sedang hingga jernih. Salah satu aspek penting dari penelitian ini
+adalah analisis terhadap dinamika permukaan air yang sangat dipengaruhi faktor
+lingkungan seperti arah arus, kecepatan angin, refleksi cahaya, serta variasi kondisi
+cuaca. Model YOLOv7 digunakan untuk mendeteksi sampah dengan tetap
+mempertimbangkan gangguan visual umum seperti glare, riakan air, bayangan
+bangunan, dan perubahan intensitas cahaya. Hasil deteksi tersebut kemudian
+menjadi input untuk simulasi Monte Carlo, yang digunakan untuk menentukan rute
+optimal kapal pembersih otomatis dalam mengumpulkan sampah. Sistem ini diuji
+menggunakan rekaman video dan citra statis yang diperoleh dari area sungai dengan
+tingkat pencahayaan bervariasi. Pengujian menunjukkan bahwa model mampu
+mendeteksi sebagian besar sampah makro seperti plastik, styrofoam, dan kayu kecil
+dengan tingkat akurasi yang tinggi pada lingkungan non-keruh. Selain itu, integrasi
+YOLOv7 dengan sistem navigasi menghasilkan peningkatan efisiensi rute
+pembersihan, terutama pada area dengan distribusi sampah yang tidak merata.
+Penelitian ini juga menyoroti bagaimana perubahan kondisi permukaan air dapat
+memengaruhi stabilitas prediksi model deteksi objek. Walaupun bekerja dengan
+baik pada air jernih dan semi-jernih, performa deteksi cenderung menurun ketika
+tingkat gangguan visual meningkat, seperti pada saat intensitas pantulan cahaya
+tinggi atau ketika objek berukuran lebih kecil tertutup oleh riak air. Temuan ini
+memperlihatkan bahwa sistem pemantauan sampah berbasis penglihatan komputer
+sangat bergantung pada kualitas visual perairan dan parameter lingkungan yang
+berubah-ubah [19].
+                                                                                                 12
+
+2.1.3 Real-time Detection of Floating Debris in Waterways Using YOLOv8
+
+        Penelitian yang dilakukan oleh Tomas et al. pada tahun 2024 membahas
+penerapan YOLOv8 untuk deteksi sampah terapung secara real-time pada
+lingkungan sungai. Penelitian ini menggunakan dataset video sungai Pasig yang
+memiliki karakteristik visual mirip dengan sungai-sungai perkotaan di Indonesia,
+yaitu permukaan air yang gelap, kekeruhan tinggi, dan keberadaan riak serta
+pantulan cahaya. Citra hasil ekstraksi video kemudian diproses melalui beberapa
+tahapan seperti auto-orientation, histogram equalization, resizing ke 640×640
+piksel, serta augmentasi tambahan untuk meningkatkan kualitas visual dan
+mengurangi ketimpangan distribusi kelas. Tahapan ini dilakukan agar model
+memiliki representasi data yang lebih stabil sebelum masuk ke proses pelatihan.
+Model YOLOv8 yang digunakan dalam penelitian tersebut menunjukkan performa
+baik pada objek berukuran sedang dan besar, namun akurasinya menurun secara
+signifikan ketika mendeteksi objek kecil atau objek yang warnanya menyatu
+dengan permukaan air. Peneliti menjelaskan bahwa sampah berukuran kecil seperti
+plastik ringan, daun, atau serpihan kayu sering kali tidak mencapai nilai confidence
+yang memadai karena teksturnya sulit dibedakan dari latar belakang air yang gelap.
+Hal ini menyebabkan penurunan nilai mAP pada kelas "garbage" dan menunjukkan
+adanya tantangan dalam generalisasi model ketika bekerja pada kondisi visual yang
+tidak stabil. Penelitian tersebut juga memfokuskan eksperimen pada pemilihan
+optimizer dan learning rate, namun belum mengevaluasi komponen internal
+arsitektur YOLOv8, seperti fungsi aktivasi, yang turut berperan penting dalam
+aliran gradien dan stabilitas proses pelatihan. Temuan ini memiliki keterkaitan
+langsung dengan penelitian yang dilakukan, karena menunjukkan bahwa YOLOv8,
+meskipun unggul dalam deteksi objek secara real-time, masih mengalami
+penurunan performa pada kondisi sungai yang keruh dan memiliki kompleksitas
+visual tinggi. Keterbatasan ini memperkuat urgensi untuk mengevaluasi ulang
+fungsi aktivasi yang digunakan pada YOLOv8 agar model mampu
+mempertahankan sensitivitas terhadap objek berkontras rendah serta meningkatkan
+kemampuan generalisasi pada data lokal sungai keruh [14].
+                                                                                                 13
+
+2.1.4 A Comparative Analysis of Activation Functions in Neural Networks
+         Unveiling Categories
+
+        Penelitian yang dilakukan oleh K. S. Maheshwari dkk. pada tahun 2024
+memfokuskan analisisnya pada berbagai fungsi aktivasi modern yang digunakan di
+dalam jaringan saraf dalam, dengan tujuan mengelompokkan, membandingkan, dan
+mengevaluasi karakteristik matematis serta performa empiris masing-masing
+fungsi aktivasi dalam proses pembelajaran model. Studi ini menelaah sejumlah
+fungsi aktivasi yang banyak digunakan pada arsitektur deep learning, termasuk
+Rectified Linear Unit (ReLU), LeakyReLU, HardSwish, dan SiLU yang seluruhnya
+relevan dengan konteks penelitian ini karena fungsi-fungsi tersebut diuji sebagai
+alternatif pada arsitektur YOLOv8. Dalam penelitian tersebut, SiLU dijelaskan
+sebagai fungsi aktivasi yang mampu menghasilkan aliran gradien yang halus,
+namun memiliki beberapa keterbatasan penting, seperti tidak monotonic, tidak
+dibatasi (unbounded), serta kecenderungan mengalami gradient degradation pada
+kondisi tertentu. Karakteristik ini menyebabkan SiLU menjadi kurang stabil pada
+data dengan kontras rendah, noise tinggi, atau latar belakang yang berubah-ubah
+kondisi yang sangat mirip dengan lingkungan sungai keruh yang menjadi fokus
+penelitian ini. Sementara itu, ReLU dipaparkan sebagai fungsi aktivasi yang paling
+efisien secara komputasi dan sangat unggul dalam menjaga stabilitas gradien. ReLU
+memiliki bentuk fungsi linear terpotong yang sederhana, sehingga dapat
+mempercepat proses pelatihan sekaligus meminimalkan risiko vanishing gradient,
+meskipun sebagian neuron dapat menjadi dead neuron ketika nilai negatif
+terabaikan. Untuk mengatasi kekurangan tersebut, penelitian ini juga mengevaluasi
+LeakyReLU, yang memberikan gradien kecil pada nilai negatif sehingga
+mempertahankan aliran informasi dan meningkatkan sensitivitas model terhadap
+fitur berkontras rendah. Selain itu, HardSwish dikaji sebagai varian ringan dari
+Swish yang menawarkan keseimbangan antara kelancaran gradien dan efisiensi
+komputasi. HardSwish direkomendasikan khususnya untuk aplikasi real-time dan
+perangkat dengan sumber daya terbatas, karena bentuk fungsinya yang sederhana
+tetapi tetap mampu mempertahankan performa deteksi objek yang kompetitif.
+Penelitian Maheshwari dkk. menunjukkan bahwa pemilihan fungsi aktivasi
+memiliki dampak signifikan terhadap kecepatan konvergensi, stabilitas pelatihan,
+                                                                                                 14
+
+dan kemampuan generalisasi model, terutama pada lingkungan data yang memiliki
+distribusi kompleks [34].
+
+2.1.5 A Comparative Study of Modern Activation Functions on Multi-Label
+         CNNs to Predict Genres Based on Movie Posters
+
+        Penelitian yang dilakukan oleh Ahmad Zein Al Wafi dan Anan Nugroho
+pada tahun 2024 membahas perbandingan berbagai fungsi aktivasi modern pada
+arsitektur CNN untuk tugas multi-label classification menggunakan dataset poster
+film IMDB. Studi ini berangkat dari tantangan utama dalam multi-label CNN, yaitu
+ketidakstabilan gradien, kompleksitas representasi fitur, dan perbedaan performa
+signifikan antar fungsi aktivasi ketika model harus mengenali lebih dari satu
+kategori dalam satu citra. Dataset yang digunakan mencakup 8.191 poster dengan
+25 genre berbeda, sehingga memberikan tingkat keragaman visual dan semantik
+yang cukup tinggi. Dalam penelitian ini diuji delapan fungsi aktivasi, yaitu ReLU,
+LeakyReLU, ELU, SELU, GELU, Swish, Mish, dan Softplus, untuk mengetahui
+bagaimana karakteristik matematis masing-masing memengaruhi proses
+pembelajaran. Hasilnya menunjukkan variasi performa yang jelas. LeakyReLU
+menghasilkan akurasi pelatihan tertinggi yaitu 0.99777, sedangkan GELU
+memberikan akurasi validasi terbaik sebesar 0.91556. ReLU menjadi fungsi yang
+paling cepat secara komputasi, sementara softplus mencapai konvergensi tercepat.
+Aktivasi berbasis non-linearitas halus seperti Swish, Mish, dan GELU memberikan
+akurasi lebih tinggi namun membutuhkan komputasi lebih berat. Temuan ini
+menunjukkan bahwa pemilihan fungsi aktivasi berpengaruh langsung terhadap
+stabilitas gradien, akurasi, dan efisiensi model. Relevansi penelitian ini terhadap
+studi yang dilakukan sangat kuat, karena memberikan dasar teoritis mengenai
+fungsi aktivasi mana yang lebih stabil dan efektif ketika diaplikasikan pada
+YOLOv8, terutama dalam kondisi citra sungai keruh yang memiliki gangguan
+visual dan kontras rendah. Dengan memanfaatkan hasil evaluasi ini, model dapat
+dioptimalkan agar lebih sensitif dan akurat dalam mendeteksi sampah mengapung
+pada lingkungan nyata [33].
+                                                                                                                              15
+
+                                              Tabel 2.1 Penelitian Terkait
+
+No  Judul           Penulis (Tahun)  Masalah              Data              Metode          Hasil                Keterkaitan
+                                                                                                                  Penelitian
+    An Enhanced                      YOLOv8 menurun
+                                                                                                                 Penggunaan
+    YOLOv8          Zhenhao Di, Li   akurasi saat         2.711             Modifikasi      mAP@0.5 naik           Metode
+                                                                                                                  YOLOv8
+    Model for       Zhang, Qian      kondisi air          gambar,        YOLOv8 (EMA,       5,4%;
+                                                                                                                  Pengaruh
+1 Accurate          Wang, dan        kompleks (keruh,     9.088             scale 160×160,  mAP@0.5:0.95 naik      kondisi
+                                                                                                                   perairan
+    Detection of    Haoran Li (2025) glare, riak, objek   anotasi, 12    Shape-IoU Loss)    6,1%; lebih stabil     terhadap
+                                                                                                                    akurasi
+    Solid Floating                   kecil)               kelas objek                       pada variasi visual    deteksi.
+
+    Waste
+
+    Adaptive                         Sistem pengelolaan 1.500 citra YOLOv7 sebagai Akurasi deteksi
+
+    Water Waste Seonghyeon Kim, sampah sungai             sampah            detektor utama meningkat +7,8%
+
+    Processing      Jungho Park,     tidak stabil akibat  permukaan +       + Monte Carlo   setelah integrasi
+
+    Using           Hyeong-Gwon fluktuasi volume          simulasi          Simulation      simulasi. Error
+
+2   Computer        Jeong, Sung-Eun sampah, sungai Monte Carlo untuk prediksi prediksi pergerakan
+
+                                     keruh, serta         5.000 iterasi                     sampah menurun
+
+    Vision and Kim, & Jae-Kwon                            untuk             jalur dan
+
+    Monte Carlo     Kim (2025)       keterbatasan                           akumulasi       32%.
+
+                                     metode manual.       pergerakan
+
+    Simulation                                            sampah.           sampah.
+                                                                                                                               16
+
+No  Judul          Penulis (Tahun)  Masalah              Data          Metode             Hasil                   Keterkaitan
+                                                                                                                   Penelitian
+
+                                    Deteksi sampah       1.842 citra,  Optimasi
+
+    Real-time                       real-time            5.376         YOLOv8 untuk
+
+    Detection of   George Qiao,     mengalami            anotasi, 4    perangkat edge     FPS: 45­52 FPS
+
+    Floating       Chen Liu, Han    penurunan            kelas objek   (simplified head,  (real-time)             Penggunaan
+                                                                                                                    Metode
+3 Debris in        Zhao, dan Minjie performa pada        (plastik,     backbone           mAP@0.5: 74,8%
+                                                                                                                   YOLOv8z
+    Waterways      Xu (2025)        glare, riak air,     styrofoam,    compression,       Precision: 81,3%
+
+    Using                           motion blur, dan     kayu ringan,  adaptive frame-    Recall: 76,9%
+
+    YOLOv8                          visibilitas rendah.  sampah        skipping).
+
+                                                         campuran).
+
+    A Comparative                   Kinerja fungsi                                        ReLU akurasi
+
+    Analysis of    Nagesh           aktivasi berbeda                   Perbandingan       87.1% dengan dead
+
+    Activation     Chandrashekar,   signifikan pada      Dataset       SiLU, ReLU,        neuron 18%.             Dasar teori
+
+4   Functions in   Saima Shaikh,    deep neural          benchmark LeakyReLU,             LeakyReLU akurasi perbedaan
+
+    Neural                          networks beberapa                                     88.4% dengan dead kinerja antar
+
+    Networks:      dan Arun Ramesh  menyebabkan          CNN           HardSwish pada     neuron 2%.              fungsi aktivasi
+
+    Unveiling      (2024)           vanishing gradient                 CNN multilayer.
+                                                                                               HardSwish akurasi
+
+    Categories                      dan lambatnya                                         89.3% dan lebih
+                                                                                                                       17
+
+No  Judul         Penulis (Tahun)  Masalah              Data           Metode               Hasil         Keterkaitan
+                                                                                                           Penelitian
+                                                                                    stabil pada noise.
+                                   konvergensi.                                    SiLU akurasi 89.8%
+
+                                                                                     namun inferensi
+                                                                                    lebih lambat 14%.
+
+                                   Multi-label CNN                     CNN multilabel ReLU mAP 72.4%
+
+    A                              itu kompleks                        dengan 25   dengan latensi
+
+    Comparative                    karena satu gambar   Dataset        output &    tercepat.
+
+    Study of                       bisa punya banyak    poster film    Pengujian 8 LeakyReLU mAP Fungsi aktivasi
+
+                  Ahmad Zein Al    label (genre) &                     activation  74.1% lebih stabil. alternatif untuk
+
+5   Modern        Wafi,dan Anan    CNN sering           dari IMDB:     functions:  HardSwish mAP meningkatkan
+
+    Activation    Nugroho (2024)   mengalami            8.191 poster,  ReLU,       75.6% efisien.         performa
+
+    Functions on                   vanishing gradient,  25 genre,      LeakyReLU, Mish­GELU mAP YOLOv8.
+
+    Multi-Label                    dying ReLU, dan 1980­2015. ELU, SELU, tertinggi 76­76.4%
+
+    CNNs                           ketidakstabilan                     GELU, Swish, tetapi paling berat
+
+                                   pelatihan.                          Mish, Softplus. secara komputasi.
+                                                                                                 18
+
+2.2 Landasan Teori
+2.2.1 Sampah Mengapung
+
+         Sampah mengapung merupakan material padat yang berada di permukaan
+sungai dan terbawa aliran air, terdiri atas plastik sekali pakai, styrofoam, botol,
+kayu, kain, karton, serta fragmen anorganik yang umumnya berasal dari aktivitas
+domestik dan pemukiman di sekitar bantaran sungai [6], [9], [14]. Material ringan
+seperti plastik tipis mudah menyebar mengikuti arus, sedangkan material yang lebih
+berat dapat tersangkut pada vegetasi atau struktur tepi sungai [6], [19]. Keberadaan
+sampah ini berkaitan erat dengan aktivitas masyarakat, termasuk pembuangan
+sampah rumah tangga, limpasan daerah padat penduduk, dan kegiatan ekonomi di
+sekitar sungai yang menghasilkan limbah padat [9], [10]. Sampah mengapung
+terlihat pada gambar 2.1.
+
+                                        Gambar 2.1 Sampah Mengapung
+
+         Penelitian global menunjukkan bahwa sungai merupakan jalur utama
+transportasi sampah plastik menuju laut, dengan sebagian besar sampah makro pada
+akhirnya mengalami fragmentasi menjadi mikroplastik akibat paparan sinar
+matahari, abrasi, dan proses mekanis aliran air [6], [12] . Fragmen mikroplastik
+tersebut kemudian dapat ditemukan kembali di kolom air dan masuk ke rantai
+makanan akuatik sebagaimana terdeteksi pada berbagai penelitian biota dan
+perairan lokal [12], [16]. Fenomena ini memperlihatkan bahwa sampah mengapung
+tidak hanya merusak estetika sungai tetapi juga menyebabkan pencemaran jangka
+panjang yang berpotensi mengancam ekosistem dan kesehatan manusia [13].
+Variasi bentuk, ukuran, warna, dan tekstur membuat sampah mengapung sulit
+diidentifikasi secara visual, terutama pada sungai yang memiliki warna air
+kecokelatan atau kondisi keruh . Bayangan vegetasi, riak permukaan, serta pantulan
+                                                                                                 19
+
+cahaya sering membuat objek tampak menyatu dengan lingkungan air sehingga
+tidak mudah terlihat [13], [19] . Akumulasi sampah mengapung juga berdampak
+pada terganggunya aliran sungai, meningkatnya risiko banjir, menurunnya kualitas
+habitat organisme air, dan menurunnya kualitas visual sungai sebagai bagian dari
+ruang hidup masyarakat [16], [12]. Kondisi ini telah diamati pada Sungai Martapura
+yang menunjukkan peningkatan beban sampah dan mikroplastik seiring tingginya
+aktivitas penduduk di sekitar aliran sungai [10], [11].
+2.2.2 Sungai Keruh
+
+         Sungai keruh merupakan kondisi perairan yang memiliki konsentrasi tinggi
+partikel tersuspensi seperti sedimen, lumpur halus, detritus organik, dan fragmen
+plastik berukuran mikro yang mengakibatkan penurunan tingkat kejernihan air [12],
+[11]. Nilai kekeruhan umumnya diukur melalui parameter Total Suspended Solids
+(TSS) serta turbidity, di mana keduanya menggambarkan jumlah dan kepadatan
+partikel dalam air [11]. Aktivitas seperti erosi tanah, limpasan dari permukiman,
+pengerukan sungai, serta pembuangan limbah domestik menjadi faktor penting
+yang meningkatkan nilai turbidity [9], [10]. Peningkatan TSS memiliki keterkaitan
+langsung dengan meningkatnya Suspended Particulate Matter (SPM) dan
+menyebabkan berkurangnya penetrasi cahaya ke dalam kolom air [12].
+
+                                            Gambar 2.2 Sungai Keruh
+
+         Kekeruhan yang tinggi menimbulkan berbagai gangguan visual seperti
+glare, perubahan warna air, serta pantulan permukaan yang menyebabkan objek
+terapung sulit dibedakan dari latar belakang air [13], [14]. Partikel tersuspensi dapat
+mempengaruhi cara cahaya dipantulkan sehingga objek tampak menyatu dengan
+                                                                                                 20
+
+air, terutama pada sungai yang sangat keruh [13]. Riak permukaan, bayangan
+pepohonan, dan variasi intensitas cahaya turut meningkatkan kompleksitas
+tampilan visual sungai, sebagaimana dicatat pada sungai-sungai perkotaan seperti
+Ciliwung dan Martapura yang memiliki tingkat kekeruhan tinggi serta beban
+sedimen dan mikroplastik yang signifikan [13], [11], [36]. Selain menurunkan
+visibilitas, kekeruhan berdampak pada kondisi ekologi sungai karena menghambat
+proses fotosintesis organisme air, meningkatkan stress pada biota, dan
+memperbesar paparan terhadap polutan seperti mikroplastik yang terbawa aliran
+[12]. Peningkatan mikroplastik di Sungai Martapura secara khusus menunjukkan
+kontribusi sampah domestik terhadap kondisi optik sungai yang semakin
+memburuk dan berpotensi mengganggu kesehatan masyarakat yang memanfaatkan
+sungai untuk aktivitas sehari-hari [9], [11]. Dengan demikian, kekeruhan
+merupakan indikator penting kualitas air dan menjadi faktor utama dalam
+memahami stabilitas ekosistem sungai [11].
+2.2.3 Computer Vision
+
+         Computer Vision merupakan cabang ilmu yang mempelajari bagaimana
+komputer memperoleh, memproses, dan menafsirkan informasi visual dari citra
+maupun video, sehingga mampu memahami pola dan struktur yang terkandung di
+dalamnya layaknya persepsi manusia [37]. Proses fundamental dalam Computer
+Vision mencakup tahap pra-pemrosesan citra, pembentukan representasi visual,
+serta ekstraksi fitur yang memungkinkan sistem mengenali objek, tekstur, dan
+perbedaan bentuk di dalam suatu lingkungan [37].
+
+                                       Gambar 2.3 Computer Vision [18]
+
+         Representasi ini menjadi dasar bagi berbagai sistem analisis citra, termasuk
+yang beroperasi pada kondisi visual kompleks seperti permukaan sungai [13], [37].
+Pada lingkungan perairan, karakteristik visual cenderung dinamis dan tidak teratur
+                                                                                                 21
+
+sehingga menimbulkan tantangan tambahan bagi sistem Computer Vision [13],
+[37]. Permukaan air dipengaruhi oleh kekeruhan, riak, pantulan cahaya, dan
+perubahan intensitas pencahayaan yang menyebabkan tampilan objek sering kali
+tidak konsisten antar-frame [14], [37]. Penelitian menunjukkan bahwa variasi
+kekeruhan dan komposisi partikel dalam air dapat mengubah kontras citra secara
+signifikan, sehingga objek pada permukaan air tampak menyatu dengan latar
+belakang [12], [11]. Kondisi ini mengharuskan sistem Computer Vision
+mengembangkan fitur yang tetap stabil terhadap noise visual seperti glare, specular
+highlight, shadow, maupun distorsi akibat tekstur permukaan yang berubah-ubah
+[13]. Dalam pengembangan sistem analisis citra, ekstraksi fitur memegang peran
+penting karena menentukan bagaimana informasi visual direpresentasikan sebelum
+dilakukan proses klasifikasi atau interpretasi [26]. Pendekatan tradisional
+mengandalkan fitur buatan manusia seperti edge, contour, dan tekstur, namun
+metode modern berbasis deep learning memungkinkan fitur dipelajari secara
+otomatis langsung dari data [37]. Pendekatan pembelajaran fitur yang adaptif ini
+lebih sesuai dengan karakteristik visual sungai, yang memiliki bentuk objek tidak
+beraturan, distribusi acak, serta konsistensi cahaya yang berubah-ubah dari waktu
+ke waktu [19], [20]. Model deep learning, terutama convolutional neural networks,
+memberikan kemampuan untuk mengekstraksi informasi visual secara hierarkis
+mulai dari pola sederhana seperti garis dan tepi hingga representasi tingkat
+tinggi[26]. Hal ini memungkinkan sistem tetap efektif meskipun citra mengalami
+gangguan visual atau perubahan konteks lingkungan. Beberapa penelitian
+menunjukkan bahwa representasi multi-level sangat penting dalam citra sungai
+karena dapat menangkap pola spasial yang tersembunyi di balik kekeruhan dan
+dinamika permukaan air [13], [35]. Selain itu, tinjauan literatur menunjukkan
+bahwa computer vision terus berkembang menuju teknik yang lebih robust dan
+adaptif, didukung oleh kemajuan pembelajaran mesin yang mampu meningkatkan
+kualitas pemrosesan visual secara signifikan [26].
+2.2.4 YOLOv8
+
+         YOLOv8 merupakan generasi terbaru dari keluarga YOLO (You Only Look
+Once) yang dikembangkan sebagai detektor objek satu tahap dengan peningkatan
+signifikan pada sisi efisiensi dan akurasi [26], [38], . Evolusi YOLO dimulai dari
+                                                                                                 22
+
+YOLOv1 yang memperkenalkan pendekatan deteksi langsung berbasis grid,
+kemudian berkembang melalui YOLOv2 dan YOLOv3 yang memperbaiki
+stabilitas prediksi, penanganan objek kecil, serta kemampuan generalisasi. Generasi
+berikutnya seperti YOLOv4 dan YOLOv5 berfokus pada peningkatan performa
+melalui strategi augmentasi, pemanfaatan modul residual, serta optimasi arsitektur
+untuk berbagai kondisi pencahayaan [15], [38]. Perkembangan tersebut menjadi
+dasar bagi YOLOv7 dan akhirnya YOLOv8, yang menekankan optimasi struktur
+jaringan untuk memperoleh akurasi tinggi sekaligus mempertahankan kecepatan
+inferensi real-time [15], [26], [38]. Kajian komprehensif mengenai YOLOv8
+menunjukkan bahwa model ini membawa perubahan penting pada mekanisme
+prediksi dan pengolahan fitur sehingga dapat bekerja lebih stabil pada lingkungan
+visual kompleks [15]. Gambar struktur arsitektur YOLOv8 disajikan pada gambar
+2.4.
+
+                                Gambar 2.4 Struktur Arsitektur YOLOv8 [15]
+
+         YOLOv8 hadir dengan revisi arsitektural pada bagian backbone, neck, dan
+head sehingga model mampu mempelajari representasi visual secara lebih efektif
+[14], [15], [26]. Backbone YOLOv8 dirancang untuk mengekstraksi fitur melalui
+rangkaian convolutional block yang memproses informasi spasial pada berbagai
+resolusi. Penggunaan modul C2f (Cross-Stage Partial connections) membuat
+                                                                                                 23
+
+ekstraksi fitur menjadi lebih efisien dan dalam, sehingga jaringan mampu
+menangkap pola halus maupun struktur visual kompleks dalam citra [26], [35],
+[39]. Pada bagian ini, backbone berfungsi sebagai pondasi utama untuk membentuk
+representasi awal sebelum dilakukan penggabungan fitur oleh komponen
+berikutnya. Neck pada YOLOv8 menggunakan mekanisme Feature Pyramid
+Network (FPN) dan Path Aggregation Network (PAN) untuk menggabungkan fitur
+dari berbagai tingkatan kedalaman [15], [26], [35]. Proses ini membantu model
+mempertahankan konsistensi informasi baik dari lapisan resolusi tinggi maupun
+rendah sehingga detektor mampu mengenali objek dengan ukuran beragam.
+Penelitian menunjukkan bahwa penggabungan fitur multilevel pada YOLOv8
+memperkuat kemampuannya dalam menangani objek kecil maupun objek yang
+mengalami distorsi visual [35]. Integrasi aliran bawah-ke-atas dan atas-ke-bawah
+di bagian neck memberikan kontribusi penting terhadap ketahanan model pada
+perbedaan pencahayaan dan latar belakang [27], [40]. Bagian head pada YOLOv8
+membawa perubahan besar dibandingkan generasi sebelumnya karena mengadopsi
+pendekatan anchor-free [35]. Pendekatan ini memungkinkan model memprediksi
+titik pusat objek, skala, dan bentuk bounding box tanpa ketergantungan pada anchor
+box yang telah ditentukan sebelumnya [35]. Mekanisme ini membuat proses
+pelatihan lebih stabil dan mempercepat inferensi, serta mengurangi kesalahan
+prediksi pada objek yang memiliki bentuk tidak teratur[41]. Beberapa studi
+menunjukkan bahwa head anchor-free pada YOLOv8 mampu meningkatkan
+deteksi pada objek kecil dan objek dengan kontras rendah, serta memiliki
+sensitivitas lebih baik terhadap variasi orientasi [27], [35], [40]. YOLOv8 juga
+menunjukkan bahwa model ini mampu beradaptasi dengan berbagai domain,
+termasuk pemantauan objek udara, kendaraan, maupun lingkungan sungai. Analisis
+terhadap performa YOLOv8 pada kondisi visual bergerak dan berubah cepat
+menunjukkan bahwa model ini menjaga akurasi tinggi berkat stabilitas representasi
+fitur dan penyempurnaan struktur prediksi [30], [39], [42]. Selain itu, pendekatan
+efisien yang digunakan YOLOv8 memungkinkan penerapan pada perangkat
+komputasi terbatas tanpa kehilangan performa deteksi secara signifikan [26].
+Secara keseluruhan, YOLOv8 mengintegrasikan penyempurnaan arsitektural dan
+strategi pengolahan fitur yang menjadikannya salah satu model deteksi objek yang
+                                                                      24
+
+unggul dalam hal akurasi, kecepatan, dan adaptabilitas [14], [15]. Kemampuan ini
+membuat YOLOv8 relevan untuk digunakan pada berbagai aplikasi vision modern,
+termasuk lingkungan dengan dinamika visual tinggi seperti permukaan air, area
+padat objek, maupun citra dengan kondisi pencahayaan tidak stabil [19], [36], [41],
+[43].
+2.2.5 Fungsi Aktivasi
+
+         Fungsi aktivasi merupakan komponen penting dalam jaringan saraf tiruan
+yang menentukan bagaimana suatu neuron merespons sinyal masukan [26], [32].
+Tanpa fungsi aktivasi, jaringan hanya membentuk pemetaan linear sehingga tidak
+mampu memodelkan pola kompleks pada data [31], [34]. Fungsi aktivasi
+memungkinkan jaringan mempelajari hubungan non-linear, menjaga stabilitas
+gradien, serta membantu proses pembaruan bobot selama pelatihan [32], [33].
+Seiring berkembangnya arsitektur deep learning, berbagai fungsi aktivasi baru
+dikembangkan untuk mengatasi masalah seperti vanishing gradient, dead neuron,
+dan ketidakefisienan komputasi [31], [32], [34].
+2.2.5.1 Sigmoid Linear Unit (SiLU)
+
+SiLU merupakan fungsi aktivasi non-linear yang memadukan sifat linier
+
+dengan fungsi sigmoid [31], [32]. Fungsi ini diperkenalkan sebagai alternatif
+
+aktivasi tradisional karena menawarkan kurva aktivasi yang halus, diferensiabel di
+
+seluruh domain, dan mampu mempertahankan informasi pada nilai negatif [31],
+
+[34]. Penelitian menunjukkan bahwa SiLU meningkatkan stabilitas pembelajaran
+
+dan performa generalisasi model karena menghasilkan gradien yang tidak terputus
+
+dan respons non-linear yang lebih natural [32], [33]. Rumus SiLU disajikan pada
+
+persamaan (1).
+
+                () =   ()........................................(1)
+
+Dimana :
+
+· f(x) = Nilai keluaran fungsi aktivasi SiLU
+
+· x = Nilai masukan neuron
+
+· () = Fungsi sigmoid
+
+·               ()  =     1
+                       1+ -
+
+· e = bilangan eksponensial
+                                                                                                 25
+
+         Keunggulan utama SiLU adalah kemampuannya mempertahankan
+sensitivitas terhadap nilai kecil tanpa menyebabkan saturasi berat seperti pada
+sigmoid klasik [31], [32]. Studi lanjutan menunjukkan bahwa varian sigmoid-
+weighted linear units memberikan peningkatan akurasi pada berbagai tugas
+pemodelan karena bentuk kurvanya yang lebih adaptif [26], [31], [32], [33]. Hal ini
+membuat SiLU banyak digunakan pada arsitektur modern yang membutuhkan
+stabilitas gradien dalam jaringan yang lebih dalam [26], [35].
+2.2.5.2 Rectified Linear Unit (ReLU)
+
+          ReLU merupakan salah satu fungsi aktivasi paling populer dalam deep
+learning [34]. ReLU bekerja dengan mempertahankan nilai positif dan menetapkan
+nol pada semua nilai negatif sehingga mempercepat proses konvergensi dan
+mengurangi masalah vanishing gradient [32]. Kesederhanaannya membuat ReLU
+efisien secara komputasi dan stabil saat digunakan pada arsitektur berskala besar
+[34]. Rumus ReLU disajikan pada persamaan (2).
+
+                      () = (0, ).....................................(2)
+     Dimana :
+
+          · f(x) = Nilai keluaran fungsi aktivasi ReLU
+          · x = Nilai masukan dead neuron
+     ReLU memiliki kelemahan berupa potensi terjadinya dead neuron, yaitu
+kondisi ketika neuron tidak pernah aktif [32]. Meskipun demikian, efektivitas
+ReLU tetap membuatnya relevan dalam banyak arsitektur, terutama pada tahap-
+tahap awal jaringan [33], [34]. Studi komparatif menunjukkan bahwa ReLU tetap
+kompetitif dibandingkan fungsi aktivasi adaptif modern, khususnya dalam model
+dengan kebutuhan komputasi tinggi [32], [39].
+2.2.5.3 LeakyReLU
+
+          LeakyReLU dikembangkan sebagai solusi atas masalah dead neuron pada
+ReLU [32], [33]. Fungsi ini memberikan kemiringan kecil pada sisi negatif
+sehingga gradien tetap mengalir dan informasi tidak hilang sepenuhnya [32], [33].
+Pendekatan ini meningkatkan sensitivitas model terhadap variasi masukan dan
+membantu stabilitas pembelajaran saat nilai input berada dalam distribusi tak
+seimbang [31], [32]. Rumus LeakyReLU disajikan pada persamaan (3).
+                                                                             26
+
+                    () = (, )........................................(3)
+     Dimana :
+
+          · f(x) = Nilai keluaran fungsi aktivasi SiLU
+          · x = Nilai masukan neuron
+          ·  = Konstanta kemiringan pada nilai negatif (umumnya  = 0,01)
+     Nilai  yang kecil (misalnya 0.01) memungkinkan jaringan mempertahankan
+informasi pada domain negatif tanpa mengubah perilaku utama ReLU[31], [34].
+Penelitian terbaru menunjukkan bahwa varian aktivasi adaptif yang berbasis konsep
+LeakyReLU mampu meningkatkan efisiensi representasi pada model
+konvolusional, terutama pada kondisi di mana data memiliki variasi kontras yang
+besar atau distribusi nilai yang tidak simetris [32], [33].
+2.2.5.4 Hardswish
+
+HardSwish merupakan varian aktivasi yang dikembangkan untuk
+
+memberikan kinerja seperti Swish namun dengan biaya komputasi lebih rendah
+
+[31], [34]. Fungsi ini menggunakan kombinasi linear piecewise untuk mendekati
+
+perilaku swish, sehingga memungkinkan implementasi efisien terutama pada
+
+perangkat dengan keterbatasan sumber daya [26], [33]. HardSwish populer
+
+digunakan pada arsitektur vision modern karena keseimbangan antara performa dan
+
+efisiensinya [35], [39]. Rumus Hardswish disajikan pada persamaan (4).
+
+          f(x)  =  x    6(x+3)    ......................................(4)
+                               6
+
+Dimana :
+
+          · ()= Nilai keluaran fungsi aktivasi hardswish
+          · = Nilai masukan neuron
+          · ReLU6() = ((0, ),6)
+     Hardswish dapat meningkatkan stabilitas pelatihan pada jaringan
+konvolusional, terutama ketika digunakan dalam representasi fitur berfrekuensi
+tinggi [32], [33]. Karakteristik ini membuat hardswish efektif pada tugas-tugas
+vision yang membutuhkan sensitivitas terhadap detail kecil tetapi tetap efisien
+dalam proses inferensi[26], [33], [35].
+                                                                                                 27
+
+2.2.6 Evaluasi Metrics
+
+        Evaluasi metrics deteksi objek dilakukan dengan menggunakan beberapa
+metrik yang mengukur ketepatan prediksi model terhadap objek yang terdapat
+dalam citra [35]. Metrik ini menilai sejauh mana model mampu memberikan
+prediksi yang relevan, akurat, dan konsisten dalam berbagai kondisi visual.
+Evaluasi biasanya dilakukan dengan membandingkan bounding box prediksi
+dengan bounding box berdasarkan tingkat kesesuaiannya [26], [44]. Ukuran ini
+sangat penting karena mempengaruhi kualitas keseluruhan performa model,
+terutama dalam aplikasi yang memerlukan ketelitian tinggi seperti pemantauan
+lingkungan dan objek berukuran kecil [13], [35].
+
+     Precision digunakan untuk mengukur proporsi prediksi benar dari seluruh
+prediksi objek yang dihasilkan model. Precision tinggi menunjukkan bahwa model
+jarang memberikan deteksi palsu. Rumus precision ditunjukkan pada persamaan
+(1).
+
+                       =  ...................................(1)
+
+                                                        +
+
+     Recall mengukur kemampuan model dalam menemukan objek yang benar-
+benar ada pada citra [35], [38]. Nilai recall tinggi menunjukkan bahwa model
+mampu mendeteksi sebagian besar objek aktual, meskipun mungkin menghasilkan
+prediksi palsu lebih banyak . Rumus recall ditunjukkan pada persamaan (2).
+
+                      =  ...........................................(2)
+
+                                                +
+
+     F1-score memperoleh keseimbangan antara precision dan recall, digunakan
+metrik F1-score. Metrik ini memberikan gambaran seimbang antara dua ukuran
+tersebut, terutama ketika terjadi ketidakseimbangan jumlah objek atau distribusi
+data [26]. Persamaan F1-score ditunjukkan pada Persamaan (3).
+
+                    1 = 2  Re ..................................(3)
+
+                                            +Re
+
+     Metrik utama dalam evaluasi deteksi objek adalah mean Average Precision
+(mAP). Metrik ini dihitung dengan mengintegrasikan kurva precision­recall pada
+berbagai ambang Intersection over Union (IoU)[26], [38]. Nilai IoU sendiri
+mengukur tingkat tumpang tindih antara bounding box prediksi dan ground truth.
+Semakin tinggi nilai mAP, semakin baik performa model dalam mendeteksi objek
+secara konsisten pada berbagai tingkat kesulitan [39], [43], [44]. Persamaan IoU
+                                                                                  28
+
+ditunjukkan pada Persamaan (4).
+
+                  =              ...........................................(4)
+                      
+
+Nilai Average Precision (AP) diperoleh dengan menghitung luas area di bawah
+
+kurva precision­recall untuk suatu kelas objek tertentu [38], [44]. Nilai mAP
+
+adalah rata-rata dari nilai AP untuk seluruh kelas, seperti ditunjukkan pada
+
+Persamaan (5).
+
+                  =  1  =1  .................................................(5)
+                     
+
+Metrik-metrik ini menjadi dasar dalam menilai performa model deteksi objek,
+
+termasuk YOLOv8, terutama pada kondisi visual yang kompleks seperti permukaan
+
+sungai yang dipengaruhi oleh kekeruhan, pantulan cahaya, dan dinamika
+
+permukaan air [13]. Dengan menggunakan evaluasi terstruktur, performa model
+
+dapat diukur secara objektif sehingga proses pengembangan, perbandingan model,
+
+dan optimasi dapat dilakukan secara lebih efektif.
+
+Dimana:
+
+- TP = True Positive (nilai objek positif yang dideteksi benar)
+
+- TN = True Negative (nilai objek negatif yang dideteksi benar)
+
+- FP = False Positive (nilai objek positif yang dideteksi salah)
+
+- FN = False Negative (nilai objek negatif yang dideteksi salah)
+
+- n = Jumlah kelas objek
+
+- i = Jumlah citra yang diprediksi
+
+- P = Precision
+
+- R = Recall
+
+- IoU = Intersection over Union
+
+- AP = Average Precision
+
+- mAP = Mean Average Precision
+                                                                                                 29
+
+2.3 Kerangka Pemikiran
+       Kerangka pemikiran dalam penelitian ini dibuat untuk memberikan gambaran
+
+yang jelas dan terstruktur tentang tahapan-tahapan yang dilakukan dalam
+mengembangkan model. Kerangka pemikiran pada penelitian ini dapat dilihat pada
+Gambar 2.5.
+
+                                        Gambar 2.5 Kerangka Pemikiran
+
+         Penelitian ini diawali dengan studi literatur untuk memahami karakteristik
+sampah mengapung, kondisi sungai keruh, serta pendekatan Computer Vision dan
+YOLOv8 dalam deteksi objek. Tahapan selanjutnya adalah pembuatan data, yang
+mencakup penentuan sumber data, metode pengambilan data citra sungai, serta
+penyesuaian karakteristik dataset sesuai kebutuhan penelitian. Data yang diperoleh
+kemudian melalui tahap pre-processing, yang meliputi resize dan proses anotasi.
+Data hasil pre-processing digunakan dalam proses pelatihan dan evaluasi model
+YOLOv8 dengan variasi fungsi aktivasi. Parameter pelatihan seperti epoch dan
+batch size ditentukan untuk memperoleh performa model yang optimal. Hasil
+pelatihan dievaluasi berdasarkan performa model menggunakan metrik precision,
+recall, F1-score, dan mean Average Precision (mAP) guna menilai kemampuan
+model dalam mendeteksi sampah mengapung pada kondisi sungai keruh.
+                                   3 BAB III
+                        METODOLOGI PENELITIAN
+
+3.1 Alat dan Bahan
+
+       Alat dan bahan penelitian yang digunakan dalam penelitian ini meliputi
+perangkat keras, perangkat lunak, dan data penelitian. Berikut adalah alat dan bahan
+yang digunakan dalam penelitian yang dijabarkan pada tabel 3.1.
+
+                                      Tabel 3.1 Alat dan Bahan Penelitian
+
+No  Alat dan Bahan         Peruntukan
+
+1   Laptop ASUS ROG Digunakan untuk pengolahan data,
+
+    STRIX G15 Ryzen 7  pengembangan, dan pelatihan model prediksi.
+
+2   Handphone IPhone 11 Digunakan untuk pembuatan memotret dan
+
+    dan IPhone 14      merekam dataset .
+
+3 Python               Bahasa pemrograman yang digunakan untuk
+                       deteksi objek.
+
+4 Visual Studio Code   Menulis dan menjalankan kode program.
+
+5 Google Colaboratory  Menulis dan menjalankan kode program.
+
+6 Roboflow             Digunakan untuk proses melabel data dan
+                       membagi data
+
+                       Aplikasi untuk mengelola sitasi dan referensi
+
+7 Mendeley Dekstop     penelitiann dan membantu menyusun daftar
+
+                       pustaka secara terstruktur.
+
+                       Digunakan untuk membuat diagram dan grafik
+
+8 Canva                serta membuat PowerPoint Presentation untuk
+
+                       mempaparkan hasil penelitian
+
+9 Draw.io              Digunakan untuk membuat diagram dan
+                       flowchart
+
+10 Dataset             Sampah mengapung dari Sungai Kota
+                       Banjarmasin
+
+                       30
+                                                                                               31
+
+3.2 Lokasi/Objek Penelitian
+3.2.1 Lokasi
+
+        Lokasi penelitian ini berada pada sungai-sungai di Kota Banjarmasin yang
+berfungsi sebagai jalur utama pergerakan air sekaligus pusat aktivitas masyarakat.
+Sungai-sungai di wilayah ini secara umum mengalami tekanan pencemaran yang
+tinggi akibat aktivitas domestik, permukiman padat, serta kegiatan ekonomi di
+sepanjang bantaran sungai. Selain intensitas sampah yang tinggi, ketiga sungai
+tersebut juga memiliki karakteristik kekeruhan yang kuat, ditandai oleh tingginya
+nilai Total Suspended Solids (TSS) yang melebihi baku mutu perairan [11]. Warna
+air yang cokelat pekat, pantulan cahaya yang kuat dari permukaan, serta sedimen
+halus yang menghambat visibilitas menjadi faktor visual utama yang menjadikan
+lokasi ini relevan sebagai area penelitian deteksi sampah terapung di perairan keruh
+[13], [14]. Sungai tersebut juga berada di kawasan padat penduduk dan pusat
+aktivitas ekonomi masyarakat, sehingga sering menerima limpasan sampah dari
+permukiman, pasar, serta kegiatan perdagangan di bantaran sungai [9], [10].
+Dengan kondisi visual yang kompleks dan tingkat pencemaran yang relatif tinggi,
+lokasi penelitian ini dipandang representatif untuk menguji performa model deteksi
+objek berbasis citra pada lingkungan sungai keruh.
+3.2.2 Objek
+
+        Objek penelitian ini adalah sampah terapung yang muncul pada permukaan
+air sungai di Kota Banjarmasin. Sampah terapung yang diamati mencakup berbagai
+jenis material yang berasal dari aktivitas domestik dan lingkungan sekitar.
+
+                                     Gambar 3.1 Objek Sampah Terapung
+
+        Objek ini dipilih karena keberadaannya memiliki dampak langsung terhadap
+ kualitas air, aliran sungai, dan risiko banjir, sekaligus menyebabkan pencemaran
+ visual yang signifikan [12], [16]. Secara visual, sampah terapung di sungai keruh
+ memiliki karakteristik yang kompleks [13]. Warna objek sering menyatu dengan
+                                                                                               32
+
+ warna air yang kecokelatan, bentuknya tidak beraturan, serta ukurannya bervariasi
+ dari kecil hingga menengah [14]. Selain itu, dinamika permukaan air seperti riak,
+ pantulan cahaya, dan bayangan pepohonan membuat objek sulit dikenali, baik
+ secara manual maupun oleh sistem deteksi berbasis citra [13], [19]. Kompleksitas
+ inilah yang menjadikan sampah terapung pada sungai keruh sebagai objek
+ penelitian yang ideal untuk menguji kemampuan model YOLOv8 dan pengaruh
+ perubahan fungsi aktivasi dalam meningkatkan akurasi deteksi pada kondisi
+ visual yang menantang.
+3.3 Alur Penelitian
+
+                                           Gambar 3.2 Alur Penelitian
+
+        Gambar 3.2 merupakan alur penelitian disusun melalui tahapan-tahapan
+yang dibutuhkan untuk menjalankan proses penelitian secara terstruktur dan
+sistematis. Alur pada penelitian ini dapat dilihat pada gambar
+3.3.1 Identifikasi Masalah
+
+         Tahapan pertama adalah mengidentifikasi permasalahan yang menjadi
+dasar dilakukannya penelitian ini. Identifikasi masalah dilakukan berdasarkan
+kondisi lingkungan sungai di Kota Banjarmasin serta evaluasi terhadap penelitian
+terdahulu. Sungai-sungai di kota ini memiliki tingkat kekeruhan tinggi, pantulan
+cahaya, riak air, dan variasi bentuk sampah yang membuat objek sulit dibedakan
+dari latar belakang. Kondisi visual yang tidak stabil tersebut menyebabkan metode
+pemantauan manual sering melewatkan objek dan tidak mampu memberikan data
+yang akurat dan konsisten. Pada sisi teknis, model YOLOv8 yang banyak
+digunakan dalam deteksi objek menunjukkan penurunan akurasi ketika diuji pada
+lingkungan dengan karakteristik visual berbeda dari data pelatihannya. Hal ini
+menunjukkan adanya masalah generalisasi, terutama pada kondisi sungai keruh
+dengan kontras rendah. Selain itu, penggunaan fungsi aktivasi default YOLOv8,
+                                                                                               33
+
+yaitu SiLU, memiliki beban komputasi yang lebih tinggi dan kurang stabil ketika
+diaplikasikan pada data berkontras rendah, sehingga berpotensi memperlambat
+proses pembelajaran. Permasalahan lain muncul dari belum tersedianya dataset
+lokal yang benar-benar merepresentasikan karakteristik sungai keruh Kota
+Banjarmasin. Ketidaksesuaian dataset umum dengan kondisi nyata menyebabkan
+model tidak memperoleh representasi yang tepat selama pelatihan. Berdasarkan
+permasalahan tersebut, diperlukan dataset lokal serta pengujian fungsi aktivasi
+alternatif untuk meningkatkan performa model YOLOv8 dalam mendeteksi sampah
+terapung pada kondisi sungai keruh.
+3.3.2 Studi Literatur
+
+         Tahapan kedua adalah melakukan studi literatur untuk memperoleh
+landasan teoritis serta memahami perkembangan penelitian yang berkaitan dengan
+deteksi sampah terapung, kondisi sungai keruh, generalisasi model, dan
+pengembangan arsitektur YOLOv8 beserta fungsi aktivasinya. Studi literatur
+dilakukan dengan meninjau jurnal nasional dan internasional yang relevan dengan
+topik penelitian. Hasil penelusuran literatur menunjukkan bahwa sebagian besar
+penelitian deteksi sampah sebelumnya masih menggunakan dataset dari perairan
+dengan visibilitas yang baik, sehingga tidak sepenuhnya menggambarkan kondisi
+sungai keruh seperti yang ditemukan di Kota Banjarmasin [13]. Penelitian Qiao et
+al. menggunakan sungai dengan kejernihan stabil, sementara Jeong et al.
+memanfaatkan sensor multispektral di laut yang tidak mencerminkan gangguan
+visual khas air keruh [13], [20]. Kondisi tersebut menyebabkan model deteksi
+mengalami penurunan akurasi ketika diterapkan pada lingkungan dengan distribusi
+data berbeda dari dataset pelatihan, sehingga permasalahan generalisasi masih
+menjadi isu utama [35], [42]. Selain itu, studi lain seperti penelitian Kim et al.
+menegaskan pentingnya penggunaan dataset yang benar-benar sesuai dengan
+kondisi lingkungan tempat model akan diterapkan [19]. Kesimpulan ini
+memperkuat alasan perlunya dataset lokal sungai keruh untuk meningkatkan
+kemampuan model mengenali pola visual secara konsisten [13]. Literatur yang
+ditelaah juga menunjukkan bahwa fungsi aktivasi memiliki peran signifikan dalam
+stabilitas gradien dan kualitas fitur yang dipelajari model [31], [32]. Sejumlah
+penelitian menyebutkan bahwa ReLU, LeakyReLU, dan HardSwish memiliki
+                                                                                               34
+
+karakteristik komputasi yang lebih ringan dan lebih stabil dibandingkan SiLU,
+terutama pada citra berkontras rendah atau bercampur gangguan visual [13], [32],
+[33].
+3.3.3 Pengumpulan Data
+
+                                     Gambar 3.3 Alur Pengumpulan Data
+
+         Tahap pembuatan data merupakan bagian awal dalam proses penelitian
+yang bertujuan untuk menyiapkan dataset citra sebagai masukan bagi model
+YOLOv8. Tahapan ini disusun berdasarkan kerangka pemikiran penelitian yang
+ditunjukkan pada Gambar 3.3, di mana pembuatan data dibagi menjadi dua
+komponen utama, yaitu sumber dan metode pengambilan data serta karakteristik
+dan spesifikasi dataset.
+3.3.3.1 Sumber dan Metode Pengambilan Data
+
+          Pengambilan data dilakukan pada waktu siang hari, yaitu pada rentang
+pukul 09.00 ­ 15.00 WITA, untuk memastikan objek sampah dapat terlihat dengan
+jelas melalui pencahayaan alami yang stabil. Pemilihan waktu siang hari bertujuan
+meminimalkan gangguan visual akibat kondisi pencahayaan rendah serta
+memastikan konsistensi kualitas citra, sebagaimana umum diterapkan pada
+penelitian deteksi sampah terapung sebelumnya [13], [14]. Perangkat yang
+digunakan adalah kamera ponsel iPhone 11, yang memiliki kamera utama 12
+megapiksel (wide) dengan aperture f/1.8, sensor CMOS, serta bidang pandang lebar
+yang mendukung pengambilan citra permukaan sungai secara optimal. Kamera ini
+mampu menghasilkan citra dengan resolusi tinggi dan detail visual yang memadai
+untuk keperluan deteksi objek berbasis Computer Vision. Data dikumpulkan dalam
+bentuk foto, dengan resolusi citra menyesuaikan pengaturan bawaan kamera
+perangkat. Kamera diposisikan pada ketinggian sekitar ±160 cm dari permukaan
+tanah, dengan jarak sekitar ±3 meter (±10 kaki) dari badan sungai, serta sudut
+                                                                                               35
+
+pengambilan sekitar 45° menghadap permukaan air. Posisi dan sudut kamera dijaga
+tetap selama proses pengambilan data untuk memperoleh citra yang konsisten dan
+representatif [14].
+3.3.3.2 Karakteristik dan Spesifikasi Dataset
+
+          Dataset yang digunakan dalam penelitian ini merupakan kumpulan citra
+sampah mengapung pada permukaan sungai yang diperoleh melalui proses
+pengambilan data secara langsung di lapangan. Dataset disusun untuk
+merepresentasikan kondisi visual sungai yang sesungguhnya, khususnya pada
+lingkungan perairan dengan tingkat kekeruhan tinggi dan dinamika visual yang
+relatif kompleks [13], [19], [39]. Citra pada dataset memiliki variasi objek sampah
+mengapung yang beragam, seperti plastik sekali pakai, botol plastik, styrofoam, dan
+material ringan lainnya[9], [13], [16]. Selain variasi jenis objek, dataset juga
+mencakup variasi ukuran, bentuk, dan posisi sampah terhadap permukaan air [35],
+[40]. Kondisi lingkungan pada citra menunjukkan adanya pantulan cahaya,
+bayangan dari vegetasi sekitar, serta riak ringan pada permukaan air, yang
+mencerminkan tantangan visual pada sungai keruh [36]. Dataset disimpan dalam
+format citra digital standar dengan resolusi tinggi sesuai dengan spesifikasi kamera
+yang digunakan. Sebelum digunakan dalam proses pelatihan, citra disiapkan agar
+kompatibel dengan arsitektur YOLOv8, termasuk penyesuaian ukuran citra dan
+format anotasi.
+
+                                        Gambar 3.4 Dataset Public [45]
+                                                                                               36
+
+          Gambar 3.4 sebagai pembanding, penelitian sebelumnya menggunakan
+dataset publik sampah terapung yang dikumpulkan dari berbagai lokasi perairan
+dengan karakteristik visual yang relatif beragam[13] . Dataset publik tersebut
+umumnya mencakup kondisi sungai atau perairan dengan aliran aktif dan visibilitas
+yang lebih baik.
+
+                                       Gambar 3.5 Contoh Dataset Lokal
+
+          Dataset pada penelitian terlihat pada gambar 3.5 ini secara khusus
+merepresentasikan kondisi sungai dengan air relatif tidak mengalir dan tingkat
+kekeruhan tinggi, sehingga memiliki karakteristik visual yang lebih menantang bagi
+proses deteksi objek. Perbedaan karakteristik ini menjadikan dataset yang
+digunakan dalam penelitian ini relevan untuk mengevaluasi kemampuan
+generalisasi dan ketahanan model YOLOv8, khususnya dalam mendeteksi sampah
+mengapung pada kondisi perairan keruh yang belum banyak menjadi fokus pada
+dataset publik sebelumnya. Dengan demikian, dataset yang disusun diharapkan
+dapat memberikan kontribusi tambahan dalam pengembangan model deteksi objek
+pada lingkungan sungai dengan kondisi visual yang kompleks.
+                                                                                               37
+
+3.3.4 Pre-Processing Data
+
+                                        Gambar 3.6 Alur Pre-Prosessing
+
+          Gambar 3.6 merupakan alur pre-processing dilakukan untuk menyiapkan
+data citra agar sesuai dengan kebutuhan model YOLOv8 dan memastikan kualitas
+visual yang konsisten sebelum memasuki tahap anotasi dan pelatihan. Proses pre-
+processing pada penelitian ini mencakup dua langkah utama, yaitu resize, anotasi
+data, dan pembagian dataset.
+3.3.4.1 Resize
+
+          Resize merupakan proses mengubah ukuran seluruh citra menjadi 640×640
+piksel agar sesuai dengan format input standar model YOLOv8 [26], [35]. Dataset
+yang berasal dari sungai Kota Banjarmasin diproses untuk memastikan ukuran
+input seragam sehingga model dapat melakukan ekstraksi fitur secara optimal tanpa
+ketidaksesuaian resolusi.
+3.3.4.2 Anotasi Data
+
+          Anotasi data dilakukan untuk memberikan label yang tepat pada setiap
+objek sampah terapung agar model YOLOv8 dapat mempelajari pola visualnya
+secara akurat. Proses anotasi dilakukan menggunakan platform Roboflow, di mana
+dataset diunggah dan diberi bounding box secara manual.
+                                                                                               38
+
+                                       Gambar 3.7 Anotasi pada Dataset
+
+         Pada gambar 3.6 adalah contoh anotasi pada data yang dimana objek
+ditandai mencakup berbagai bentuk sampah makro seperti plastik, styrofoam,
+ranting, dan daun yang terlihat pada permukaan air. Seluruh objek dimasukkan ke
+dalam dua kelas, yaitu "sampah_mengapung", dan "tanaman_sungai" agar
+pelatihan lebih konsisten dan sesuai dengan fokus penelitian. Setelah proses
+pelabelan selesai, dataset diekspor ke dalam format YOLOv8 sehingga siap
+digunakan pada tahapan pelatihan, validasi, dan pengujian model.
+3.3.4.3 Pembagian Dataset
+
+          Dataset yang telah melalui tahap pra-pemrosesan selanjutnya dibagi ke
+dalam tiga subset, yaitu data pelatihan (training), data validasi (validation), dan
+data pengujian (testing) [26], [35]. Pembagian ini dilakukan untuk mendukung
+proses pelatihan dan evaluasi model deteksi objek secara objektif.
+
+          Pembagian dataset menggunakan rasio 70% data pelatihan, 20% data
+validasi, dan 10% data pengujian [35], [42]. Data pelatihan digunakan untuk
+melatih model YOLOv8, data validasi berfungsi untuk memantau kinerja model
+selama pelatihan dan mencegah overfitting [35], sedangkan data pengujian
+digunakan untuk mengevaluasi performa akhir model menggunakan data yang
+belum pernah dilibatkan sebelumnya. Pembagian dataset dilakukan secara
+terkontrol untuk menjaga distribusi objek tetap representatif serta menghindari
+kebocoran data antar subset, sehingga kemampuan generalisasi model dapat
+dievaluasi secara akurat.
+                                                                                               39
+
+3.3.5 Pembelajaran Pembuatan Model
+         Tahapan pembelajaran dan pembuatan model pada penelitian ini difokuskan
+
+pada proses modifikasi arsitektur YOLOv8 melalui penggantian fungsi aktivasi
+default SiLU dengan tiga fungsi alternatif, yaitu ReLU, LeakyReLU, dan
+HardSwish. Modifikasi ini dilakukan untuk menganalisis pengaruh masing-masing
+fungsi aktivasi terhadap stabilitas pelatihan, aliran gradien, serta kemampuan model
+dalam mengekstraksi fitur visual pada lingkungan sungai keruh yang memiliki
+tingkat gangguan visual tinggi [13], [32], [33]. Seluruh proses pembelajaran tetap
+mempertahankan struktur utama arsitektur YOLOv8 agar perubahan performa yang
+dihasilkan benar-benar berasal dari perbedaan fungsi aktivasi.
+
+         Penggantian fungsi aktivasi diterapkan pada tiga komponen utama
+arsitektur, yaitu backbone, neck, dan detection head [38]. Ketiga komponen ini
+mengalami modifikasi terstruktur sesuai konfigurasi eksperimen. Untuk
+memberikan gambaran lebih jelas mengenai posisi penggantian fungsi aktivasi
+dalam keseluruhan arsitektur.
+
+     Gambar 3.8 Ilustrasi Modifikasi Arsitektur YOLOv8 dengan Penggantian Fungsi Aktivasi
+
+         Gambar 3.8 ilustrasi modifikasi arsitektur, ada bagian backbone, seluruh
+blok konvolusi yang sebelumnya menggunakan SiLU dimodifikasi menggunakan
+salah satu fungsi aktivasi yang diuji. Pada bagian neck, penggantian fungsi aktivasi
+diterapkan pada mekanisme FPN­PAN, termasuk proses upsampling,
+downsampling, dan fusi fitur multiskala. Sementara itu, pada bagian Detection
+head, seluruh layer prediksi mengganti fungsi aktivasi SiLU dengan ReLU,
+LeakyReLU, atau HardSwish, sehingga perubahan yang terjadi pada komponen ini
+memberikan pengaruh langsung terhadap hasil prediksi bounding box, skor objek,
+                                                               40
+
+dan probabilitas kelas.
+       Setiap fungsi aktivasi diterapkan pada seluruh bagian arsitektur dalam satu
+
+konfigurasi model yang konsisten, sehingga penelitian ini menghasilkan tiga model
+berbeda, yaitu YOLOv8-ReLU, YOLOv8-LeakyReLU, dan YOLOv8-HardSwish.
+Ketiga model tersebut dilatih menggunakan dataset yang sama, parameter pelatihan
+yang sama, serta prosedur augmentasi yang seragam, agar perbedaan performa yang
+diperoleh dapat dievaluasi secara objektif dan tidak dipengaruhi oleh faktor lain
+selain fungsi aktivasi yang digunakan. Setelah seluruh proses pelatihan selesai,
+setiap model disimpan sebagai hasil eksperimen dan digunakan pada tahap evaluasi
+performa untuk menentukan fungsi aktivasi yang memberikan hasil terbaik pada
+kondisi visual sungai keruh. Seluruh proses pelatihan dan pengujian model
+dilakukan menggunakan perangkat lokal dengan dukungan GPU untuk
+mempercepat proses komputasi selama eksperimen. Spesifikasi perangkat yang
+digunakan ditunjukkan pada tabel 3.2.
+
+                                    Tabel 3.2 Spesifikasi Perangkat Pelatihan
+
+Komponen                            Spesifikasi
+
+Laptop                              ASUS ROG Strix G15 G513RC
+
+Processor           AMD Ryzen 7 6800H with Radeon Graphics
+
+GPU                 NVIDIA GeForce RTX 3050 Laptop GPU 4GB
+
+RAM                                 16 GB
+
+Sistem Operasi      Windows 11 Home Single Language 64-bit
+
+Framework                           PyTorch 2.5.1 + CUDA 12.1
+
+Bahasa Pemrograman                  Python 3.12.6
+
+Berdasarkan tabel 3.2, penelitian ini dilakukan menggunakan perangkat
+
+lokal ASUS ROG Strix G15 dengan dukungan GPU NVIDIA GeForce RTX 3050
+
+Laptop GPU untuk membantu mempercepat proses pelatihan dan pengujian model
+
+YOLOv8 selama eksperimen berlangsung. Selain itu, penggunaan framework
+
+PyTorch dengan dukungan CUDA memungkinkan proses komputasi berjalan lebih
+
+optimal pada proses deep learning.
+                                                                 41
+
+3.3.6 Evaluasi Model
+
+         Tahapan evaluasi model dilakukan untuk mengukur performa YOLOv8
+setelah melalui proses pelatihan menggunakan dataset lokal sungai keruh yang
+telah melalui tahap pre-processing, anotasi, dan pembagian data. Proses pelatihan
+dilakukan menggunakan lokal device dengan bahasa pemrograman Python serta
+pustaka Ultralytics YOLOv8 sebagai kerangka utama. Pada penelitian ini, tiga
+model YOLOv8 dibangun dengan perbedaan utama pada fungsi aktivasi yang
+digunakan, yaitu ReLU, LeakyReLU, dan HardSwish, sebagai pengganti fungsi
+aktivasi default SiLU. Evaluasi performa dilakukan menggunakan beberapa metrik
+yang umum digunakan pada sistem deteksi objek, yaitu Precision, Recall, F1-
+Score, dan mean Average Precision (mAP) pada dua skala evaluasi: mAP@0.5 dan
+mAP@0.5:0.95. Keempat metrik tersebut memberikan gambaran menyeluruh
+mengenai kualitas prediksi model, baik dari segi ketepatan klasifikasi maupun
+akurasi bounding box. Seluruh eksperimen menggunakan dataset, parameter
+pelatihan, dan augmentasi yang sama agar perbandingan performa bersifat objektif
+dan hanya dipengaruhi oleh perbedaan fungsi aktivasi yang diuji. Berikut tabel 3.2
+merupakan paramater pelatihan dan nilai yang digunakan.
+
+                                         Tabel 3.3 Parameter Pelatihan
+
+ Parameter                               Nilai
+  Pelatihan
+                                       500[15]
+     Epoch                              16[15]
+   Batch Size                    640x640[14], [15]
+  Image Size                          Adam[14]
+   Optimizer                           0.01[14]
+Learning Rate   Efficient Multiscale Attention (EMA) [15], [28]
+
+    Module      Cosine Annealing and Linear Decay [26], [42]
+ Learning rate
+decay strategy              Terbaik berdasarkan mAP
+Checkpointing
+                                                                            42
+
+         Parameter pelatihan pada tabel 3.3, penggunaan dua konfigurasi epoch 500
+bertujuan untuk mengamati pengaruh jumlah iterasi pelatihan terhadap peningkatan
+performa model. Setiap fungsi aktivasi diuji dalam dua durasi pelatihan berbeda
+sehingga pola konvergensi model dapat dianalisis secara lebih komprehensif.
+Masing-masing model diuji menggunakan data validation dan test untuk
+memperoleh nilai Precision, Recall, F1-Score, dan mAP. Hasil pengujian dari tiga
+model kemudian dibandingkan untuk mengetahui fungsi aktivasi yang memberikan
+performa paling optimal pada kondisi sungai keruh Kota Banjarmasin. Ringkasan
+hasil eksperimen ditampilkan pada tabel 3.3.
+
+                                            Tabel 3.4 Evaluasi Model
+
+Eksperimen  Learning  Epoch P(%) R(%)  F1-       mAP0.5(%) mAP0.5:0.95(%)
+
+YOLOv8-     Rate                       score(%)
+   SiLU
+            0.01 500 -  -              -         -                       -
+
+YOLOv8-     0.01 500 -  -              -         -                       -
+
+ReLU
+
+YOLOv8-     0.01 500 -  -              -         -                       -
+
+LeakyReLU
+
+YOLOv8-     0.01 500 -  -              -         -                       -
+
+Hardwish
+
+Hasil yang diperoleh pada tahap ini menjadi dasar untuk menentukan fungsi
+
+aktivasi yang paling efektif dalam meningkatkan performa deteksi objek pada
+
+YOLOv8 ketika diterapkan pada kondisi perairan keruh. Model dengan performa
+
+terbaik kemudian digunakan sebagai dasar analisis pada bab selanjutnya.
+
+3.3.7 Analisis Hasil
+
+         Tahapan analisis hasil dilakukan setelah seluruh model YOLOv8 dengan
+fungsi aktivasi SiLU, ReLU, LeakyReLU, dan HardSwish selesai menjalani proses
+pelatihan dan evaluasi. Analisis ini bertujuan membandingkan performa setiap
+model berdasarkan Precision, Recall, F1-Score, mAP@0.5, dan mAP@0.5:0.95
+untuk mengetahui fungsi aktivasi yang memberikan hasil paling optimal. Model
+YOLOv8 dengan aktivasi SiLU digunakan sebagai acuan awal, kemudian
+dibandingkan dengan ketiga aktivasi alternatif untuk melihat peningkatan atau
+penurunan performa. ReLU dianalisis dari sisi kestabilan gradien dan kecepatan
+                                                                                               43
+
+pembelajaran, LeakyReLU dari kemampuannya menjaga aliran gradien pada nilai
+negatif, dan HardSwish dari efisiensi komputasi serta responsnya pada citra
+berkontras rendah. Hasil metrik pada 500 epoch, digunakan untuk mengamati
+stabilitas dan konsistensi performa model sepanjang proses pelatihan. Perubahan
+nilai metrik juga diamati pada objek berukuran kecil, objek yang warnanya mirip
+dengan latar belakang, serta citra dengan pantulan cahaya dan kekeruhan tinggi.
+Tahap analisis ini memberikan pemahaman mengenai fungsi aktivasi yang paling
+efektif digunakan pada YOLOv8 untuk mendeteksi sampah terapung di lingkungan
+sungai keruh. Temuan pada tahap ini menjadi dasar penarikan kesimpulan pada
+bagian pembahasan.
+                                                                                                 44
+
+                                   4 BAB IV
+                         HASIL DAN PEMBAHASAN
+
+4.1 Pengumpulan Data
+       Data yang digunakan dalam penelitian ini berupa citra sampah terapung pada
+
+permukaan sungai yang diperoleh melalui pengambilan data secara langsung di
+lapangan. Pengambilan data dilakukan menggunakan perangkat iPhone 11 dan
+iPhone 14 Pro yang mampu menghasilkan citra dengan resolusi tinggi. Proses
+pengambilan data dilakukan dalam dua bentuk, yaitu foto dan video. Data berupa
+video kemudian diekstraksi menjadi beberapa frame gambar untuk meningkatkan
+jumlah data yang diperoleh. Melalui proses tersebut, total data awal yang berhasil
+dikumpulkan berjumlah 1.578 gambar.
+
+         Seluruh citra yang diperoleh kemudian diseleksi untuk memastikan kualitas
+gambar tetap layak digunakan, seperti kejelasan objek dan minimnya gangguan
+visual yang berlebihan. Dataset yang dihasilkan mencakup berbagai kondisi
+permukaan air dengan tingkat kekeruhan tinggi, serta variasi objek sampah seperti
+plastik, botol, dan material ringan lainnya. Citra dataset yang digunakan dalam
+penelitian ini ditunjukkan pada Gambar 4.1.
+
+                                            Gambar 4. 1 Citra Dataset
+
+                                                44
+                                                                                                 45
+
+         Untuk menyesuaikan ukuran citra agar lebih seragam, setiap gambar
+selanjutnya dilakukan proses pemotongan menjadi dua bagian dengan ukuran 640
+× 640 piksel. Proses ini juga bertujuan untuk meningkatkan jumlah data tanpa
+menghilangkan informasi penting pada citra. Setelah proses tersebut, jumlah dataset
+meningkat menjadi 3.156 gambar yang digunakan dalam penelitian ini. Dataset
+yang digunakan memiliki tingkat kompleksitas yang cukup tinggi akibat kondisi
+sungai yang keruh, keberadaan pantulan cahaya pada permukaan air, variasi
+pencahayaan, serta keberadaan objek tanaman yang terkadang memiliki warna dan
+bentuk yang menyerupai objek sampah. Selain itu, beberapa objek juga ditemukan
+saling bertumpang tindih sehingga meningkatkan tingkat kesulitan dalam proses
+deteksi objek.
+4.2 Pre-processing Data
+
+       Tahap pre-processing data dilakukan untuk menyiapkan citra agar memiliki
+format dan kualitas yang seragam sebelum digunakan pada tahap eksperimen.
+Proses ini meliputi tiga tahapan utama, yaitu resize, anotasi data, dan pembagian
+dataset.
+4.2.1 Resize
+
+         Pada tahap ini, seluruh citra diubah ukurannya menjadi 640 × 640 piksel.
+Penyesuaian ukuran ini dilakukan agar dimensi citra sesuai dengan kebutuhan input
+yang digunakan dalam penelitian. Dataset yang diperoleh memiliki resolusi awal
+yang lebih besar, umumnya sebesar 1920 × 1080 piksel. Oleh karena itu, proses
+resize dilakukan untuk menyesuaikan ukuran citra tanpa menghilangkan informasi
+penting yang terdapat pada gambar. Selain itu, proses resize juga membantu
+mempertahankan fokus pada objek utama dalam citra, khususnya pada area yang
+mengandung sampah mengapung. Dengan ukuran yang lebih terpusat, detail objek
+tetap terlihat dengan jelas. Perbandingan ukuran citra sebelum dan sesudah proses
+resize ditunjukkan pada Gambar 4.2.
+                                                                                                 46
+
+                              Gambar 4. 2 Perbandingan Ukuran Citra Sebelum dan Sesudah Resize
+
+       Proses resize dilakukan terhadap seluruh dataset sehingga seluruh citra
+memiliki dimensi yang seragam dan siap digunakan pada tahap berikutnya.
+4.2.2 Anotasi Data
+
+         Pada tahap ini, setiap citra diberikan penandaan pada objek yang terdapat di
+dalamnya melalui proses anotasi. Proses anotasi dilakukan secara manual
+menggunakan platform Roboflow dengan metode bounding box. Setiap objek yang
+terdapat pada citra diklasifikasikan ke dalam dua kelas, yaitu
+"sampah_mengapung" dan "tanaman_sungai". Pengelompokan ini dilakukan untuk
+membedakan objek buatan manusia dengan objek alami yang sering muncul pada
+permukaan sungai. Proses anotasi dilakukan dengan cara memberikan kotak
+pembatas (bounding box) secara manual pada setiap objek yang terlihat, kemudian
+memberikan label sesuai dengan kelasnya. Setiap citra dapat memiliki lebih dari
+satu objek dengan jumlah dan posisi yang bervariasi.
+
+         Hasil anotasi menunjukkan bahwa objek dalam citra memiliki variasi
+ukuran, bentuk, dan persebaran yang berbeda-beda, sehingga memberikan
+keragaman data yang cukup untuk digunakan dalam penelitian.Hasil anotasi pada
+dataset ditunjukkan pada gambar 4.3.
+                                                                                                 47
+
+                                    Gambar 4. 3 Anotasi Data pada Dataset
+
+         Seluruh data yang telah dianotasi kemudian dikonversi ke dalam format
+yang terstruktur. Setiap citra memiliki file anotasi dengan format ".txt" yang berisi
+informasi kelas dan koordinat bounding box untuk setiap objek. Dataset disusun ke
+dalam dua direktori utama, yaitu images yang berisi citra, dan labels yang berisi
+file anotasi yang sesuai untuk setiap gambar. Selain itu, dataset juga dilengkapi
+dengan file konfigurasi "data.yaml" yang memuat informasi jumlah kelas serta
+nama kelas yang digunakan, yaitu "sampah_mengapung" dan "tanaman_sungai".
+Struktur ini memastikan setiap data memiliki pasangan anotasi yang sesuai serta
+tersusun secara sistematis. Proses anotasi dilakukan secara manual menggunakan
+metode bounding box pada dua kelas objek, yaitu sampah mengapung dan tanaman
+sungai. Berdasarkan hasil peninjauan terhadap sampel dataset, masih ditemukan
+beberapa objek yang belum seluruhnya teranotasi sehingga dilakukan pemeriksaan
+dan penyempurnaan anotasi. Selain itu, kondisi tumpang tindih antara objek
+sampah dengan tanaman sungai tetap dipertahankan karena kondisi tersebut umum
+dijumpai pada lingkungan sungai. Sampah yang terbawa aliran sungai sering kali
+tersangkut pada vegetasi atau tanaman yang mengapung sehingga kondisi tersebut
+dianggap merepresentasikan keadaan sebenarnya di lapangan.
+                                                                                                 48
+
+4.2.3 Pembagian Dataset
+         Dataset yang telah melalui tahap preprocessing selanjutnya dibagi menjadi
+
+tiga bagian, yaitu data pelatihan (training), data validasi (validation), dan data
+pengujian (testing). Pembagian dataset dilakukan dengan rasio 70% : 20% : 10%
+untuk menjaga keseimbangan distribusi data pada setiap subset. Data pelatihan
+digunakan sebagai bagian utama dalam proses pembelajaran, data validasi
+digunakan untuk memantau performa selama proses berlangsung, sedangkan data
+pengujian digunakan untuk mengevaluasi hasil akhir. Setiap subset disusun dalam
+struktur direktori yang terpisah, di mana masing-masing subset memiliki dua folder
+utama, yaitu images yang berisi citra dan labels yang berisi file anotasi. Selain itu,
+
+Gambar 4. 4 Pembagian Dataset
+
+         Terdapat file konfigurasi dataset dalam format .yaml yang memuat
+informasi terkait kelas dan lokasi data. Struktur direktori dataset yang digunakan
+dalam penelitian ini ditunjukkan pada gambar 4.4. Selain itu, jumlah data pada
+masing-masing subset ditunjukkan pada Tabel 4.1.
+
+                                          Tabel 4. 1 Pembagian Dataset
+
+                Dataset    Jumlah Data
+                Training       2.209
+               Validation        631
+                 Testing         316
+                               3.156
+                  Total
+4.3 Implementasi Model
+
+       Pada tahap ini, model dibangun berdasarkan arsitektur YOLOv8 dengan
+melakukan modifikasi pada fungsi aktivasi. Implementasi dilakukan menggunakan
+bahasa pemrograman Python dengan pustaka Ultralytics. Model yang digunakan
+                                                                                                 49
+
+mempertahankan struktur utama arsitektur, yang terdiri dari backbone, neck, dan
+head, sehingga perubahan yang dilakukan hanya berfokus pada fungsi aktivasi.
+4.3.1 Arsitektur Model
+
+         Arsitektur model dengan mengganti fungsi aktivasi pada seluruh layer
+konvolusi. Fungsi aktivasi yang digunakan terdiri dari tiga variasi, yaitu ReLU,
+LeakyReLU, dan HardSwish. Penggantian ini dilakukan secara menyeluruh untuk
+memastikan bahwa setiap eksperimen hanya berbeda pada jenis fungsi aktivasi
+yang digunakan. Selain itu, penelitian ini juga menambahkan modul EMA pada
+setiap layer konvolusi. Modul EMA diterapkan pada output feature map untuk
+membantu menjaga kestabilan representasi fitur. Penerapan EMA dilakukan
+dengan mengintegrasikan modul tambahan pada proses forward, sehingga setiap
+output layer diproses kembali menggunakan mekanisme rata-rata eksponensial.
+Modifikasi fungsi aktivasi serta integrasi modul EMA pada arsitektur model
+ditunjukkan pada Gambar 4.5.
+
+                                       Gambar 4. 5 Modifikasi Arsitektur
+
+       Kombinasi antara fungsi aktivasi dan modul EMA bertujuan untuk
+menghasilkan representasi fitur yang lebih konsisten, terutama pada kondisi visual
+yang kompleks seperti permukaan air yang keruh.
+4.3.2 Konfigurasi Pelatihan
+
+         Konfigurasi pelatihan digunakan untuk memastikan seluruh model dilatih
+menggunakan parameter yang konsisten sehingga proses evaluasi fungsi aktivasi
+dapat dilakukan secara objektif. Selain parameter utama, penelitian ini juga
+menerapkan beberapa parameter tambahan selama proses eksperimen, seperti
+mekanisme early stopping dan augmentasi data untuk membantu meningkatkan
+kestabilan pelatihan serta kemampuan generalisasi model. Parameter pelatihan
+                                                                                50
+
+yang digunakan ditunjukkan pada tabel 4.2.
+
+                                         Tabel 4. 2 Parameter Pelatihan
+
+Parameter Pelatihan                                                      Nilai
+
+Model                 YOLOv8n
+
+Epoch                                                                    500
+
+Batch Size                                                               16
+
+Image Size            640 × 640
+
+Optimizer                                                                Adam
+
+Learning Rate                                                            0.01
+
+Learning Rate Decay   Cosine Learning Rate
+
+Modul Tambahan        EMA pada feature map
+
+Early Stopping        Patience 50
+
+Augmentasi Data       HSV, Horizontal Flip, dan Mosaic
+
+Checkpoint            Berdasarkan mAP terbaik
+
+Berdasarkan Tabel 4.2, seluruh parameter pelatihan disusun secara konsisten
+
+pada setiap eksperimen untuk menjaga objektivitas perbandingan. Penggunaan
+
+jumlah epoch yang tinggi memberikan kesempatan bagi model untuk mempelajari
+
+pola secara optimal, sementara strategi penurunan learning rate membantu menjaga
+
+kestabilan selama proses pelatihan. Selain itu, penerapan EMA dan teknik
+
+augmentasi turut mendukung peningkatan kualitas representasi fitur. Dengan
+
+konfigurasi ini, model mampu mencapai performa terbaik sebelum mencapai
+
+jumlah epoch maksimum pada sebagian besar eksperimen.
+
+4.4 Eksperimen Model
+
+       Eksperimen dilakukan untuk membandingkan performa model YOLOv8
+dengan variasi fungsi aktivasi yang berbeda, yaitu SiLU, ReLU, LeakyReLU, dan
+HardSwish. Seluruh model dilatih menggunakan dataset, parameter pelatihan, dan
+konfigurasi yang sama, sehingga perbedaan hasil yang diperoleh hanya dipengaruhi
+oleh jenis fungsi aktivasi yang digunakan. Evaluasi model dilakukan menggunakan
+metrik precision, recall, f1-score, serta mAP@0.5 dan mAP@0.5:0.95. Model
+terbaik ditentukan berdasarkan nilai mAP tertinggi yang dicapai selama proses
+pelatihan.
+                                                                                                 51
+
+4.4.1 Pelatihan Model SiLU
+
+                  Gambar 4. 6 Hasil Pelatihan Model YOLOv8 dengan Aktivasi SiLU
+
+         Berdasarkan Gambar 4.6, nilai training loss mengalami penurunan dari
+sekitar 6.5 pada awal pelatihan menjadi sekitar 4.1 pada akhir epoch. Sementara itu,
+validation loss yang sempat tinggi pada awal pelatihan (sekitar 11) menurun dan
+kemudian stabil pada kisaran 5.3­5.5. Setelah melewati sekitar epoch ke-200,
+terlihat adanya jarak antara training loss dan validation loss yang mengindikasikan
+mulai terjadinya overfitting ringan.
+
+         Pada kurva mAP, performa model meningkat dengan cepat pada awal
+pelatihan, dari sekitar 0.25 hingga mencapai nilai maksimum sebesar 0.664 pada
+epoch ke-227. Setelah titik tersebut, nilai mAP cenderung mengalami penurunan
+hingga mendekati 0.60 pada akhir pelatihan, yang menunjukkan bahwa
+penambahan epoch tidak lagi meningkatkan performa model.
+
+         Nilai mAP@0.5:0.95 berada pada kisaran 0.23 hingga 0.27 dan tidak
+mengalami peningkatan signifikan setelah pertengahan proses pelatihan. Nilai
+precision yang diperoleh sebesar 0.718 lebih tinggi dibandingkan recall sebesar
+0.621, yang menunjukkan bahwa model cenderung lebih selektif dalam mendeteksi
+objek, namun masih terdapat beberapa objek yang tidak terdeteksi. Tabel 4.3 Hasil
+                                                                                  52
+
+Pelatihan Model YOLOv8 dengan Aktivasi SiLU
+
+                    Tabel 4. 3 Hasil Pelatihan Model YOLOv8 dengan Aktivasi SiLU
+
+                Metrik           Nilai
+
+                Precision        0.718
+                  Recall         0.621
+                                 0.664
+                mAP@0.5
+
+                mAP@0.5:0.95     0.270
+                Epoch Terbaik     227
+
+                Waktu Pelatihan  5 jam 10 menit
+
+Hasil pelatihan menunjukkan bahwa model telah mencapai titik konvergensi
+
+sebelum mencapai epoch maksimum yang ditentukan. Meskipun pelatihan
+
+dilanjutkan hingga akhir, tidak terjadi peningkatan performa yang signifikan setelah
+
+epoch terbaik.
+
+4.4.2 Pelatihan Model ReLU
+
+       Gambar 4. 7 Hasil Pelatihan Model YOLOv8 dengan Aktivasi ReLU
+
+Berdasarkan Gambar 4.7, nilai training loss mengalami penurunan dari
+                                 53
+
+sekitar 6.5 pada awal pelatihan menjadi sekitar 4.8 pada akhir epoch. Sementara itu,
+validation loss yang sempat sangat tinggi pada awal pelatihan (mencapai sekitar 30)
+menurun secara signifikan dan kemudian stabil pada kisaran 5.4­5.6. Setelah
+melewati sekitar epoch ke-200, terlihat adanya selisih antara training loss dan
+validation loss yang mengindikasikan terjadinya overfitting ringan.
+
+         Pada kurva mAP, performa model meningkat secara signifikan pada awal
+pelatihan hingga mencapai nilai maksimum sebesar 0.658 pada epoch ke-377.
+Setelah titik tersebut, nilai mAP cenderung stabil tanpa peningkatan yang berarti
+hingga pelatihan dihentikan.
+Nilai mAP@0.5:0.95 sebesar 0.274, dengan precision sebesar 0.708 dan recall
+sebesar 0.597, menunjukkan bahwa model memiliki performa deteksi yang cukup
+baik, meskipun masih terdapat beberapa objek yang belum terdeteksi secara
+optimal. Pelatihan tidak mencapai batas maksimum 500 epoch karena mekanisme
+Early Stopping yang secara otomatis menghentikan proses training ketika tidak
+terdapat peningkatan performa dalam 50 epoch terakhir. Berdasarkan hasil
+pelatihan, proses berhenti pada epoch ke-426 dengan performa terbaik diperoleh
+pada epoch ke-376, sehingga model terbaik disimpan pada titik tersebut.
+
+                   Tabel 4. 4 Hasil Pelatihan Model YOLOv8 dengan Aktivasi ReLU
+
+     Metrik            Nilai
+    Precision         0.708
+                      0.597
+      Recall          0.658
+   mAP@0.5            0.274
+mAP@0.5:0.95           376
+ Epoch Terbaik   4 jam 17 menit
+Waktu Pelatihan
+                                                                                                 54
+
+         Berdasarkan Tabel 4.4, model dengan aktivasi ReLU mampu mencapai
+performa optimal pada epoch ke-376 dengan nilai mAP@0.5 sebesar 0.658. Nilai
+precision yang lebih tinggi dibandingkan recall menunjukkan bahwa model lebih
+selektif dalam mendeteksi objek, namun masih terdapat beberapa objek yang tidak
+terdeteksi. Secara keseluruhan, performa model sudah stabil sebelum mencapai
+epoch maksimum, sehingga penambahan epoch tidak memberikan peningkatan
+yang signifikan terhadap hasil deteksi.
+
+                  Gambar 4. 8 Hasil Validasi Model YOLOv8 dengan Aktivasi ReLU
+
+         Berdasarkan gambar 4.8, ditampilkan perbandingan antara ground truth
+(label) dan hasil prediksi model pada data validasi. Secara umum, model mampu
+mendeteksi objek "sampah_mengapung" dan "tanaman_sungai" dengan posisi
+bounding box yang cukup sesuai dengan label pada sebagian besar gambar.
+Pada hasil prediksi, terlihat bahwa objek terdeteksi dengan nilai confidence yang
+bervariasi, berkisar antara sekitar 0.3 hingga 0.8. Beberapa objek pada label
+terdeteksi lebih dari satu bounding box pada hasil prediksi, serta terdapat perbedaan
+jumlah objek antara label dan prediksi pada beberapa gambar. Selain itu, objek
+dengan ukuran kecil cenderung memiliki nilai confidence yang lebih rendah
+dibandingkan objek yang lebih besar. Secara keseluruhan, hasil validasi
+menunjukkan bahwa model telah mampu mengenali pola objek pada data, dengan
+tingkat kesesuaian yang cukup baik antara label dan prediksi.
+                                                                                                 55
+
+4.4.3 Pelatihan Model LeakyReLU
+
+              Gambar 4. 9 Hasil Pelatihan Model YOLOv8 dengan Aktivasi LeakyReLU
+
+         Berdasarkan gambar 4.9, nilai training loss mengalami penurunan dari
+sekitar 6.5 pada awal pelatihan menjadi sekitar 4.7 pada akhir epoch. Sementara itu,
+validation loss yang sempat tinggi pada awal pelatihan (sekitar 9­10) menurun dan
+kemudian stabil pada kisaran 5.3­5.4. Setelah melewati sekitar epoch ke-150,
+terlihat adanya selisih antara training loss dan validation loss yang
+mengindikasikan terjadinya overfitting ringan. Pada kurva mAP, performa model
+meningkat secara signifikan pada awal pelatihan hingga mencapai nilai maksimum
+sebesar 0.658 pada epoch ke-168. Setelah titik tersebut, nilai mAP cenderung stabil
+tanpa peningkatan yang signifikan hingga pelatihan dihentikan.
+Nilai mAP@0.5:0.95 sebesar 0.272, dengan precision sebesar 0.689 dan recall
+sebesar 0.620, menunjukkan bahwa model memiliki performa deteksi yang cukup
+baik dengan kecenderungan lebih selektif dalam mendeteksi objek. Pelatihan tidak
+mencapai batas maksimum 500 epoch karena tambahan mekanisme Early Stopping
+dengan nilai patience sebesar 50. Hal ini berarti proses pelatihan akan dihentikan
+apabila tidak terdapat peningkatan performa selama 50 epoch berturut-turut.
+Berdasarkan hasil pelatihan, proses berhenti pada epoch ke-218 dengan performa
+                                56
+
+terbaik diperoleh pada epoch ke-168, sehingga model terbaik disimpan pada titik
+tersebut.
+
+                Tabel 4. 5 Hasil Pelatihan Model YOLOv8 dengan Aktivasi LeakyReLU
+
+Metrik           Nilai
+
+Precision        0.689
+
+Recall           0.620
+
+mAP@0.5          0.659
+
+mAP@0.5:0.95     0.272
+
+Epoch Terbaik    168
+
+Waktu Pelatihan  2 jam 6 menit
+
+         Berdasarkan Tabel 4.5, model dengan aktivasi LeakyReLU mencapai
+performa optimal pada epoch ke-168 dengan nilai mAP@0.5 sebesar 0.659. Nilai
+precision yang lebih tinggi dibandingkan recall menunjukkan bahwa model lebih
+selektif dalam mendeteksi objek. Secara keseluruhan, performa model telah stabil
+sebelum mencapai epoch maksimum, sehingga penambahan epoch tidak
+memberikan peningkatan yang signifikan terhadap hasil deteksi.
+
+              Gambar 4. 10 Hasil Validasi Model YOLOv8 dengan Aktivasi LeakyReLU
+
+         Berdasarkan Gambar 4.10, ditampilkan perbandingan antara ground truth
+(label) dan hasil prediksi model pada data validasi. Secara umum, model mampu
+mendeteksi objek "sampah_mengapung" dan "tanaman_sungai" dengan posisi
+bounding box yang cukup sesuai dengan label pada sebagian besar gambar. Pada
+                                                                                                 57
+
+hasil prediksi, nilai confidence yang dihasilkan bervariasi, berkisar antara sekitar
+0.3 hingga 0.7. Sebagian besar objek pada label berhasil terdeteksi, meskipun
+terdapat perbedaan jumlah bounding box pada beberapa gambar antara label dan
+prediksi. Selain itu, objek dengan ukuran lebih kecil cenderung memiliki nilai
+confidence yang lebih rendah dibandingkan objek yang lebih besar. Secara
+keseluruhan, hasil validasi menunjukkan bahwa model mampu mengenali objek
+dengan cukup baik dan menghasilkan prediksi yang relatif konsisten terhadap label.
+4.4.4 Pelatihan Model HardSwish
+
+              Gambar 4. 11 Hasil Pelatihan Model YOLOv8 dengan Aktivasi HardSwish
+
+         Berdasarkan Gambar 4.11, nilai training loss mengalami penurunan dari
+sekitar 9 pada awal pelatihan menjadi sekitar 4.6 pada akhir epoch. Sementara itu,
+validation loss yang sempat tinggi pada awal pelatihan (sekitar 16) menurun secara
+signifikan dan kemudian stabil pada kisaran 5.3­5.4. Setelah melewati sekitar
+epoch ke-200, terlihat adanya selisih antara training loss dan validation loss yang
+mengindikasikan terjadinya overfitting ringan. Pada kurva mAP, performa model
+meningkat secara signifikan pada awal pelatihan hingga mencapai nilai maksimum
+sebesar 0.661 pada epoch ke-269. Setelah titik tersebut, nilai mAP cenderung stabil
+tanpa peningkatan yang signifikan hingga pelatihan dihentikan.
+                                58
+
+         Nilai mAP@0.5:0.95 sebesar 0.276, dengan precision sebesar 0.699 dan
+recall sebesar 0.619, menunjukkan bahwa model memiliki performa deteksi yang
+cukup baik dengan kecenderungan lebih selektif dalam mendeteksi objek. Pelatihan
+tidak mencapai batas maksimum 500 epoch karena mekanisme Early Stopping
+dengan nilai patience sebesar 50. Proses pelatihan berhenti pada epoch ke-320
+dengan performa terbaik diperoleh pada epoch ke-269.
+
+                Tabel 4. 6 Hasil Pelatihan Model YOLOv8 dengan Aktivasi Hardswish
+
+Metrik           Nilai
+
+Precision        0.699
+
+Recall           0.619
+
+mAP@0.5          0.660
+
+mAP@0.5:0.95     0.276
+
+Epoch Terbaik    269
+
+Waktu Pelatihan  3 jam 0 menit
+
+         Berdasarkan Tabel 4.6 model dengan aktivasi HardSwish mencapai
+performa optimal pada epoch ke-269 dengan nilai mAP@0.5 sebesar 0.660. Nilai
+precision yang lebih tinggi dibandingkan recall menunjukkan bahwa model lebih
+selektif dalam mendeteksi objek. Secara keseluruhan, performa model telah stabil
+sebelum mencapai epoch maksimum, sehingga penambahan epoch tidak
+memberikan peningkatan yang signifikan terhadap hasil deteksi.
+
+         Gambar 4. 12 Hasil Validasi Model YOLOv8 dengan Aktivasi HardSwish
+
+Berdasarkan Gambar 4.12, ditampilkan perbandingan antara ground truth
+                                                                   59
+
+(label) dan hasil prediksi model pada data validasi. Secara umum, model mampu
+mendeteksi objek "sampah_mengapung" dan "tanaman_sungai" dengan posisi
+bounding box yang cukup sesuai dengan label pada sebagian besar gambar. Pada
+hasil prediksi, nilai confidence yang dihasilkan berada pada kisaran sekitar 0.3
+hingga 0.7. Sebagian besar objek pada label berhasil terdeteksi, meskipun terdapat
+beberapa perbedaan jumlah bounding box antara label dan hasil prediksi pada
+beberapa gambar. Objek dengan ukuran lebih kecil cenderung memiliki nilai
+confidence yang lebih rendah dibandingkan objek yang lebih besar. Secara
+keseluruhan, hasil validasi menunjukkan bahwa model dengan aktivasi HardSwish
+mampu menghasilkan prediksi yang cukup konsisten terhadap label yang diberikan.
+4.5 Evaluasi Model
+
+       Pada tahap ini dilakukan evaluasi terhadap performa model YOLOv8 dengan
+variasi fungsi aktivasi, yaitu SiLU, ReLU, LeakyReLU, dan HardSwish. Evaluasi
+dilakukan menggunakan metrik precision, recall, mAP@0.5, dan mAP@0.5:0.95
+berdasarkan hasil pengujian pada data test. Ringkasan hasil evaluasi disajikan pada
+Tabel 4.7 berikut.
+
+                        Tabel 4. 7 Hasil Evaluasi Model YOLOv8 pada Data Test
+
+Eksperimen  Learning       Patience Epoch Precision Recall mAP@0.5 mAP@0.5:0.95
+
+            Rate
+
+YOLOv8 -                   - 500 0.6708 0.5958 0.6519      0.2890
+                    0.01
+
+   SiLU
+
+YOLOv8 -                   50 500 0.6728 0.6095 0.6665     0.3027
+                    0.01
+
+  ReLU
+
+YOLOv8 -                   50 500 0.6385 0.6756 0.6705     0.2965
+                     0.01
+
+LeakyReLU
+
+YOLOv8 -                   50 500 0.6614 0.6530 0.6793     0.3015
+                    0.01
+
+HardSwish
+
+Keterangan :
+
+              Nilai performa tertinggi pada setiap metrik
+
+              Nilai performa terendah pada setiap metrik
+
+Hasil evaluasi model menggunakan metrik precision, recall, mAP@0.5, dan
+                                                                                                 60
+
+mAP@0.5:0.95 menunjukkan bahwa setiap fungsi aktivasi memberikan performa
+yang berbeda terhadap model YOLOv8. Berdasarkan Tabel 4.7, model dengan
+aktivasi HardSwish menunjukkan performa terbaik pada metrik mAP@0.5 dengan
+nilai sebesar 0.6793, yang mengindikasikan kemampuan deteksi objek yang paling
+optimal dibandingkan model lainnya. Pada metrik mAP@0.5:0.95, model dengan
+aktivasi ReLU memperoleh nilai tertinggi sebesar 0.3027, yang menunjukkan
+performa yang lebih baik dalam mendeteksi objek pada berbagai tingkat IoU. Selain
+itu, model ReLU juga memiliki nilai precision tertinggi sebesar 0.6728, yang
+menunjukkan bahwa model lebih akurat dalam meminimalkan kesalahan deteksi.
+Sementara itu, model dengan aktivasi LeakyReLU menunjukkan keunggulan pada
+metrik recall dengan nilai sebesar 0.6756, yang menandakan bahwa model mampu
+mendeteksi lebih banyak objek dibandingkan model lainnya. Di sisi lain, model
+dengan aktivasi SiLU cenderung memiliki nilai terendah pada beberapa metrik,
+yaitu recall sebesar 0.5958, mAP@0.5 sebesar 0.6519, dan mAP@0.5:0.95 sebesar
+0.2890, meskipun tetap menunjukkan performa yang stabil.
+
+       Perbedaan performa ini juga dipengaruhi oleh karakteristik dataset yang
+digunakan, yaitu dataset lokal dengan variasi kondisi sungai keruh, pencahayaan,
+serta bentuk objek yang beragam. Selain itu, proses anotasi dilakukan secara
+manual sehingga terdapat kemungkinan ketidaksempurnaan dalam penentuan
+bounding box, seperti objek yang belum teranotasi secara lengkap atau
+ketidaktepatan dalam penempatan kotak pembatas. Kondisi ini dapat memengaruhi
+hasil evaluasi model, karena model dinilai berdasarkan kesesuaian prediksi
+terhadap anotasi yang tersedia. Dengan demikian, hasil yang diperoleh tidak hanya
+dipengaruhi oleh arsitektur dan fungsi aktivasi yang digunakan, tetapi juga oleh
+kualitas dataset dan proses anotasi. Aktivasi HardSwish dan ReLU cenderung
+memberikan hasil yang lebih optimal secara keseluruhan, sedangkan LeakyReLU
+lebih unggul dalam meningkatkan kemampuan deteksi objek secara menyeluruh
+(recall). Hal ini menunjukkan bahwa setiap fungsi aktivasi memiliki karakteristik
+masing-masing dalam mempengaruhi performa model YOLOv8 pada dataset yang
+digunakan.
+                                                  61
+
+4.6 Analisis Hasil
+
+       Berdasarkan hasil evaluasi pada data testing, setiap fungsi aktivasi
+menunjukkan karakteristik performa yang berbeda pada model YOLOv8. Secara
+umum, perbedaan nilai antar model tidak terlalu signifikan, yang menunjukkan
+bahwa arsitektur YOLOv8 memiliki tingkat stabilitas yang baik meskipun
+menggunakan fungsi aktivasi yang berbeda. Namun demikian, terdapat perbedaan
+kecenderungan performa pada masing-masing aktivasi. Selain faktor fungsi
+aktivasi, hasil yang diperoleh juga dipengaruhi oleh karakteristik dataset yang
+digunakan. Dataset lokal dengan kondisi sungai keruh memiliki kompleksitas
+visual yang tinggi, seperti variasi pencahayaan, kekeruhan air, serta latar belakang
+yang tidak homogen. Kondisi ini menyebabkan proses deteksi objek menjadi lebih
+menantang dibandingkan dataset dengan kondisi visual yang lebih bersih.
+
+       Proses anotasi yang dilakukan secara manual juga berpengaruh terhadap hasil
+evaluasi. Dalam beberapa kasus, terdapat objek yang tidak teranotasi secara
+lengkap atau ketidaktepatan dalam penempatan bounding box, sehingga dapat
+memengaruhi nilai metrik seperti precision dan recall. Untuk melihat pengaruh
+fungsi aktivasi secara lebih jelas, dilakukan analisis selisih performa terhadap
+model dengan aktivasi SiLU sebagai baseline, seperti ditunjukkan pada tabel 4.8
+berikut.
+
+                Tabel 4. 8 Selisih Performa Antar Fungsi Aktivasi (Dibandingkan SiLU)
+
+Aktivasi  Precision Recall mAP@0.5  mAP@0.5:0.95
+
+ReLU      +0.0020 +0.0137 +0.0146   +0.0137
+
+LeakyReLU -0.0323 +0.0798 +0.0186   +0.0075
+
+HardSwish -0.0094 +0.0572 +0.0274   +0.0125
+
+Keterangan:
+Nilai positif menunjukkan peningkatan performa dibandingkan SiLU, sedangkan
+nilai negatif menunjukkan penurunan performa.
+
+         Berdasarkan Tabel 4.8, seluruh fungsi aktivasi alternatif menunjukkan
+peningkatan pada metrik recall dan mAP@0.5 dibandingkan SiLU. Aktivasi
+HardSwish memberikan peningkatan terbesar pada mAP@0.5, yang menunjukkan
+performa deteksi objek yang lebih optimal secara keseluruhan. Sementara itu,
+                                                                                                 62
+
+LeakyReLU memberikan peningkatan terbesar pada recall, yang menunjukkan
+kemampuan model dalam mendeteksi lebih banyak objek.
+
+         Aktivasi ReLU menunjukkan peningkatan yang lebih seimbang pada
+seluruh metrik tanpa penurunan yang signifikan, sehingga dapat dikatakan memiliki
+performa yang stabil. Di sisi lain, LeakyReLU dan HardSwish mengalami sedikit
+penurunan pada precision, yang menunjukkan adanya peningkatan jumlah prediksi
+tambahan. Secara keseluruhan, hasil ini menunjukkan bahwa pemilihan fungsi
+aktivasi memberikan pengaruh terhadap performa model, terutama dalam
+keseimbangan antara precision dan recall. Aktivasi HardSwish dan ReLU
+cenderung memberikan performa yang lebih optimal pada kondisi dataset sungai
+keruh, sedangkan LeakyReLU lebih unggul dalam meningkatkan sensitivitas
+deteksi objek. Perbedaan performa yang diperoleh dari setiap fungsi aktivasi tidak
+hanya dipengaruhi oleh karakteristik fungsi aktivasi yang digunakan, tetapi juga
+dipengaruhi oleh karakteristik dataset. Dataset lokal yang digunakan memiliki
+tingkat kompleksitas yang tinggi akibat kondisi sungai yang keruh, variasi
+pencahayaan, keberadaan vegetasi air, serta adanya objek yang saling bertumpang
+tindih. Selain itu, proses anotasi yang dilakukan secara manual memungkinkan
+masih terdapat objek yang memerlukan penyempurnaan anotasi. Kondisi tersebut
+dapat mempengaruhi proses pembelajaran model sehingga menghasilkan
+perbedaan nilai precision, recall, F1-score, dan mAP pada setiap fungsi aktivasi
+yang diuji.
+                          5 BAB V
+                KESIMPULAN DAN SARAN
+
+5.1 Kesimpulan
+
+    Penelitian ini berhasil mengimplementasikan model deteksi objek berbasis
+YOLOv8 dengan variasi fungsi aktivasi, yaitu SiLU, ReLU, LeakyReLU, dan
+HardSwish, untuk mendeteksi objek sampah mengapung dan tanaman sungai pada
+kondisi sungai keruh. Tujuan utama penelitian ini adalah untuk mengevaluasi
+pengaruh penggunaan fungsi aktivasi terhadap performa model dalam mendeteksi
+objek pada dataset lokal. Berdasarkan hasil eksperimen dan evaluasi yang telah
+dilakukan, diperoleh beberapa kesimpulan sebagai berikut:
+
+    1. Model YOLOv8 mampu melakukan deteksi objek dengan cukup baik pada
+         dataset sungai keruh, yang ditunjukkan oleh nilai mAP@0.5 di atas 0.65
+         pada seluruh variasi fungsi aktivasi. Hal ini menunjukkan bahwa model
+         memiliki kemampuan yang baik dalam mengenali objek pada kondisi
+         lingkungan yang kompleks.
+
+    2. Penggunaan fungsi aktivasi memberikan pengaruh terhadap performa
+         model. Aktivasi HardSwish menghasilkan nilai mAP@0.5 tertinggi sebesar
+         0.6793, sedangkan aktivasi ReLU menghasilkan nilai precision tertinggi
+         sebesar 0.6728 dan mAP@0.5:0.95 tertinggi sebesar 0.3027. Aktivasi
+         LeakyReLU menunjukkan nilai recall tertinggi sebesar 0.6756.
+
+    3. Perbedaan performa antar fungsi aktivasi tidak terlalu signifikan, yang
+         menunjukkan bahwa arsitektur YOLOv8 memiliki stabilitas yang baik
+         meskipun menggunakan fungsi aktivasi yang berbeda. Namun demikian,
+         setiap fungsi aktivasi memiliki karakteristik masing-masing dalam
+         menyeimbangkan nilai precision dan recall.
+
+    4. Karakteristik dataset lokal yang digunakan, seperti kondisi air yang keruh,
+         variasi pencahayaan, serta latar belakang yang kompleks, memberikan
+         tantangan tersendiri dalam proses deteksi objek. Hal ini memengaruhi
+         performa model dalam mengenali objek secara optimal.
+
+    5. Proses anotasi manual pada dataset juga berpengaruh terhadap hasil
+         evaluasi. Ketidaktepatan atau ketidaklengkapan dalam penandaan bounding
+         box dapat memengaruhi nilai metrik evaluasi pada precision dan recall
+
+                63
+                                                                                                 64
+
+5.2 Saran
+    Penelitian ini masih memiliki beberapa keterbatasan dan dapat dikembangkan
+
+lebih lanjut untuk meningkatkan performa model. Adapun saran yang dapat
+diberikan untuk penelitian selanjutnya adalah sebagai berikut:
+
+    1. Meningkatkan kualitas dataset, khususnya pada proses anotasi, agar lebih
+         akurat dan konsisten dalam penentuan bounding box.
+
+    2. Menambahkan jumlah data serta variasi kondisi lingkungan, seperti
+         perubahan cuaca, waktu pengambilan gambar, dan tingkat kekeruhan air,
+         untuk meningkatkan kemampuan generalisasi model.
+
+    3. Menerapkan teknik augmentasi data untuk memperkaya variasi dataset
+         sehingga model dapat lebih robust terhadap kondisi yang beragam.
+
+    4. Mengembangkan model dengan menambahkan metode lain, seperti
+         penggunaan attention mechanism atau kombinasi arsitektur lain, untuk
+         meningkatkan performa deteksi.
+
+    5. Melakukan evaluasi menggunakan metrik tambahan atau skenario
+         pengujian lain agar performa model dapat dianalisis secara lebih
+         komprehensif.
+                   6 DAFTAR PUSTAKA
+
+[1] E. Pengelolaan, S. Pasar, T. Berbasis Modern, D. Kuantan, S. Harpani, and
+
+M. S. Nasution, "QISTINA: Jurnal Multidisiplin Indonesia," vol. 4, no. 1.
+
+[2] H. M. Sari and A. Afrinaldi, "Analisis Implementasi Kebijakan Penertiban
+
+dan Pengelolaan Kebersihan Lingungan (Studi Kasus Pengelolaan Sampah
+
+Berbasis 3R di Kota Sungai Penuh)," Jurnal Ilmu Lingkungan, vol. 23, no.
+
+1, pp. 228­238, Jan. 2025, doi: 10.14710/jil.23.1.228-238.
+
+[3] F. Candy et al., "Edukasi Pemilahan dan Pengolahan Sampah," Madani:
+
+Jurnal Pengabdian Kepada Masyarakat, vol. 9, no. 2, pp. 73­83, Dec. 2023,
+
+doi: 10.53834/mdn.v9i2.6857.
+
+[4] Tempo, "11 Juta Sampah Tidak Terkelola dengan Baik, Peneliti BRIN: Perlu
+
+Kedepankan Ekonomi Sirkular," https://www.tempo.co/lingkungan/11-juta-
+
+sampah-tidak-terkelola-dengan-baik-peneliti-brin-perlu-kedepankan-
+
+ekonomi-sirkular-30778.
+
+[5] H. C. Chotimah, M. R. Iswardhana, and L. Rizky, "Model Collaborative
+
+Governance dalam Pengelolaan Sampah Plastik Laut Guna Mewujudkan
+
+Ketahanan Maritim di Indonesia," Jurnal Ketahanan Nasional, vol. 27, no.
+
+3, p. 348, Jan. 2022, doi: 10.22146/jkn.69661.
+
+[6] L. J. J. Meijer, T. Van Emmerik, R. Van Der Ent, C. Schmidt, and L.
+
+Lebreton, "More than 1000 rivers account for 80% of global riverine plastic
+
+emissions into the ocean," 2021. [Online]. Available:
+
+https://www.science.org
+
+[7] Y. Liang et al., "Changes in aerosol loading before, during and after the
+
+COVID-19 pandemic outbreak in China: Effects of anthropogenic and
+
+natural aerosol," Science of the Total Environment, vol. 857, Jan. 2023, doi:
+
+10.1016/j.scitotenv.2022.159435.
+
+[8] A. P. Utami and A. Hasibuan, "Analisis Dampak Limbah/Sampah Rumah
+
+Tangga Terhadap Pencemaran Lingkungan Hidup," Cross-border, vol. 6, no.
+
+2, pp. 1107­1112.
+
+[9] S. Adyatma and M. Muhaimin, "Domestic Waste Pollution of River
+
+Settlements, Banjarmasin City, Indonesia," Ecology, Environment and
+
+Conservation,      pp.        1130­1134,        Sep.        2022,   doi:
+
+                              65
+        10.53550/eec.2022.v28i03.008.
+[10] R. Laila, J. P. Bambang, S. H. Achmad, and R. I. Eko, "Kajian Persepsi dan
+
+        Perilaku Masyarakat Terhadap Pencemaran Air Sungai Martapura,"
+        EnviroScienteae, vol. 16, no. 3, pp. 389­398, Nov. 2020.
+[11] M. Safrie and D. C. Abdi, "Penentuan Status Mutu Air Sungai Martapura Di
+        Kota Banjarmasin Menggunakan Metode Storet Determination Of Water
+        Quality Status Of The Martapura River In The City Of Banjarmasin Using
+        The Storet Method," Jukung Jurnal Teknik Lingkungan, vol. 8, no. 2, pp. 44­
+        49, 2022.
+[12] A. Rajwa-Kuligiewicz, A. Bojarczuk, A. Lenart-Boro, O. Kafliska, and
+        W. Suwalska, "Journey of pathogen-loaded macroplastics in a gravel-bed
+        mountain river: Hydrological and geomorphological controls in a
+        probabilistic framework," Science of the Total Environment, vol. 991, Aug.
+        2025, doi: 10.1016/j.scitotenv.2025.179916.
+[13] G. Qiao, M. Yang, and H. Wang, "An annotated Dataset and Benchmark for
+        Detecting Floating Debris in Inland Waters," Scientific Data , vol. 12, no. 1,
+        Dec. 2025, doi: 10.1038/s41597-025-04594-9.
+[14] J. P. Q. Tomas, J. E. E. Tupas, M. T. Soniel, C. H. M. E. Caruz, and D. B.
+        Babar, "Real-Time Detection of Floating Debris in Waterways Using
+        YOLOv8," in 14th International Workshop on Computer Science and
+        Engineering, WCSE 2024, International Workshop on Computer Science and
+        Engineering (WCSE), 2024, pp. 6­15. doi: 10.18178/wcse.2024.06.002.
+[15] J. Di, K. Xi, and Y. Yang, "An enhanced YOLOv8 model for accurate
+        detection of solid floating waste," Sci. Rep., vol. 15, no. 1, Dec. 2025, doi:
+        10.1038/s41598-025-10163-2.
+[16] C. W. Brewster et al., "Assessing macroplastic debris collected from eight
+        diverse river systems across four continents: Insights from synchronous
+        three-year community-led research efforts," J. Environ. Manage., vol. 391,
+        Sep. 2025, doi: 10.1016/j.jenvman.2025.126354.
+[17] A. Surahmat and D. B. R. W. Yato, "AI-Based Waste Detection for Water
+        Quality Monitoring in the Cisadane River: A Deep Learning Approach,"
+        Gema Lingkungan Kesehatan, vol. 23, no. 3, pp. 333­343, Jul. 2025, doi:
+
+                                                66
+        10.36568/gelinkes.v23i3.270.
+[18] A. I. Khan and S. Al-Habsi, "Machine Learning in Computer Vision," in
+
+        Procedia Computer Science, Elsevier B.V., 2020, pp. 1444­1451. doi:
+        10.1016/j.procs.2020.03.355.
+[19] S. Kim, T. Kim, M. Lee, J. Won, and H. Kim, "Adaptive water waste
+        processing strategy at floating barriers using computer vision, route finding,
+        and Monte Carlo simulation," KSCE Journal of Civil Engineering, vol. 29,
+        no. 10, Oct. 2025, doi: 10.1016/j.kscej.2025.100238.
+[20] Y. Jeong et al., "A Study on the Monitoring of Floating Marine Macro-Litter
+        Using a Multi-Spectral Sensor and Classification Based on Deep Learning,"
+        Remote Sens. (Basel)., vol. 16, no. 23, Dec. 2024, doi: 10.3390/rs16234347.
+[21] K. S. Khusnul and Nasrudin, "Pencemaran Sungai Martapura Akibat
+        Perilaku Masyarakat Membuang Sampah Di Sungai, Limbah Industri Dan
+        Pertambangan (Human Behavior Environmental Analysis)," Jurnal
+        Penelitian Multidisiplin, vol. 1, no. No. 2, pp. 34­41, Dec. 2022, [Online].
+        Available: https://journal.pbnsurabaya.co.id
+[22] M. Muhaimin, "Analisis Permasalahan Sampah Rumah Tangga Di Bantaran
+        Sungai Kota Banjarmasin Article Info Abstract," ASANKA: Jounal of Social
+        Science and Education, vol. 04, 2023, [Online]. Available:
+        https://jurnal.iainponorogo.ac.id/index.php/asanka
+[23] M. Hayati, "Tanggung Jawab Pemerintah Kota Banjarmasin Dalam
+        Pengelolaan Sampah Di Kawasan Sungai Kota Banjarmasin," Sekolah
+        Tinggi Ilmu Hukum Sultan Adam, vol. 10, no. 02, Aug. 2022, [Online].
+        Available:
+        https://banjarmasinkota.bps.go.id/statictable/2015/03/15/280/daftar-nama-
+        sungai-di-kota-banjarmasin-beserta-data-
+[24] M. Muhaimin, "Analisis Permasalahan Sampah Rumah Tangga Di Bantaran
+        Sungai Kota Banjarmasin Article Info Abstract," ASANKA: Jounal of Social
+        Science and Education, vol. 04, 2023, [Online]. Available:
+        https://jurnal.iainponorogo.ac.id/index.php/asanka
+[25] R. Ani, Herawati, and R. Kurnia, "Faktor-Faktor yang Berhubungan dengan
+        Perilaku Membuang Sampah ke Sungai di Kelurahan Sungai Kuin Kota
+
+                                                67
+        Banjarmasin," Dunia Keperawatan: Jurnal Keperawatan dan Kesehatan,
+        vol. 12, pp. 206­218, Jun. 2024, doi: 10.20527/dk.v12i2.529.
+[26] A. Vivi and S. Erniwati, "YOLOv8 for Object Detection: A Comprehensive
+        Review of Advances,Techniques, and Applications," IJACI: International
+        Journal of Advanced Computing and Informatics, vol. 2, no. 1, pp. 53­61,
+        Jul. 2025, doi: 10.71129/ijaci.v2i1.pp53-61.
+[27] M. Sohan, T. Sairam, and C. V. Ramireddy, "A Review on YOLOv8 and its
+        Advancements," Amaravati, India, 522237, 2023.
+[28] O. Daliang et al., "Efficient Multi-Scale Attention Module with Cross-
+        Spatial Learning," Shenzhen, China, May 2023. doi:
+        https://doi.org/10.48550/arXiv.2305.13563.
+[29] E. M. Bakr, A. El-Sallab, and M. Rashwan, "EMCA: Efficient Multiscale
+        Channel Attention Module," IEEE Access, vol. 10, pp. 103447­103461,
+        2022, doi: 10.1109/ACCESS.2022.3205602.
+[30] Z. Huang, L. Li, G. C. Krizek, and L. Sun, "Research on Traffic Sign
+        Detection Based on Improved YOLOv8," Journal of Computer and
+        Communications, vol. 11, no. 07, pp. 226­232, 2023, doi:
+        10.4236/jcc.2023.117014.
+[31] P. Ramachandran, B. Zoph, and Q. V. Le, "Searching for Activation
+        Functions," Oct. 2017, [Online]. Available: http://arxiv.org/abs/1710.05941
+[32] S. Justin, A. Waoo, and A. A. Waoo, "Performance Analysis Of Activation
+        Functions In Neural Networks," ShodhKosh: Journal of Visual and
+        Performing Arts, vol. 5, no. 1, Jan. 2024, doi:
+        10.29121/shodhkosh.v5.i1.2024.1908.
+[33] A. Z. Al Wafi and A. Nugroho, "A Comparative Study of Modern Activation
+        Functions on Multi-Label CNNs to Predict Genres Based on Movie Posters,"
+        Jurnal Ilmiah Teknik Elektro Komputer dan Informatika, vol. 10, no. 3, pp.
+        608­624, Sep. 2024, doi: 10.26555/jiteki.v10i3.29540.
+[34] S. Bouraya and A. Belangour, "A comparative analysis of activation
+        functions in neural networks: unveiling categories," Bulletin of Electrical
+        Engineering and Informatics, vol. 13, no. 5, pp. 3301­3308, Oct. 2024, doi:
+        10.11591/eei.v13i5.7274.
+
+                                                68
+[35] H. Huang, B. Wang, J. Xiao, and T. Zhu, "Improved small-object detection
+        using YOLOv8: A comparative study," Applied and Computational
+        Engineering, vol. 41, no. 1, pp. 80­88, Feb. 2024, doi: 10.54254/2755-
+        2721/41/20230714.
+
+[36] R. Theofilus and R. Kurniawan, "Deteksi Sampah di Permukaan Sungai
+        menggunakan Convolutional Neural Network dengan Algoritma YOLOv8,"
+        Seminar Nasional Official Statistics, pp. 537­546, Nov. 2024, doi:
+        10.34123/semnasoffstat.v2024i1.2099.
+
+[37] J. F. Peters, Foundations of Computer Vision, vol. 124. in Intelligent Systems
+        Reference Library, vol. 124. Cham: Springer International Publishing, 2017.
+        doi: 10.1007/978-3-319-52483-2.
+
+[38] J. Terven and D. Cordova-Esparza, "A Comprehensive Review of YOLO
+        Architectures in Computer Vision: From YOLOv1 to YOLOv8 and YOLO-
+        NAS," ArXiv, Apr. 2024, doi: 10.3390/make5040083.
+
+[39] E. Panja, H. Hendry, and C. Dewi, "YOLOv8 Analysis for Vehicle
+        Classification Under Various Image Conditions," Scientific Journal of
+        Informatics, vol. 11, no. 1, pp. 127­138, Feb. 2024, doi:
+        10.15294/sji.v11i1.49038.
+
+[40] D. Reis, J. Kupec, J. Hong, and A. Daoudi, "Real-Time Flying Object
+        Detection with YOLOv8," May 2024, [Online]. Available:
+        http://arxiv.org/abs/2305.09972
+
+[41] M. Yaseen, "What is YOLOv8: An In-Depth Exploration of the Internal
+        Features of the Next-Generation Object Detector," Aug. 2024, [Online].
+        Available: http://arxiv.org/abs/2408.15857
+
+[42] E. Panja, H. Hendry, and C. Dewi, "YOLOv8 Analysis for Vehicle
+        Classification Under Various Image Conditions," Scientific Journal of
+        Informatics, vol. 11, no. 1, pp. 127­138, Feb. 2024, doi:
+        10.15294/sji.v11i1.49038.
+
+[43] Q. Wu and X. Nie, "Improved YOLOv10: A Real-Time Object Detection
+        Approach in Complex Environments," Sensors, vol. 25, no. 22, Nov. 2025,
+        doi: 10.3390/s25226893.
+
+[44] P. Hidayatullah, N. Syakrani, M. R. Sholahuddin, T. Gelar, and R. Tubagus,
+
+                                                69
+"YOLOv8 to YOLO11: A Comprehensive Architecture In-depth
+
+Comparative Review A PREPRINT," ArXiv, Jan. 2025.
+
+[45] Q. Guangchao, Y. Mingxiang, and wang Hao,
+
+"IWHR_AI_Lable_Floater_V1: An annotated Dataset and Benchmark for
+
+Detecting Floating Debris in Inland Waters," Nov. 07, 2024, Beijing Science
+
+and  technology  planning                      project.  doi:
+
+https://doi.org/10.6084/m9.figshare.27376851.
+
+                 70
+                                                                                                 71
+
+                                  LAMPIRAN
+
+Lampiran 1. Lembar Konsultasi
+
+                                                71
+                                                                                                 72
+Lampiran 2. Validasi Datasets
+73
+                                                     74
+
+Lampiran 3. Source Code Training Model
+    1. SiLU.py
+          from ultralytics import YOLO
+          import torch
+          import pandas as pd
+          import matplotlib.pyplot as plt
+          import os
+
+from custom_modules.ema import EMA # buat ambil ema
+
+def add_ema(model):
+for m in model.model.modules():
+if hasattr(m, "cv1") and hasattr(m.cv1, "conv"):
+try:
+ch = m.cv1.conv.out_channels # ngambil channel
+m.ema = EMA(ch)
+
+# patch forward ema
+old_forward = m.forward
+
+def      new_forward(x,  old_forward=old_forward,
+
+module=m):
+
+x = old_forward(x)
+
+return module.ema(x)
+
+m.forward = new_forward
+
+except:
+pass
+
+def main():
+                                                      75
+
+# konfig
+
+DATA_PATH                   =             r"G:\My
+
+Drive\TA\Dataset_SungaiKeruh\Dataset_Sungai_Terapung
+
+_v79\dataset_v79\dataset_v79.yaml"
+
+PROJECT_NAME                   =          r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_Evaluasi_Model_Sil
+
+u_V791"
+
+EXP_NAME = "dataset100_silu_ema_500epoch_V791"
+
+os.makedirs(PROJECT_NAME, exist_ok=True)
+
+# load model
+model = YOLO("YOLOv8n.pt")
+
+# inject EMA
+add_ema(model)
+
+# train
+model.train(
+data=DATA_PATH,
+epochs=500,
+imgsz=640,
+batch=16,
+optimizer="Adam",
+lr0=0.01,
+cos_lr=True,
+lrf=0.01,
+device=0,
+
+workers=4,
+                                                                                      76
+
+patience=0,
+pretrained=True,
+
+#augment sikit ja
+hsv_h=0.015,
+hsv_s=0.7,
+hsv_v=0.4,
+fliplr=0.5,
+mosaic=1.0,
+
+project=PROJECT_NAME,
+name=EXP_NAME,
+exist_ok=True,
+save=True
+)
+
+# ambil hasil
+save_dir = os.path.join(PROJECT_NAME, EXP_NAME)
+csv_path = os.path.join(save_dir, "results.csv")
+
+if not os.path.exists(csv_path):
+print("results.csvtak da")
+return
+
+df = pd.read_csv(csv_path)
+
+summary = df[
+[
+"epoch",
+"metrics/precision(B)",
+"metrics/recall(B)",
+                                       77
+
+"metrics/mAP50(B)",
+"metrics/mAP50-95(B)"
+]
+]
+
+summary.to_csv(os.path.join(save_dir,
+"summary_metrics.csv"), index=False)
+
+# plot
+plt.figure()
+
+plt.plot(df["epoch"],                    df["metrics/mAP50(B)"],
+label="mAP50")                       df["metrics/mAP50-95(B)"],
+plt.plot(df["epoch"],
+label="mAP50-95")
+
+plt.xlabel("Epoch")
+plt.ylabel("Nilai")
+plt.title("YOLOv8 + EMA (500 Epoch)")
+plt.legend()
+
+plt.savefig(os.path.join(save_dir, "grafik_map.png"))
+plt.close()
+
+print("selesaiii")
+print("hasil ada di:", save_dir)
+
+         if __name__ == "__main__":
+         main()
+   2. ReLU.py
+from ultralytics import YOLO
+                                                                                               78
+
+import torch
+import torch.nn as nn
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+
+from custom_modules.ema import EMA
+
+def add_ema(model):
+      for name, m in model.model.named_modules():
+             if "model.0" in name or "model.1" in name:
+                    try:
+                              if hasattr(m, "cv1") and hasattr(m.cv1,
+
+"conv"):
+                                 ch = m.cv1.conv.out_channels
+                                 m.ema = EMA(ch)
+
+                                 old_forward = m.forward
+
+                                                                def new_forward(x,
+old_forward=old_forward, module=m):
+
+                                        x = old_forward(x)
+                                        return module.ema(x)
+
+                                 m.forward = new_forward
+                    except:
+
+                          pass
+
+def replace_activation(model):
+      count = 0
+      for m in model.model.modules():
+                                                      79
+
+      if hasattr(m, "act"):
+             try:
+                    m.act = nn.ReLU(inplace=True)
+                    count += 1
+             except:
+                    pass
+
+print(f"[INFO] Aktivasi diganti: {count} layer")
+
+def main():
+
+             DATA_PATH        =                       r"G:\My
+
+Drive\TA\Dataset_SungaiKeruh\Dataset_Sungai_Terapung_v79\d
+
+ataset_v79\dataset_v79.yaml"
+
+             PROJECT_NAME     =                       r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_Evaluasi_Model_ReLU_V791
+
+_V3"
+
+EXP_NAME = "dataset100_relu_ema_500epoch_V791_V3"
+
+os.makedirs(PROJECT_NAME, exist_ok=True)
+
+model = YOLO("YOLOv8n.yaml")
+
+replace_activation(model)
+add_ema(model)
+
+for m in model.model.modules():
+      if hasattr(m, "act"):
+             print("[CHECK AKTIVASI]:", type(m.act))
+             break
+
+model.train(
+      data=DATA_PATH,
+                                                                                         80
+
+      epochs=500,
+      imgsz=640,
+      batch=16,
+      optimizer="Adam",
+      lr0=0.01,
+      cos_lr=True,
+      lrf=0.01,
+      device=0,
+
+      workers=4,
+      patience=50,
+      pretrained=False,
+
+      hsv_h=0.015,
+      hsv_s=0.7,
+      hsv_v=0.4,
+      fliplr=0.5,
+      mosaic=1.0,
+
+      project=PROJECT_NAME,
+      name=EXP_NAME,
+      exist_ok=True,
+      save=True
+)
+
+save_dir = os.path.join(PROJECT_NAME, EXP_NAME)
+csv_path = os.path.join(save_dir, "results.csv")
+
+if not os.path.exists(csv_path):
+      print("results.csv tak ada")
+      return
+                                                                                               81
+
+      df = pd.read_csv(csv_path)
+
+      summary = df[
+             [
+                    "epoch",
+                    "metrics/precision(B)",
+                    "metrics/recall(B)",
+                    "metrics/mAP50(B)",
+                    "metrics/mAP50-95(B)"
+             ]
+
+      ]
+
+                                   summary.to_csv(os.path.join(save_dir,
+"summary_metrics.csv"), index=False)
+
+      if "time" in df.columns:
+             total_seconds = df["time"].sum()
+
+      else:
+             total_seconds = 0
+
+      hours = int(total_seconds // 3600)
+      minutes = int((total_seconds % 3600) // 60)
+      seconds = int(total_seconds % 60)
+
+        waktu_str = f"{hours} jam {minutes} menit {seconds}
+detik"
+
+       with open(os.path.join(save_dir, "training_time.txt"),
+"w") as f:
+
+             f.write("===== WAKTU TRAINING =====\n")
+                                                                                               82
+
+             f.write(waktu_str + "\n")
+
+      plt.figure()
+
+                 plt.plot(df["epoch"], df["metrics/mAP50(B)"],
+label="mAP50")
+
+             plt.plot(df["epoch"], df["metrics/mAP50-95(B)"],
+label="mAP50-95")
+
+      plt.xlabel("Epoch")
+      plt.ylabel("Nilai")
+      plt.title("YOLOv8 + EMA (ReLU, 500 Epoch)")
+      plt.legend()
+
+      plt.savefig(os.path.join(save_dir, "grafik_map.png"))
+      plt.close()
+
+      print("TOTAL WAKTU TRAINING:", waktu_str)
+      print("selesai")
+      print("hasil ada di:", save_dir)
+
+if __name__ == "__main__":
+      main()
+
+   3. LeakyReLU.py
+# import library
+from ultralytics import YOLO
+import torch
+import torch.nn as nn
+import pandas as pd
+                                                                                               83
+
+import matplotlib.pyplot as plt
+import os
+import time
+
+# import ema
+from custom_modules.ema import EMA
+
+# fungsi nambah ema
+def add_ema(model):
+
+      for name, m in model.model.named_modules():
+             if "model.0" in name or "model.1" in name:
+                    try:
+                              if hasattr(m, "cv1") and hasattr(m.cv1,
+
+"conv"):
+                                 ch = m.cv1.conv.out_channels
+                                 m.ema = EMA(ch)
+
+                                 old_forward = m.forward
+
+                                                                def new_forward(x,
+old_forward=old_forward, module=m):
+
+                                        x = old_forward(x)
+                                        return module.ema(x)
+
+                                 m.forward = new_forward
+                    except:
+
+                          pass
+
+# aktivasi ke leaky ReLU
+def replace_activation(model):
+
+      count = 0
+                                          84
+
+      for m in model.model.modules():
+             if hasattr(m, "act"):
+                    try:
+                             m.act = nn.LeakyReLU(negative_slope=0.1,
+
+inplace=False)
+                          count += 1
+
+                    except:
+                          pass
+
+      print(f"aktivasi diganti: {count} layer")
+
+def main():
+
+# path dataset
+
+                 data_path         =      r"G:\My
+
+Drive\TA\Dataset_SungaiKeruh\Dataset_Sungai_Terapung_v79\d
+
+ataset_v79\dataset_v79.yaml"
+
+# folder output
+
+                 project_name      =      r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_Evaluasi_Model_LeakyReLU
+
+_V791_v4"
+
+exp_name = "dataset100_Leakyrelu_ema_500epoch_v791_v4"
+
+os.makedirs(project_name, exist_ok=True)
+
+# load model dari yaml biar fresh
+model = YOLO("YOLOv8n.yaml")
+
+# ganti aktivasi
+replace_activation(model)
+
+# tambah ema
+                                                                                         85
+
+add_ema(model)
+
+# cek apakah leaky ReLU kepake
+for m in model.model.modules():
+
+      if hasattr(m, "act"):
+             print("cek aktivasi:", type(m.act))
+             break
+
+# mulai hitung waktu
+start_time = time.time()
+
+# training
+model.train(
+
+      data=data_path,
+      epochs=500,
+      imgsz=640,
+      batch=16,
+      optimizer="Adam",
+      lr0=0.01,
+      cos_lr=True,
+      lrf=0.01,
+      device=0,
+      workers=4,
+      patience=50,
+      pretrained=False,
+
+      hsv_h=0.015,
+      hsv_s=0.7,#augment
+      hsv_v=0.4,
+      fliplr=0.5,
+      mosaic=1.0,
+                                                                                         86
+
+      project=project_name,
+      name=exp_name,
+      exist_ok=True,
+      save=True
+)
+
+# selesai hitung waktu
+end_time = time.time()
+total_seconds = end_time - start_time
+
+# ambil hasil
+save_dir = os.path.join(project_name, exp_name)
+csv_path = os.path.join(save_dir, "results.csv")
+
+if not os.path.exists(csv_path):
+      print("results.csv tidak ada")
+      return
+
+df = pd.read_csv(csv_path)
+
+# simpan metrics
+summary = df[
+
+      [
+             "epoch",
+             "metrics/precision(B)",
+             "metrics/recall(B)",
+             "metrics/mAP50(B)",
+             "metrics/mAP50-95(B)"
+
+      ]
+]
+                                                                                               87
+
+                                   summary.to_csv(os.path.join(save_dir,
+"summary_metrics.csv"), index=False)
+
+      # convert waktu
+      hours = int(total_seconds // 3600)
+      minutes = int((total_seconds % 3600) // 60)
+      seconds = int(total_seconds % 60)
+
+        waktu_str = f"{hours} jam {minutes} menit {seconds}
+detik"
+
+       with open(os.path.join(save_dir, "training_time.txt"),
+"w") as f:
+
+             f.write("waktu training\n")
+             f.write(waktu_str + "\n")
+
+      # plot grafik
+      plt.figure()
+
+                 plt.plot(df["epoch"], df["metrics/mAP50(B)"],
+label="mAP50")
+
+             plt.plot(df["epoch"], df["metrics/mAP50-95(B)"],
+label="mAP50-95")
+
+      plt.xlabel("epoch")
+      plt.ylabel("nilai")
+      plt.title("YOLOv8 + ema (Leakyrelu, 500 epoch)")
+      plt.legend()
+
+      plt.savefig(os.path.join(save_dir, "grafik_map.png"))
+                                                                                               88
+
+      plt.close()
+
+      print("total waktu training:", waktu_str)
+      print("selesai")
+      print("hasil ada di:", save_dir)
+
+if __name__ == "__main__":
+      main()
+
+   4. Hardwish.py
+# import library
+from ultralytics import YOLO
+import torch
+import torch.nn as nn
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+import time
+
+# import ema
+from custom_modules.ema import EMA
+
+# fungsi nambah ema
+def add_ema(model):
+
+      for name, m in model.model.named_modules():
+             if "model.0" in name or "model.1" in name:
+                    try:
+                          if hasattr(m, "cv1") and hasattr(m.cv1,
+
+"conv"):
+                                 ch = m.cv1.conv.out_channels
+                                                              89
+
+                m.ema = EMA(ch)
+
+                old_forward = m.forward
+
+                def                                new_forward(x,
+
+old_forward=old_forward, module=m):
+
+                     x = old_forward(x)
+
+                     return module.ema(x)
+
+                          m.forward = new_forward
+             except:
+
+                   pass
+
+#aktivasi ke hardwish
+def replace_activation(model):
+
+      count = 0
+      for m in model.model.modules():
+
+             if hasattr(m, "act"):
+                    try:
+                          m.act = nn.HardSwish(inplace=True)
+                          count += 1
+                    except:
+                          pass
+
+      print(f"aktivasi diganti: {count} layer")
+
+def main():
+
+# path dataset
+
+data_path            =                                        r"G:\My
+
+Drive\TA\Dataset_SungaiKeruh\Dataset_Sungai_Terapung_v79\d
+                                                  90
+
+ataset_v79\dataset_v79.yaml"
+
+# folder output
+
+project_name                  =                   r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_Evaluasi_Model_HardSwish
+
+_V791_v4"
+
+exp_name = "dataset100_HardSwish_ema_500epoch_v791_v4"
+
+os.makedirs(project_name, exist_ok=True)
+
+# load model dari yaml biar fresh
+model = YOLO("YOLOv8n.yaml")
+
+# ganti aktivasi
+replace_activation(model)
+
+# tambah ema
+add_ema(model)
+
+# cek apakah hardwish kepake
+for m in model.model.modules():
+
+      if hasattr(m, "act"):
+             print("cek aktivasi:", type(m.act))
+             break
+
+# mulai hitung waktu
+start_time = time.time()
+
+# training
+model.train(
+
+      data=data_path,
+                                                                                         91
+
+      epochs=500,
+      imgsz=640,
+      batch=16,
+      optimizer="Adam",
+      lr0=0.01,
+      cos_lr=True,
+      lrf=0.01,
+      device=0,
+      workers=4,
+      patience=50,
+      pretrained=False,
+
+      hsv_h=0.015,
+      hsv_s=0.7,#augment
+      hsv_v=0.4,
+      fliplr=0.5,
+      mosaic=1.0,
+
+      project=project_name,
+      name=exp_name,
+      exist_ok=True,
+      save=True
+)
+
+# selesai hitung waktu
+end_time = time.time()
+total_seconds = end_time - start_time
+
+# ambil hasil
+save_dir = os.path.join(project_name, exp_name)
+csv_path = os.path.join(save_dir, "results.csv")
+                                                                                               92
+
+      if not os.path.exists(csv_path):
+             print("results.csv tidak ada")
+             return
+
+      df = pd.read_csv(csv_path)
+
+      # simpan metrics
+      summary = df[
+
+             [
+                    "epoch",
+                    "metrics/precision(B)",
+                    "metrics/recall(B)",
+                    "metrics/mAP50(B)",
+                    "metrics/mAP50-95(B)"
+
+             ]
+      ]
+
+      summary.to_csv(os.path.join(save_dir,
+"summary_metrics.csv"), index=False)
+
+      # convert waktu
+      hours = int(total_seconds // 3600)
+      minutes = int((total_seconds % 3600) // 60)
+      seconds = int(total_seconds % 60)
+
+      waktu_str = f"{hours} jam {minutes} menit {seconds}
+detik"
+
+      with open(os.path.join(save_dir, "training_time.txt"),
+"w") as f:
+                                                       93
+
+f.write("waktu training\n")
+f.write(waktu_str + "\n")
+
+# plot grafik
+plt.figure()
+
+      plt.plot(df["epoch"],       df["metrics/mAP50(B)"],
+label="mAP50")               df["metrics/mAP50-95(B)"],
+
+      plt.plot(df["epoch"],
+label="mAP50-95")
+
+plt.xlabel("epoch")
+plt.ylabel("nilai")
+plt.title("YOLOv8 + ema (hardwish, 500 epoch)")
+plt.legend()
+
+plt.savefig(os.path.join(save_dir, "grafik_map.png"))
+plt.close()
+
+print("total waktu training:", waktu_str)
+print("selesai")
+print("hasil ada di:", save_dir)
+
+if __name__ == "__main__":
+      main()
+                                                     94
+
+Lampiran 4. Source Code Test Model
+
+ from ultralytics import YOLO
+ import pandas as pd
+ import os
+
+def main():
+
+#path (ganti di sini aja path dari best epoch training)
+
+             MODEL_PATH                  =           r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_Evaluasi_Model_Silu_v791
+
+\dataset100_silu_ema_500epoch_v791\weights\best.pt"
+
+             DATA_PATH                   =           r"G:\My
+
+Drive\TA\Dataset_SungaiKeruh\Dataset_Sungai_Terapung_v79\d
+
+ataset_v79\dataset_v79.yaml"
+
+             PROJECT_NAME                =           r"G:\My
+
+Drive\TA\Evaluasi_Model_EMA\Hasil_TEST"
+
+EXP_NAME = "test_silu_ema_500epoch_v791"
+
+SAVE_DIR = os.path.join(PROJECT_NAME, EXP_NAME)
+os.makedirs(SAVE_DIR, exist_ok=True)
+
+#load model
+model = YOLO(MODEL_PATH)
+
+#test
+metrics = model.val(
+
+      data=DATA_PATH,
+      split="test",
+      imgsz=640,
+      batch=16,
+      device=0,
+                                                                                               95
+
+             conf=0.1,
+             iou=0.5,
+
+             #max_det=300,
+
+             project=PROJECT_NAME,
+             name=EXP_NAME,
+             exist_ok=True,
+             save=True
+      )
+
+      print("\n===== HASIL TEST =====")
+
+      #ambik metrix
+      result_dict = {
+
+             "precision": metrics.box.mp,
+             "recall": metrics.box.mr,
+             "mAP50": metrics.box.map50,
+             "mAP50-95": metrics.box.map
+      }
+
+      print(result_dict)
+
+      #save summary
+      df_summary = pd.DataFrame([result_dict])
+
+                              df_summary.to_csv(os.path.join(SAVE_DIR,
+"summary_metrics.csv"), index=False)
+
+      #per kelasnya
+      class_names = metrics.names
+                                                                                               96
+
+      per_class_data = []
+
+      for i, name in class_names.items():
+             per_class_data.append({
+                    "class": name,
+                    "precision": metrics.box.p[i],
+                    "recall": metrics.box.r[i],
+                    "mAP50": metrics.box.ap50[i],
+                    "mAP50-95": metrics.box.ap[i]
+             })
+
+      df_class = pd.DataFrame(per_class_data)
+                                  df_class.to_csv(os.path.join(SAVE_DIR,
+
+"per_class_metrics.csv"), index=False)
+
+      #ngambil file txt
+       with open(os.path.join(SAVE_DIR, "hasil_ringkas.txt"),
+"w") as f:
+
+             f.write("===== HASIL TEST =====\n")
+             for k, v in result_dict.items():
+
+                    f.write(f"{k}: {v:.4f}\n")
+
+      print("\nSemua hasil disimpan di:", SAVE_DIR)
+
+if __name__ == "__main__":
+      main()
+

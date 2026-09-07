@@ -8,7 +8,6 @@ from src.config import (
     BUDGET,
     MANGROVE_CODES,
     RESTORABLE_CODES,
-    LOCKED_CODES,
     BIAYA_DEFAULT,
     INVALID_PENALTY,
     REPEAT_INVALID_LIMIT,
@@ -30,6 +29,8 @@ class RestorasiEnv(gym.Env):
         jarak_max=None,
         reward_akhir=False,
         ukuran_blok=1,
+        restorable_codes=None,
+        reward_per_biaya=False,
     ):
         super().__init__()
         from src.config import DISPERSAL_DISTANCE
@@ -38,17 +39,25 @@ class RestorasiEnv(gym.Env):
         self.H, self.W = kelas.shape
         self.n_sel = self.H * self.W
         self.mangrove = np.isin(kelas, MANGROVE_CODES)
-        self.restorable = np.isin(kelas, RESTORABLE_CODES)
-        self.dikunci = np.isin(kelas, LOCKED_CODES)
+        self.restorable_codes = tuple(
+            RESTORABLE_CODES if restorable_codes is None else restorable_codes
+        )
+        self.restorable = np.isin(kelas, self.restorable_codes)
+        self.dikunci = ~(self.mangrove | self.restorable)
         self.biaya_peta = np.zeros((self.H, self.W), dtype=np.float32)
         for kode, hrg in (biaya or BIAYA_DEFAULT).items():
             self.biaya_peta[self.kelas == kode] = float(hrg)
+        tanpa_biaya = self.restorable & (self.biaya_peta <= 0)
+        if np.any(tanpa_biaya):
+            kode = np.unique(self.kelas[tanpa_biaya]).tolist()
+            raise ValueError(f"Kelas restorable tanpa biaya positif: {kode}")
         self.biaya_max = float(max(self.biaya_peta.max(), 1.0))
         self.budget_awal = float(budget)
         self.pakai_penalti = pakai_penalti
         self.reward_scale = reward_scale
         self.jarak_max = DISPERSAL_DISTANCE if jarak_max is None else float(jarak_max)
         self.reward_akhir = bool(reward_akhir)
+        self.reward_per_biaya = bool(reward_per_biaya)
         self.ukuran_blok = max(1, int(ukuran_blok))
         self.luas_lanskap = float((self.mangrove | self.restorable).sum())
         self.batas_langkah = max(MIN_STEPS, int(budget) * STEPS_PER_BUDGET)
@@ -168,6 +177,8 @@ class RestorasiEnv(gym.Env):
             iic_baru = hitung_iic(self.habitat, self.luas_lanskap, self.jarak_max)
             reward = iic_baru - self.iic
             self.iic = iic_baru
+            if self.reward_per_biaya:
+                reward /= max(cost, 1e-9)
             if self.reward_akhir:
                 reward = 0.0
             self._aksi_invalid_beruntun = 0
@@ -202,7 +213,12 @@ class RestorasiEnv(gym.Env):
         }
 
 
-def cek_raster(path=RASTER_PATH, budget=BUDGET, biaya=None):
+def cek_raster(
+    path=RASTER_PATH,
+    budget=BUDGET,
+    biaya=None,
+    restorable_codes=None,
+):
     kelas = np.load(path)
     print(f"Raster {path}: {kelas.shape}, n={kelas.size}")
     nama = {
@@ -211,13 +227,15 @@ def cek_raster(path=RASTER_PATH, budget=BUDGET, biaya=None):
         13: "non-hutan lain",
         21: "pertanian lain",
         31: "tambak",
+        35: "sawit",
         40: "sawah",
         33: "air",
         0: "NoData",
     }
     for kode, n in zip(*np.unique(kelas, return_counts=True)):
         print(f"  {int(kode):>3}  {nama.get(int(kode), '?'):16s}  {n}")
-    rest = np.isin(kelas, RESTORABLE_CODES)
+    kode_restorable = RESTORABLE_CODES if restorable_codes is None else restorable_codes
+    rest = np.isin(kelas, kode_restorable)
     mang = np.isin(kelas, MANGROVE_CODES)
     front = np.zeros_like(rest)
     ys, xs = np.nonzero(mang)
@@ -226,5 +244,8 @@ def cek_raster(path=RASTER_PATH, budget=BUDGET, biaya=None):
             r, c = y + dy, x + dx
             if 0 <= r < kelas.shape[0] and 0 <= c < kelas.shape[1] and rest[r, c]:
                 front[r, c] = True
-    print(f"  restorable={int(rest.sum())}  frontier awal={int(front.sum())}")
+    print(
+        f"  kode restorable={list(kode_restorable)}  "
+        f"restorable={int(rest.sum())}  frontier awal={int(front.sum())}"
+    )
     print(f"  budget unit={budget}  biaya={biaya or BIAYA_DEFAULT}")

@@ -12,11 +12,13 @@ sys.path.insert(0, str(ROOT))
 from src.config import (
     BUDGET,
     DISPERSAL_DISTANCE,
+    PRESET_RL,
     RASTER_PATH,
     RESOLUTION_CONFIG,
     SEEDS,
     SKENARIO_BIAYA,
     SKENARIO_ANGGARAN,
+    SKENARIO_LAHAN,
     TIMESTEPS,
 )
 from src.env import cek_raster
@@ -32,6 +34,8 @@ from src.train import latih
 
 KOLOM = [
     "resolusi",
+    "skenario_lahan",
+    "preset_rl",
     "skenario_biaya",
     "anggaran",
     "timesteps",
@@ -56,6 +60,9 @@ def satu_skenario(
     biaya,
     anggaran,
     resolusi,
+    skenario_lahan,
+    preset_rl,
+    algo_kw,
     env_base,
     metode=None,
     algoritma_rl=None,
@@ -66,10 +73,15 @@ def satu_skenario(
     algoritma_rl = list(algoritma_rl or [])
     env_kw = dict(env_base, biaya=biaya, budget=anggaran)
     print(
-        f"\n=== resolusi {resolusi}  biaya {nama_biaya}  "
-        f"anggaran {anggaran} ==="
+        f"\n=== resolusi {resolusi}  lahan {skenario_lahan}  "
+        f"biaya {nama_biaya}  anggaran {anggaran} ==="
     )
-    cek_raster(path=env_kw["path"], budget=anggaran, biaya=biaya)
+    cek_raster(
+        path=env_kw["path"],
+        budget=anggaran,
+        biaya=biaya,
+        restorable_codes=env_kw["restorable_codes"],
+    )
     baseline = {
         "random": ("Random Valid Action", aksi_acak, None),
         "naif": ("Greedy Naif (Delta IIC)", aksi_greedy, 1),
@@ -86,13 +98,16 @@ def satu_skenario(
         )
     biaya_slug = nama_biaya.replace(":", "-")
     konfigurasi_seed = "-".join(map(str, seeds))
+    lahan_slug = "" if skenario_lahan == "utama" else f"_lahan_{skenario_lahan}"
+    preset_slug = "" if preset_rl == "default" else f"_preset_{preset_rl}"
     for jenis in algoritma_rl:
         nama_rl = "PPO (tanpa masking)" if jenis == "ppo" else "MaskablePPO"
         nama_file = "ppo" if jenis == "ppo" else "maskableppo"
         model_dan_waktu = []
         for seed in seeds:
             stem = (
-                f"{nama_file}_biaya_{biaya_slug}_budget{anggaran}_"
+                f"{nama_file}{lahan_slug}{preset_slug}_biaya_{biaya_slug}_"
+                f"budget{anggaran}_"
                 f"steps{timesteps}_seed{seed}"
             )
             model_path = ROOT / "outputs" / "models" / resolusi / f"{stem}.zip"
@@ -105,6 +120,9 @@ def satu_skenario(
                     timesteps=timesteps,
                     model_path=model_path,
                     run_name=run_name,
+                    algo_kw=algo_kw,
+                    select_best=PRESET_RL[preset_rl].get("select_best", False),
+                    eval_every=PRESET_RL[preset_rl].get("eval_every", 10_000),
                 )
             )
         baris.append(
@@ -117,9 +135,11 @@ def satu_skenario(
         )
     for b in baris:
         b["resolusi"] = resolusi
+        b["skenario_lahan"] = skenario_lahan
         b["skenario_biaya"] = nama_biaya
         b["anggaran"] = anggaran
         is_rl = b["metode"] in {"PPO (tanpa masking)", "MaskablePPO"}
+        b["preset_rl"] = preset_rl if is_rl else ""
         b["timesteps"] = timesteps if is_rl else 0
         b["seeds"] = konfigurasi_seed if is_rl else ""
     return baris
@@ -129,6 +149,8 @@ def simpan_hasil(df, out):
     """Simpan hasil tanpa menggandakan konfigurasi eksperimen yang sama."""
     kunci = [
         "resolusi",
+        "skenario_lahan",
+        "preset_rl",
         "skenario_biaya",
         "anggaran",
         "timesteps",
@@ -139,7 +161,17 @@ def simpan_hasil(df, out):
         lama = pd.read_csv(out)
         for kolom in KOLOM:
             if kolom not in lama:
-                lama[kolom] = "" if kolom == "seeds" else 0
+                if kolom == "seeds":
+                    lama[kolom] = ""
+                elif kolom == "skenario_lahan":
+                    lama[kolom] = "utama"
+                elif kolom == "preset_rl":
+                    is_rl = lama["metode"].isin(
+                        ["PPO (tanpa masking)", "MaskablePPO"]
+                    )
+                    lama[kolom] = is_rl.map({True: "default", False: ""})
+                else:
+                    lama[kolom] = 0
         lama["seeds"] = lama["seeds"].fillna("").astype(str)
         df = pd.concat([lama[KOLOM], df[KOLOM]], ignore_index=True)
     df["seeds"] = df["seeds"].fillna("").astype(str)
@@ -156,6 +188,18 @@ if __name__ == "__main__":
         help="profil raster, dispersal distance, dan budget ekuivalen",
     )
     p.add_argument("--biaya", default="1:2", choices=list(SKENARIO_BIAYA))
+    p.add_argument(
+        "--skenario-lahan",
+        default="utama",
+        choices=list(SKENARIO_LAHAN),
+        help="kelas kandidat restorasi; s2 membuka kelas 13, 21, 31, dan 40",
+    )
+    p.add_argument(
+        "--preset-rl",
+        default="default",
+        choices=list(PRESET_RL),
+        help="konfigurasi training; s2-tuned lebih stabil dan peka biaya",
+    )
     p.add_argument(
         "--anggaran",
         type=int,
@@ -193,6 +237,8 @@ if __name__ == "__main__":
         p.error("--timesteps harus lebih besar dari 0")
     if args.tanpa_rl and args.rl:
         p.error("--tanpa-rl tidak dapat dipakai bersama --rl")
+    if args.preset_rl == "s2-tuned" and args.skenario_lahan != "s2":
+        p.error("--preset-rl s2-tuned hanya untuk --skenario-lahan s2")
 
     if args.resolusi:
         profil = RESOLUTION_CONFIG[args.resolusi]
@@ -212,6 +258,11 @@ if __name__ == "__main__":
 
     if not env_base["path"].exists():
         p.error(f"raster tidak ditemukan: {env_base['path']}")
+
+    profil_lahan = SKENARIO_LAHAN[args.skenario_lahan]
+    env_base["restorable_codes"] = profil_lahan["restorable_codes"]
+    preset_rl = PRESET_RL[args.preset_rl]
+    env_base.update(preset_rl["env"])
 
     if args.semua:
         pasangan = [(n, b, a) for n, b in SKENARIO_BIAYA.items() for a in SKENARIO_ANGGARAN]
@@ -241,12 +292,17 @@ if __name__ == "__main__":
         metode = None
 
     for nama, biaya, anggaran in pasangan:
+        biaya = dict(biaya)
+        biaya.update(profil_lahan["biaya_tambahan"])
         hasil.extend(
             satu_skenario(
                 nama,
                 biaya,
                 anggaran,
                 resolusi,
+                args.skenario_lahan,
+                args.preset_rl,
+                preset_rl["algo"],
                 env_base,
                 metode=metode,
                 algoritma_rl=algoritma_rl,
@@ -257,11 +313,15 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(hasil)[KOLOM]
     print(df.round(4))
-    nama_out = (
-        "iic_frontier_multiresolusi.csv"
-        if args.resolusi
-        else "iic_frontier_skenario.csv"
-    )
+    if args.skenario_lahan == "utama":
+        nama_out = (
+            "iic_frontier_multiresolusi.csv"
+            if args.resolusi
+            else "iic_frontier_skenario.csv"
+        )
+    else:
+        cakupan = "multiresolusi" if args.resolusi else "skenario"
+        nama_out = f"iic_frontier_{args.skenario_lahan}_{cakupan}.csv"
     out = ROOT / "outputs" / "csv" / nama_out
     out.parent.mkdir(parents=True, exist_ok=True)
     simpan_hasil(df, out)

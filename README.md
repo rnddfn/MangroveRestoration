@@ -145,6 +145,28 @@ python experiments/run_frontier.py --resolusi 48x96 --metode naif cost bridge
 python experiments/run_frontier.py --resolusi 64x128 --metode naif cost bridge
 ```
 
+### Skenario eksploratif S2
+
+S2 membuka kelas 13, 21, 31 (tambak), dan 40 (sawah) sebagai kandidat restorasi.
+Biaya tambahannya adalah 3 untuk tambak dan 3 untuk sawah. Skenario ini hanya
+untuk analisis sensitivitas, bukan rekomendasi restorasi lapangan. Hasilnya
+disimpan terpisah dalam `outputs/csv/iic_frontier_s2_multiresolusi.csv`.
+
+```powershell
+python experiments/run_frontier.py --resolusi 48x96 --skenario-lahan s2 --metode naif cost bridge
+python experiments/run_frontier.py --resolusi 48x96 --skenario-lahan s2 --rl mask --timesteps 100000 --seeds 0
+```
+
+Jika hasil awal S2 tertinggal dari Greedy Cost, gunakan preset yang menstabilkan
+pembaruan PPO dan memberi sinyal belajar berupa kenaikan IIC per biaya. Evaluasi
+akhir tetap menggunakan IIC asli.
+Model diperiksa setiap 10.000 langkah dan checkpoint dengan IIC evaluasi tertinggi
+yang disimpan sebagai hasil akhir.
+
+```powershell
+python experiments/run_frontier.py --resolusi 48x96 --skenario-lahan s2 --preset-rl s2-tuned --rl mask --timesteps 200000 --seeds 0
+```
+
 Tambahkan `random` jika Random Valid Action juga ingin dihitung:
 
 ```powershell

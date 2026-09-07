@@ -1,0 +1,3709 @@
+PENERAPAN MODEL DAMPED LOCAL TREND BERBASIS
+BAYESIAN TIME SERIES UNTUK FORECASTING CURAH
+
+                                   HUJAN
+
+                                   SKRIPSI
+
+                                    OLEH:
+                            HENNY KARTIKA
+                            NIM. 2110817120003
+
+         PROGRAM STUDI TEKNOLOGI INFORMASI
+                            FAKULTAS TEKNIK
+
+           UNIVERSITAS LAMBUNG MANGKURAT
+                      BANJARMASIN, JUNI 2025
+PENERAPAN MODEL DAMPED LOCAL TREND BERBASIS
+BAYESIAN TIME SERIES UNTUK FORECASTING CURAH
+
+                                   HUJAN
+
+                                   Skripsi
+
+                    Diajukan Untuk Memenuhi Salah Satu Syarat
+                         Sarjana Strata-1 Teknologi Informasi
+
+                                    OLEH:
+                            HENNY KARTIKA
+                           NIM. 2110817120003
+
+         PROGRAM STUDI TEKNOLOGI INFORMASI
+                            FAKULTAS TEKNIK
+
+           UNIVERSITAS LAMBUNG MANGKURAT
+                      BANJARMASIN, JUNI 2025
+
+                                               i
+                                          ABSTRAK
+Perubahan iklim menyebabkan ketidakpastian pola curah hujan yang berdampak
+signifikan pada sektor pertanian dan ketahanan pangan. Tantangan utama yang
+dihadapi adalah penanganan data iklim yang tidak lengkap, khususnya missing
+values curah hujan, yang dapat menurunkan kualitas model prediksi dan keandalan
+prediksi curah hujan masa depan. Masalah utama missing values dalam data time
+series iklim curah hujan karena dapat menyebabkan bias, kesalahan prediksi, dan
+kegagalan sistem prediksi. Oleh karena itu, pemilihan metode imputasi yang tepat
+sangat penting untuk mempertahankan informasi dan pola dalam data serta
+meningkatkan performa model. Penelitian ini bertujuan mengukur dan
+menganalisis kinerja metode Damped Local Trend (DLT) berbasis Bayesian Time
+Series dalam memprediksi curah hujan harian univariate dengan dua pendekatan
+penanganan missing values, yaitu tanpa pengisian (unfilled) dan dengan pengisian
+menggunakan Linear Interpolation dan Multiple Linear Regression (filled). Metode
+Bayesian Time Series dipilih karena kemampuannya mengakomodasi
+ketidakpastian secara probabilistik dan memberikan estimasi parameter yang
+robust. Data yang digunakan berasal dari Stasiun Meteorologi Syamsudin Noor
+BMKG periode 2015­2024. Evaluasi model menggunakan metrik Root Mean
+Square Error (RMSE) dan Mean Absolute Error (MAE). Hasil penelitian
+menunjukkan bahwa dengan penggunaan regressor, pendekatan missing values
+unfilled memberikan error testing terendah dengan RMSE 16.3105 dan MAE
+7.8979, menandakan model mampu menangani missing values tanpa imputasi
+pengisian di preprocessing. Sebaliknya, pada model tanpa regressor, pendekatan
+missing values filled unggul, mengindikasikan imputasi missing values membantu
+peningkatan performa saat regressor pendukung tidak tersedia.
+
+Kata kunci: bayesian, curah hujan, DLT, missing values, time series
+
+                                                 v
+                                         ABSTRACT
+Climate change has led to uncertainty in rainfall patterns, significantly impacting
+the agricultural sector and food security. A major challenge in addressing this issue
+is the presence of incomplete climate data, particularly missing values in rainfall
+data, which can reduce the quality and reliability of predictive models. Missing
+values in rainfall time series data pose a critical problem, as they may introduce
+bias, lead to inaccurate forecasts, and cause predictive system failures. Therefore,
+selecting an appropriate imputation method is essential to preserve information
+and patterns in the data while improving model performance.This study aims to
+evaluate and analyze the performance of the Damped Local Trend (DLT) method
+based on Bayesian Time Series in forecasting daily univariate rainfall using two
+missing value handling approaches: without imputation (unfilled) and with
+imputation using Linear Interpolation and Multiple Linear Regression (filled). The
+Bayesian Time Series method was chosen for its ability to accommodate uncertainty
+probabilistically and provide robust parameter estimation. The dataset used in this
+study was obtained from the Syamsudin Noor Meteorological Station (BMKG) for
+the period of 2015­2024. Model evaluation was conducted using Root Mean Square
+Error (RMSE) and Mean Absolute Error (MAE) metrics. The results show that
+when regressors are included, the unfilled missing value approach yields the lowest
+testing error, with an RMSE of 16.3105 and an MAE of 7.8979, indicating that the
+model can handle missing values without imputation during preprocessing.
+Conversely, in the model without regressors, the filled missing value approach
+outperforms, suggesting that imputation helps improve performance when
+supporting regressors are unavailable.
+
+Keywords: bayesian, DLT, missing values, rainfall, time series
+
+                                                vi
+                             HALAMAN PERSEMBAHAN
+Skripsi ini penulis persembahkan untuk:
+
+    1. Mama, abah dan kakak tercinta yang selalu menjadi sumber motivasi
+         penulis. Terimakasih atas segala doa, dukungan, dan kasih sayang yang
+         telah kalian berikan selama ini.
+
+    2. IbuDr.Ir.Yuslena SariS.Kom.,M.Kom., IPM selaku Dosen Pembimbing
+         Utama dan BapakAndreyan Rizky BaskaraS.Kom.,M.Kom., selaku
+         Koordinator Program Studi Teknologi Informasi yang telah bersedia
+         meluangkan waktunya untuk memberikan bimbingan dan dukungan kepada
+         penulis dengan penuh kesabaran agar skripsi ini dapat segera diselesaikan.
+
+    3. Seluruh Dosen, beserta Staf Administrasi Program Studi Teknologi
+         Informasi yang turut mengarahkan dan membantu selama menyelesaikan
+         skripsi.
+
+    4. Erika Maulidiya S.Kom., M.Kom selaku kakak pembimbing yang sangat
+         luar biasa membantu penulis dalam penelitian metode, penulisan, dari awal
+         hingga akhir penelitian.
+
+    5. ANU girls, selaku bestie Aca, Putri, Kama, Hani sebagai teman
+         seperjuangan, serta tim riset nutrisi tanaman, Syauqi, Najwa, Andri
+         Rahman, dan Khisyam. Andri Rahmadani, Dessy Fitriaya, kak Nula selaku
+         teman seperjuangan yang telah membantu penulis serta memberikan
+         motivasi, dukungan, kritik dan saran selama masa perkuliahan hingga
+         penyelesaian skripsi ini.
+
+    6. Seluruh teman-teman Angkatan2021 Program Studi Teknologi Informasi
+         serta kakak tingkat lainnya yang pernah membantu serta memberi semangat
+         kepada penulis selama perkuliahan hingga penyelesaian skripsi ini.
+
+                                                vii
+                                   KATA PENGANTAR
+         Puji dan syukur senantiasa kami panjatkan ke hadirat Allah SWT yang telah
+melimpahkan rahmat, kesehatan, dan kekuatan, sehingga penulis dapat
+menyelesaikan skripsi yang berjudul "Penerapan Model Damped Local Trend
+Berbasis Bayesian Time Series Untuk Forecasting Curah Hujan" ini dengan baik.
+Shalawat serta salam semoga tercurah kepada junjungan kita, Nabi Besar
+Muhammad SAW, yang telah membawa kita dari zaman kegelapan menuju cahaya
+keilmuan.
+
+         Skripsi ini disusun sebagai salah satu syarat untuk memperoleh gelar
+Sarjana Strata-1 (S1) pada Program Studi Teknologi Informasi, Fakultas Teknik,
+Universitas Lambung Mangkurat, Banjarmasin. Penulis menyadari bahwa
+penyelesaian skripsi ini tidak lepas dari dukungan dan bantuan berbagai pihak. Oleh
+karena itu, dengan penuh rasa hormat dan terima kasih, penulis menyampaikan
+penghargaan kepada:
+
+    1. Bapak Dekan Fakultas Teknik Universitas Lambung Mangkurat, yang telah
+         memberikan izin dan dukungan dalam proses penyusunan skripsi ini.
+
+    2. Bapak Ketua Jurusan Teknologi Informasi, yang selalu memberikan arahan
+         dalam proses akademik.
+
+    3. Bapak Andreyan Rizky Baskara, S.Kom., M.T., selaku Koordinator
+         Program Studi Teknologi Informasi, yang senantiasa memberikan
+         bimbingan dan dukungan selama masa studi.
+
+    4. Dr.Ir.Yuslena SariS.Kom.,M.Kom., IPM, selaku pembimbing utama,
+         yang dengan penuh kesabaran telah memberikan arahan, bimbingan, dan
+         motivasi kepada penulis.
+
+    5. Orang tua dan keluarga, yang selalu memberikan doa, dukungan moral, dan
+         materiil tanpa henti.
+
+    6. Teman-teman seperjuangan di Program Studi Teknologi Informasi, yang
+         telah menjadi tempat berbagi ilmu dan pengalaman selama masa
+         perkuliahan.
+
+    7. Seluruh pihak yang telah membantu dan memberikan dukungan dalam
+        penyelesaian skripsi ini, yang tidak dapat penulis sebutkan satu per satu.
+
+Skripsi ini terdiri dari beberapa bab dengan sistematika penulisan sebagai berikut:
+
+                                                viii
+                                         DAFTAR ISI
+LEMBAR PERNYATAAN .................................................................................... ii
+LEMBAR PENGESAHAN ................................................................................... iii
+PERSETUJUAN MAJU SIDANG SKRIPSI ........................................................ iv
+ABSTRAK .............................................................................................................. v
+ABSTRACT ........................................................................................................... vi
+HALAMAN PERSEMBAHAN............................................................................ vii
+KATA PENGANTAR ......................................................................................... viii
+DAFTAR ISI ........................................................................................................... x
+DAFTAR GAMBAR ........................................................................................... xiii
+DAFTAR TABEL ................................................................................................ xiv
+DAFTAR LAMPIRAN ......................................................................................... xv
+DAFTAR RIWAYAT HIDUP............................................................................. xvi
+BAB I PENDAHULUAN ....................................................................................... 1
+1.1 Latar Belakang ................................................................................................. 1
+1.2 Rumusan Masalah ............................................................................................ 7
+1.3 Batasan Masalah .............................................................................................. 7
+1.4 Tujuan Penelitian ............................................................................................. 8
+1.5 Manfaat Penelitian ........................................................................................... 8
+BAB II ................................................................................................................... 10
+TINJAUAN PUSTAKA........................................................................................ 10
+2.1 Penelitian Terkait ........................................................................................... 10
+2.1.1 Orbit: Probabilistic Forecast with Exponential Smoothing ..................... 10
+2.1.2 Predicting rainfall using machine learning, deep learning, and time series
+
+        models across an altitudinal gradient in the North-Western Himalayas.. 10
+2.1.3 Assessment of Moving Average (MA) Method for Rainfall Prediction in
+
+        Yogyakarta, Indonesia............................................................................... 11
+
+                                                 x
+2.1.4 Validation of Three Daily Satellite Rainfall Products in a Humid Tropic
+        Watershed, Brantas, Indonesia: Implications to Land Characteristics and
+        Hydrological Modelling ............................................................................ 12
+
+2.1.5 Comparison of Methods for Filling Daily and Monthly Rainfall Missing
+        Data: Statistical Models or Imputation of Satellite Retrievals? ............... 13
+
+2.2 Landasan Teori............................................................................................... 20
+2.2.1 Curah hujan ............................................................................................... 20
+2.2.2 Missing Values Data ................................................................................. 20
+2.2.3 Forecasting Time Series............................................................................ 21
+2.2.4 Data Forecasting: Univariate, Multivariate Regression .......................... 21
+2.2.5 Damped Local Trend (DLT) ..................................................................... 22
+2.2.6 Loss............................................................................................................ 25
+2.2.7 RMSE (Root Mean Squared Error) ........................................................... 25
+2.2.8 Mean Absolute Error (MAE) .................................................................... 25
+2.3 Kerangka Pemikiran....................................................................................... 26
+BAB III METODE PENELITIAN........................................................................ 28
+3.1 Alat dan Bahan Penelitian.............................................................................. 28
+3.2 Alur Penelitian ............................................................................................... 28
+3.2.1 Identifikasi Masalah .................................................................................. 29
+3.2.2 Studi Literatur ........................................................................................... 30
+3.2.3 Pengumpulan Data .................................................................................... 30
+3.2.4 Eksperimen dan Penelitian ........................................................................ 31
+BAB IV ................................................................................................................. 36
+HASIL DAN PEMBAHASAN............................................................................. 36
+4.1 Pengumpulan Data ......................................................................................... 36
+4.2 Pra-processing Data Target dan Regressor................................................... 38
+4.2.1 Penerapan Datetime dan Format Kolom TANGGAL ............................... 38
+
+                                                xi
+4.2.2 Inisialisasi Missing Values ........................................................................ 38
+4.2.3 Penyesuaian Tipe Data Dataset Iklim Harian ........................................... 39
+4.2.4 Perhitungan Missing Values ...................................................................... 40
+4.2.5 Pemeriksaan Panjang Missing Data Hari Berturut-turut........................... 41
+4.2.6 Penambahan Fitur Month, dan Dayofyear ................................................ 42
+4.2.7 Pemilihan Fitur Penelitian ......................................................................... 43
+4.2.8 Data Splitting ............................................................................................ 43
+4.2.9 Penerapan Log Tranform Data RR Curah Hujan...................................... 44
+4.2.10 Handling Missing Values Data RR (Unfilled) DLT Bayesian................... 44
+4.2.11 Handling Missing Values Data RR (Filled) DLT Bayesian ...................... 45
+4.3 Implementasi Model Damped Local Trend Bayesian.................................... 46
+4.4 Eksperimen Model ......................................................................................... 49
+4.4.1 Inisialisasi Parameter Model DLT Bayesian............................................. 49
+4.4.2 Eksperimen dan Evaluasi Model without Regressor (Unfilled)................ 52
+4.4.3 Eksperimen dan Evaluasi Model without Regressor (Filled) ................... 55
+4.4.4 Eksperimen Model with Regressor ........................................................... 58
+4.4.5 Evaluasi dan Hasil Model RMSE MAE DLT Bayesian ........................... 63
+4.5 Implementasi System Prediction Curah Hujan (Rainfall).............................. 64
+BAB V KESIMPULAN DAN SARAN................................................................ 65
+5.1 Kesimpulan .................................................................................................... 65
+5.2 Saran................................................................................................................ 65
+DAFTAR PUSTAKA ........................................................................................... 66
+
+                                                xii
+                                    DAFTAR GAMBAR
+Gambar 1. 1 Missing Values Data Curah BMKG [15] ........................................... 3
+Gambar 1. 2 Website BMKG Pengambilan Data Curah Hujan [15] ...................... 5
+Gambar 2. 1 Alur Pemrosesan missing values DLT Bayesian MCMC ................ 24
+Gambar 2.2 Kerangka Pemikiran .......................................................................... 27
+Gambar 3.1 Alur Penelitian................................................................................... 29
+Gambar 3.2 Alur pengumpulan data curah hujan ................................................. 31
+Gambar 3.3 Eksperimen dan Penelitian ................................................................ 32
+Gambar 4. 1 Website BMKG Data Online [15].................................................... 36
+Gambar 4. 2 Total Missing Values dan Available data RR (Unfilled) ................. 45
+Gambar 4. 3 Total Missing Values dan Available data RR (Filled) ..................... 45
+Gambar 4. 4 Proses Bayesian Optimization stan-map inisialisasi best parameters
+............................................................................................................................... 51
+Gambar 4. 5 Output Bayesian Optimization stan-map inisialisasi best parameters
+............................................................................................................................... 51
+Gambar 4. 6 Proses Training model DLT Stan-mcmc Iterasi............................... 52
+Gambar 4. 7 Plot Forecasting Actual Testing dan Missing Values without
+Regressor Unfilled ................................................................................................ 53
+Gambar 4. 8 Plot Forecasting Actual Testing dan Missing Values without
+Regressor Filled .................................................................................................... 56
+Gambar 4. 9 Plot Forecasting Actual Testing dan Missing Values with Regressor
+Unfilled ................................................................................................................. 59
+Gambar 4. 10 Plot Forecasting Actual Testing dan Missing Values with Regressor
+Filled ..................................................................................................................... 61
+Gambar 4. 11 Sistem Prediction Rainfall.............................................................. 64
+
+                                                xiii
+                                   DAFTAR TABEL
+Tabel 2.1 Ringkasan Penelitian Terkait ................................................................ 15
+Tabel 3. 1 Alat dan Bahan Penelitian.................................................................... 28
+Tabel 3. 2 Data Iklim Curah Hujan Banjarmasin BMKG..................................... 30
+Tabel 4. 1 Pemeriksaan Missing Values Variabel Target RR Curah Hujan ......... 37
+Tabel 4. 2 Dataset Iklim Harian ............................................................................ 37
+Tabel 4. 3 Penerapan datetime kolom TANGGAL ............................................... 38
+Tabel 4. 4 Nilai Inisialisasi Missing Values.......................................................... 39
+Tabel 4. 5 Tipe Data Variabel Dataset .................................................................. 39
+Tabel 4. 6 Pemeriksaan Missing Values................................................................ 40
+Tabel 4. 7 Missing Values Hari Berturut Pertahun ............................................... 41
+Tabel 4. 8 Penambahan Fitur month dan dayofyear ............................................. 42
+Tabel 4. 9 Perubahan Data RR ke Log-transformed ............................................. 44
+Tabel 4. 10 Source Code Hyperparameter Bayesian Optimization stan-map ...... 49
+Tabel 4. 11 Source Code Training Model DLT Bayesian Stan-mcmc.................. 51
+Tabel 4. 12 Nilai Evaluasi RMSE MAE without Regressor Unfilled................... 52
+Tabel 4. 13 Forecasting dan Actual Testing RR without Regressor (Unfilled) .... 53
+Tabel 4. 14 Nilai Evaluasi RMSE MAE without Regressor Filled....................... 55
+Tabel 4. 15 Forecasting dan Actual Testing RR without Regressor (Filled) ........ 55
+Tabel 4. 16 Forecasting dan Actual Testing RR with Regressor (Unfilled) ........ 58
+Tabel 4. 17 Forecasting dan Actual Testing RR with Regressor (Filled) ............. 61
+Tabel 4. 18 Nilai Evaluasi Model RMSE dan MAE DLT Bayesian .................... 63
+
+                                                xiv
+                                   DAFTAR LAMPIRAN
+Lampiran 1. Lembar Konsultasi............................................................................ 71
+Lampiran 2. Website Dokumentasi Metode DLT Bayesian Time Series ............. 72
+Lampiran 3. Dataset Iklim BMKG Excel ............................................................. 72
+Lampiran 4. Source Code Model DLT Terbaik .................................................... 72
+Lampiran 5. Soure Code Sistem Prediction curah hujan (Rainfall)...................... 81
+
+                                                xv
+       DAFTAR RIWAYAT HIDUP
+
+       Nama:                        : Henny Kartika
+
+       TTL                          : Kotabaru, 25 September 2002
+
+       Alamat                       : JL. Purwosari GG. III Kotabaru
+
+                                    Kalimantan Selatan
+
+Agama  : Islam
+
+Kewarganegaraan : Indonesia
+
+Riwayat Pendidikan : SDN 2 Semayap
+
+       SMPN 1 Kotabaru
+
+       SMAN 2 Kotabaru
+
+                             xvi
+                                     BAB I
+
+                    PENDAHULUAN
+
+1.1 Latar Belakang
+
+         Nutrisi tanaman terdiri dari unsur hara makro seperti nitrogen (N), fosfor
+(P), kalium (K), magnesium (Mg), kalsium (Ca), dan belerang (S), serta unsur hara
+
+mikro seperti besi (Fe), mangan (Mn), dan unsur lain yang diperlukan dalam jumlah
+kecil namun sangat penting. Unsur-unsur ini berfungsi dalam berbagai proses
+
+metabolisme tanaman termasuk fotosintesis, respirasi, dan sintesis senyawa organik
+yang penting bagi pertumbuhan dan produksi tanaman [1]. Nutrisi yang cukup dan
+
+seimbang sangat penting untuk mendukung pertumbuhan vegetatif, pembungaan,
+dan hasil panen, sehingga berkontribusi terhadap peningkatan produktivitas
+
+tanaman. Faktor-faktor yang mempengaruhi nutrisi tanaman mencakup kondisi
+lingkungan, seperti curah hujan, suhu, kelembaban, serta pH dan struktur tanah,
+
+yang mempengaruhi ketersediaan dan penyerapan nutrisi oleh akar tanaman.
+Perubahan iklim, seperti perubahan pola curah hujan, dapat mengganggu
+
+keseimbangan nutrisi dan berdampak negatif terhadap pertumbuhan serta
+produktivitas tanaman [2].
+
+Nutrisi tanaman dipengaruhi oleh curah hujan, variasi curah hujan yang
+
+dipengaruhi oleh fenomena ENSO seperti El Nino dan La Nina memberikan
+dampak signifikan terhadap produksi tanaman pangan di Indonesia, terutama padi,
+
+jagung, dan kedelai. Penurunan curah hujan akibat El Nino dapat menyebabkan
+
+kekeringan yang menghambat pertumbuhan tanaman dan mengurangi hasil
+
+produksi, sedangkan peningkatan curah hujan selama La Nina dapat berpotensi
+
+menyebabkan gangguan terhadap tanaman serta pergeseran siklus tanam [3]. Curah
+
+hujan penting untuk dianalisis, pada proses tersebut diperlukan data curah hujan
+
+yang berkualitas secara tidak langsung ikut serta dalam peningkatan kualitas data,
+
+untuk mengantisipasi dan mengurangi dampak risiko yang ditimbulkan oleh
+
+perubahan pola curah hujan, guna memastikan keberlanjutan produksi pangan dan
+
+meningkatkan produktivitas tanaman.
+
+Kualitas data curah hujan menjadi faktor penting untuk analisis curah hujan
+
+terhadap perencanaan pertanian. Banyak penelitian mengidentifikasi adanya
+
+tantangan dalam kualitas data curah hujan, kualitas data curah hujan sangat penting
+
+                                     1
+                                                                                                  2
+
+dalam rangka memperoleh prediksi yang akurat. Kualitas dan kuantitas data curah
+hujan merupakan faktor krusial dalam meningkatkan akurasi prediksi dengan
+menggunakan model. Ketersediaan data historis yang lengkap dan pengukuran
+real-time yang andal akan sangat membantu dalam menghasilkan model yang lebih
+akurat. Oleh karena itu, proses persiapan data yang tepat sebelum pelatihan model,
+seperti mengatasi nilai-nilai yang tidak konsisten dan melengkapi data yang hilang,
+menjadi langkah penting untuk mengoptimalkan kinerja model rainfall forecasting
+[4]. Untuk itu, dilakukan tahapan preprocessing yang meliputi pembersihan data
+dari nilai-nilai anomali dan transformasi data guna mengurangi ketidaklengkapan
+dan inkonsistensi data pada dataset curah hujan yang digunakan [5], [6].
+Ketersediaan dan kualitas data curah hujan sangat menentukan keberhasilan
+pengembangan model prediksi yang andal, dimana nilai nol curah hujan sangat
+sering muncul. Oleh karena itu, mengurangi ketidaklengkapan dan inkonsistensi
+data, misalnya dengan mengelola nilai nol serta mempertimbangkan skala waktu
+yang tepat seperti bulanan atau musiman, dapat meningkatkan performa model.
+Penyesuaian model juga dapat dilakukan dengan memperbaiki bias dalam
+memodelkan kejadian curah hujan ekstrim dan menggabungkan model dengan
+skenario perubahan iklim global untuk hasil prediksi yang lebih realistis [7]
+Keterbatasan data dalam cakupan data iklim yang memiliki missing values,
+anomalies [8], [9], [10], [11], [12]. Sifat non-linear yang kompleks sehingga
+membuat prediksi menjadi sulit., serta variasi spasial dan temporal [13].
+
+         Masalah nilai yang hilang (missing values) yang diakibatkan dalam data
+iklim sering disebabkan oleh berbagai faktor, termasuk kerusakan perangkat
+pengukur sensor, kesalahan pengukuran, atau gangguan dalam pengambilan data
+oleh operator stasiun cuaca [14], seperti contoh data curah hujan pada Gambar 1.1.
+Data curah hujan yang kurang berkualitas berpotensi mengurangi keandalan hasil
+prediksi atau forecasting, termasuk pengaruh variabilitas curah hujan yang
+disebabkan oleh fenomena ENSO, terutama ketidakteraturan curah hujan,
+berpotensi menurunkan ketepatan prediksi hasil panen yang selanjutnya dapat
+mempengaruhi pengambilan keputusan dalam perencanaan usaha tani seperti
+penentuan waktu tanam dan pengelolaan air. Kondisi ini berimplikasi pada
+produktivitas tanaman pangan dan ketahanan pangan di Indonesia [3].
+                                                                                                  3
+
+                           Gambar 1. 1 Missing Values Data Curah BMKG [15]
+
+         Penanganan dari kekurangan kualitas data curah hujan, penelitian utama
+yang berfokus pada nilai hilang (missing values) pada data curah hujan, dapat
+diatasi dengan teknik imputasi serta penggunaan model tradisional hingga modern
+yang telah banyak digunakan dalam penelitian, seperti machine learning, deep
+learning, dan metode tradisional. Metode tradisional sederhana seperti imputasi
+mean dan median sering digunakan karena kemudahannya dan sebagai strategi
+referensi praktis dalam menangani data hilang. Namun, metode ini memiliki
+keterbatasan karena tidak mempertimbangkan aspek-aspek kompleks seperti
+variabilitas temporal pada data iklim curah hujan [16].
+
+         Penelitian oleh Angkool Wangwongchai dkk. pada tahun 2023. metode
+statistik klasik seperti Multiple Linear Regression (MLR) menunjukkan performa
+unggul dengan nilai koefisien determinasi (R²) antara 77.7% hingga 81.5%, serta
+nilai error rendah (RMSE dan MAE), menandakan estimasi yang akurat dan
+kesalahan imputasi minimal. Selain itu, teknik kecerdasan buatan (Artificial
+Intelligence Techniques) seperti Multilayer Perceptron Neural Network (MLPNN),
+M5 Model Tree (M5-MT), dan Long Short-Term Memory Recurrent Neural
+Network (LSTM-RNN) juga menunjukkan hasil menjanjikan dalam kondisi
+tertentu, meskipun model-model ini memerlukan arsitektur yang lebih kompleks
+dan pemahaman lebih mendalam .
+
+         Penelitian oleh Vidal Paz J dkk. pada tahun 2023 metode imputasi berbasis
+ensemble seperti missForest memberikan performa terbaik dalam pengisian data
+curah hujan dengan waktu resolusi sepuluh menit, dengan error (RMSE, NRMSE)
+paling rendah dan bias mendekati nol, serta nilai R² dan indeks kesamaan (d) yang
+                                                                                                  4
+
+lebih tinggi daripada metode lain seperti MICE, Amelia II, dan IDW. Metode-
+metode tersebut efektif, tantangan utama dalam imputasi data curah hujan adalah
+ketidakpastian dalam estimasi, karakteristik data non-stasioner, dan kebutuhan
+akan interpretabilitas serta ketahanan model di berbagai skenario data yang berbeda
+[17].
+
+         Damped Local Trend (DLT) dengan pendekatan Bayesian, terutama
+menggunakan estimasi Markov Chain Monte Carlo (MCMC) di Orbit, dipilih
+meskipun terdapat metode-metode lain seperti Multiple Linear Regression (MLR)
+dan missForest yang juga menunjukkan performa yang sangat baik dalam imputasi
+data. Alasan utama pemilihan DLT adalah kemampuannya untuk mengakomodasi
+ketidakpastian parameter secara lebih dalam dibandingkan dengan teknik lainnya.
+Berbeda dengan MLR dan missForest yang hanya memberikan estimasi titik, DLT
+dengan pendekatan Bayesian memungkinkan estimasi distribusi posterior penuh
+dari parameter, yang tidak hanya memberikan prediksi imputasi tetapi juga
+mengukur ketidakpastian atas nilai-nilai parameter dan missing values. DLT model
+juga mempunyai parameter yang fleksibel untuk menangani pola tren dan musiman
+dalam data iklim. Model ini dapat secara eksplisit memodelkan tren lokal yang
+berubah-ubah dan komponen musiman secara terpisah dan adaptif, yang
+memungkinkan penyesuaian terhadap data yang non-stasioner dan memiliki
+fluktuasi musiman atau efek tren yang kompleks. Hal ini memberikan keunggulan
+dibandingkan dengan MLR atau missForest yang tidak secara eksplisit
+mengakomodasi komponen tren dalam data, dan lebih fokus pada imputasi data
+hilang tanpa menangani perubahan karakteristik tren dalam seri waktu [18], [19]
+
+         Keuntungan dari DLT adalah sifatnya yang generatif dan interpretatif. DLT
+adalah model probabilistik yang secara eksplisit menggambarkan proses
+pembentukan data melalui komponen-komponen tren, musiman, dan noise. DLT
+dalam Orbit memanfaatkan informasi prior yang dapat menggabungkan
+pengetahuan eksternal, yang dapat meningkatkan kualitas imputasi, terutama ketika
+data hilang memiliki pola yang kompleks atau jumlah data terbatas. Keunggulan
+lain dari DLT adalah ketahanannya terhadap overfitting. Estimasi Bayesian dengan
+MCMC secara alami memberikan regularisasi melalui penggunaan priors dan
+distribusi posterior, mengurangi risiko overfitting yang sering kali menjadi masalah
+                                                                                                  5
+
+pada metode seperti MLR atau algoritma machine learning lainnya yang lebih
+kompleks. Orbit, sebagai framework open-source yang dikembangkan oleh Uber,
+memberikan dukungan yang kuat untuk pemodelan berbasis Bayesian dan telah
+terbukti efektif untuk aplikasi time series dengan menggunakan MCMC. Dengan
+fitur-fitur ini, Orbit menyediakan platform yang ideal untuk implementasi DLT
+dalam pemodelan data curah hujan yang memiliki missing values [19], [20].
+
+         Penelitian ini menerapkan model berbasis DLT Bayesian untuk model data
+curah hujan dengan fokus pada kinerja DLT dalam penanganan missing values data
+curah hujan dengan pendekatan Bayesian pada parameter MCMC. Dataset pada
+penelitian ini adalah data curah hujan harian univariate yang berasal dari Badan
+Meteorologi Klimatologi dan Geofisika (BMKG) di salah satu wilayah di Indonesia
+Provinsi Kalimantan Selatan kota Banjarmasin seperti pada Gambar 1.2 [15].
+
+                   Gambar 1. 2 Website BMKG Pengambilan Data Curah Hujan [15]
+
+         BMKG melakukan pengumpulan data iklim curah hujan melalui
+pengamatan manual dan otomatis. Pengamatan manual dilakukan dengan penakar
+hujan standar yang diukur setiap hari, pengukuran curah hujan sehari yang diamati
+pada jam 07.00 WS [15]. Meskipun demikian, data curah hujan BMKG terkadang
+tidak lengkap atau terdapat kekosongan (missing values data). Data curah hujan
+observasi di Indonesia mengalami keterbatasan seperti data tidak lengkap dan
+distribusi stasiun yang kurang merata. Hal ini disebabkan oleh berbagai kendala,
+antara lain ketersediaan alat pengamatan yang terbatas di daerah terpencil, jumlah
+tenaga pengamat yang kurang, dan proses pengumpulan serta transmisi data yang
+                                                                                                  6
+
+masih manual dan lambat sehingga mempengaruhi kualitas data yang diperoleh
+[21].
+
+         Data iklim curah hujan yang digunakan pada penelitian ini hanya di
+Kalimantan Selatan, khususnya Kota Banjarmasin, karena wilayah ini merupakan
+salah satu penghasil utama padi sangat rentan terhadap dampak perubahan iklim,
+seperti peningkatan curah hujan yang memicu banjir tahunan. Berdasarkan
+penelitian oleh Ekawati dan Ichwan pada tahun 2022, ditemukan hubungan yang
+cukup kuat antara tingginya frekuensi banjir akibat curah hujan tinggi dengan
+penurunan produksi padi. Analisis statistik menunjukkan bahwa semakin sering
+terjadi banjir, semakin besar penurunan hasil panen padi. Hal ini tidak hanya
+mempengaruhi ketersediaan pangan tetapi juga berdampak pada kualitas nutrisi
+tanaman secara tidak langsung, misalnya melalui kerusakan lahan dan
+terganggunya distribusi air dan mineral di tanah. Oleh karena itu, penggunaan data
+di kota Banjarmasin mendukung upaya mitigasi bencana dan memastikan
+ketahanan pangan di tengah tantangan perubahan iklim [22].
+
+         Penelitian ini menggunakan data curah hujan, dengan fokus utama pada
+penanganan missing values. Pendekatan univariate dipilih karena curah hujan
+merupakan fenomena yang sangat dipengaruhi oleh berbagai faktor eksternal
+seperti suhu, kelembapan, kecepatan angin, dan durasi penyinaran matahari.
+Dengan memasukkan variabel-variabel pendukung tersebut sebagai regresor,
+model dapat memahami konteks variabel yang mempengaruhi terjadinya hujan,
+sehingga meningkatkan kemampuan model dalam menghasilkan estimasi nilai
+curah hujan yang hilang.
+
+         Metode Damped Local Trend (DLT) yang digunakan dalam penelitian ini,
+meskipun pada dasarnya dirancang untuk data univariate, melalui penggunaan
+regressor fitur tambahan BMKG. Dengan pendekatan Bayesian, DLT mampu
+mengakomodasi ketidakpastian dalam data dan menghasilkan estimasi parameter
+secara probabilistik melalui inferensi MCMC. Selain itu, DLT tidak memerlukan
+volume data yang besar sebagaimana metode machine learning atau deep learning,
+sehingga cocok diterapkan pada dataset iklim dengan cakupan waktu terbatas,
+namun tetap memungkinkan model untuk mengestimasi nilai secara lebih stabil
+melalui integrasi informasi dari variabel cuaca pendukung.
+                                                                                                  7
+
+         Forecasting curah hujan memerlukan model atau metode dengan performa
+terbaik agar hasil prediksinya seakurat mungkin. Evaluasi kinerja model Damped
+Local Trend (DLT) dilakukan menggunakan dua metrik utama, yaitu Root Mean
+Square Error (RMSE), dan Mean Absolute Error (MAE). RMSE dipilih karena
+mampu memberikan penalti lebih besar terhadap kesalahan prediksi yang besar,
+sehingga sensitif terhadap outlier dan memberikan gambaran kinerja model dalam
+satuan yang sama dengan data asli. MAE digunakan karena kesederhanaannya
+dalam mengukur rata-rata selisih absolut antara nilai aktual dan prediksi. Metrik ini
+menunjukkan seberapa jauh, secara rata-rata, hasil prediksi menyimpang dari nilai
+aktual. Sementara itu, digunakan untuk mengukur proporsi variabilitas data aktual
+yang dapat dijelaskan oleh model. Semakin kecil nilai RMSE dan MAE, maka
+semakin baik kinerja model dalam melakukan prediksi [23], [24].
+1.2 Rumusan Masalah
+Rumusan masalah yang diambil dari latar belakang di atas adalah sebagai berikut:
+
+    1. Berapa nilai RMSE, MAE yang dihasilkan oleh metode DLT Bayesian Time
+         Series forecasting curah hujan dengan missing values data yang tidak diisi
+         (unfilled) dan missing values data yang telah diisi (filled)?
+
+    2. Berapa nilai perbedaan RMSE, MAE yang dihasilkan metode DLT
+         Bayesian Time Series antara perbandingan missing values yang tidak diisi
+         (unfilled) dan missing values data yang telah di isi (filled)?
+
+1.3 Batasan Masalah
+         Batasan masalah yang perlu ditetapkan agar fokus penelitian terjaga adalah
+
+     sebagai berikut:
+    1. Dataset adalah data iklim harian yang berasal dari Stasiun Klimatologi dan
+
+         Geofisika (BMKG) Kalimantan Selatan di Kota Banjarmasin [15].
+    2. Data pada penelitian ini menggunakan data iklim harian dari data online
+
+         BMKG Stasiun Meteorologi Syamsudin Noor yang tersedia, dan data yang
+         digunakan adalah 10 tahun yaitu 1 Januari 2015 hingga 31 Desember 2024
+         [15].
+    3. Forecasting penelitian yaitu curah hujan (variabel target). Sementara itu,
+         variabel-variabel lainnya menjadi regresor atau fitur, seperti temperatur
+         minimum, temperatur maksimum, temperatur rata-rata, kelembaban rata-
+                                                                                                  8
+
+         rata, lamanya penyinaran matahari, kecepatan angin maksimum, arah angin
+         saat kecepatan maksimum, kecepatan angin rata-rata, dan arah angin
+         terbanyak, digunakan dan regresor-regresor ini digunakan untuk
+         memodelkan hubungan dengan curah hujan dalam rangka meramalkan nilai
+         curah hujan univariate di masa depan.
+    4. Penelitian ini hanya berfokus pada missing values pada variabel target curah
+         hujan (RR), yang mana missing values hanya ada pada data curah hujan
+         (RR), sedangkan variabel lainnya atau regressor menjadi variabel
+         pendukung atau fitur dalam kondisi dataset terisi penuh atau tidak ada
+         missing values. berdasarkan dokumentasi resmi Orbit, training model data
+         missing values hanya dapat dilakukan pada variabel utama atau target,
+         sedangkan regressor harus terisi penuh, jika terdapat missing values pada
+         regressor maka proses training terjadi error [18].
+    5. Evaluasi model menggunakan nilai matriks Loss RMSE, dan MAE
+    6. Penelitian menggunakan bahasa pemrograman python, menggunakan IDE
+         Visual Studio Code, dan menggunakan library orbit open source untuk
+         menerapkan metode Damped Local Trend Bayesian Time Series
+1.4 Tujuan Penelitian
+         Tujuan dari penelitian ini adalah sebagai berikut:
+    1. Mengukur kinerja model DLT berbasis Bayesian Time Series dalam
+         menangani missing values data curah hujan berdasarkan nilai metrik
+         evaluasi RMSE, MAE pada missing values tanpa diisi (unfilled) maupun
+         missing values yang telah disi (filled).
+    2. Menganalisis perbedaan nilai RMSE, MAE yang dihasilkan oleh metode
+         DLT Bayesian Time Series antara pendekatan missing values tanpa diisi
+         (unfilled) dan missing values data yang telah diisi (filled), untuk mengetahui
+         pengaruh praproses terhadap performa forecasting.
+1.5 Manfaat Penelitian
+         Hasil dari penelitian ini dapat memberikan manfaat sebagai berikut:
+    1. Manfaat teoritis
+
+              Hasil dari penelitian ini dapat membantu meningkatkan pengetahuan
+     serta kajian terkait metode DLT Bayesian Time Series terhadap missing values
+                                                                                              9
+
+data berdasarkan nilai matriks evaluasi RMSE, MAE pada forecasting curah
+hujan.
+2. Manfaat praktis
+
+    a. Penulis
+         Hasil dari penelitian ini dapat meningkatkan wawasan penulis tentang
+
+    konsep kerja metode DLT Bayesian Time Series dalam menangani missing
+    values berdasarkan nilai matriks evaluasi RMSE, MAE pada forecasting
+    curah hujan.
+    b. Peneliti berikutnya
+
+         Hasil dari penelitian ini dapat digunakan sebagai referensi untuk
+    peneliti berikutnya terkait kinerja dari model berbasis DLT Bayesian Time
+    Series terhadap missing values data berdasarkan nilai matriks evaluasi
+    RMSE, MAE untuk forecasting curah hujan.
+                                             BAB II
+                                  TINJAUAN PUSTAKA
+2.1 Penelitian Terkait
+              Penelitian ini telah dilakukan kajian pustaka terhadap beberapa
+     penelitian sebelumnya yang memiliki kesamaan dalam aspek permasalahan,
+     data, atau metode yang terdapat dalam penelitiannya.
+2.1.1 Orbit: Probabilistic Forecast with Exponential Smoothing
+              Penelitian yang dilakukan oleh Edwin Ng, Zhishi Wang, dkk tahun
+     2021 bertujuan untuk memperkenalkan paket Orbit yang dirancang untuk
+     forecasting probabilistik menggunakan model exponential smoothing berbasis
+     Bayesian. Permasalahan penelitian adalah kompleksitas forecasting time
+     series, terutama dengan data granularitas rendah dan kebutuhan akan model
+     yang dapat diinterpretasi. Data yang digunakan meliputi lima dataset:
+     perjalanan mingguan Uber di AS dan Kanada (rider dan driver), pesanan
+     harian Uber Eats secara global, serta seri M3 dan M4 yang terkenal di
+     komunitas forecasting. Metode yang digunakan melibatkan pengembangan
+     dua model utama, Local and Global Trend (LGT) dan Damped Local Trend
+     (DLT), dengan pemanfaatan bahasa pemrograman probabilistik seperti Stan
+     dan Pyro. Hasil penelitian menunjukkan bahwa model LGT dan DLT dalam
+     Orbit secara konsisten mengungguli model lain seperti SARIMA dan Prophet
+     dalam metrik Symmetric Mean Absolute Percentage Error (SMAPE), pada
+     data mingguan rider, model DLT mencatat SMAPE rata-rata 0.106
+     dibandingkan Prophet dengan 0.121. Hal ini mengindikasikan bahwa Orbit
+     lebih efisien secara komputasi sekaligus memberikan evaluasi yang lebih baik
+     [19].
+2.1.2 Predicting rainfall using machine learning, deep learning, and time series
+        models across an altitudinal gradient in the North-Western Himalayas
+                  Penelitian yang dilakukan oleh Yeasin dkk. pada tahun 2024
+     bertujuan untuk meningkatkan prediksi curah hujan di wilayah Pegunungan
+     Himalaya Barat Laut dengan menggunakan berbagai pendekatan model
+     machine learning (ML), deep learning (DL), dan teknik time series.
+     Permasalahan penelitian ini adalah kompleksitas pola curah hujan yang
+
+                                                10
+                                                                                                 11
+
+     dipengaruhi oleh variasi ketinggian dan kondisi geografis yang dinamis, serta
+     keterbatasan data meteorologi di daerah tersebut. Data yang digunakan
+     meliputi rekaman meteorologi dari enam stasiun cuaca pada berbagai elevasi
+     selama periode 1980 hingga 2021. Metode yang diterapkan mencakup
+     algoritma ML seperti Random Forest (RF), Support Vector Regression (SVR),
+     Artificial Neural Network (ANN), dan K-Nearest Neighbour (KNN), serta
+     algoritma DL seperti Long Short-Term Memory (LSTM), bi-directional
+     LSTM, deep LSTM, Gated Recurrent Unit (GRU), dan Recurrent Neural
+     Network (RNN), dengan juga membandingkan kinerja metode time series
+     seperti ARIMA dan TBATS. Hasil penelitian menunjukkan bahwa model bi-
+     directional LSTM memiliki performa terbaik dengan nilai rata-rata Root Mean
+     Square Error (RMSE) pada data uji berkisar antara 13.97 hingga 42.65 dan
+     Mean Absolute Error (MAE) antara 13.97 hingga 25.67 pada berbagai
+     ketinggian. Sebagai contoh pada salah satu elevasi (L3), bi-directional LSTM
+     memperoleh RMSE uji sebesar 32.46 dan MAE uji sebesar 20.34, sementara
+     model ML Random Forest menunjukkan RMSE uji mencapai di atas 43 dengan
+     MAE di kisaran 29, menunjukkan keunggulan metode deep learning dalam
+     pengenalan pola non-linear data curah hujan. Studi ini menegaskan pentingnya
+     peningkatan jumlah stasiun cuaca guna memperbaiki presisi prediksi curah
+     hujan di kawasan pegunungan serta mengusulkan integrasi data satelit resolusi
+     tinggi dan observasi lapangan untuk memaksimalkan kemampuan model
+     dalam merepresentasikan pola spasial dan temporal kompleks guna
+     mendukung pengelolaan sumber daya air dan mitigasi risiko perubahan iklim
+     [25].
+2.1.3 Assessment of Moving Average (MA) Method for Rainfall Prediction in
+
+        Yogyakarta, Indonesia
+              Penelitian oleh Jamal dkk. pada tahun 2025 mengevaluasi metode
+
+     Moving Average (MA) dalam memprediksi curah hujan harian di tujuh lokasi
+     di Gunung Kidul, Provinsi Yogyakarta, Indonesia, menggunakan data harian
+     selama sepuluh tahun (2010­2019). Model MA dengan smoothing factor k
+     dikembangkan dan dievaluasi menggunakan enam indikator performa utama,
+     antara lain MAE, NAE, RMSE, PA, R², dan IA. Hasil evaluasi menunjukkan
+                                                                                                 12
+
+     bahwa MA adalah model yang reliabel dengan nilai RMSE dan IA masing-
+     masing berkisar antara 10.7­18.3 dan 0.80­0.85, yang menunjukkan
+     kesesuaian tinggi antara prediksi dan data observasi. Meski demikian, model
+     MA menunjukkan kecenderungan underfitting di beberapa lokasi. Oleh karena
+     itu, penelitian merekomendasikan penggunaan model alternatif seperti ARMA
+     dan ARIMA, serta pengembangan model multivariat seperti Multiple Linear
+     Regression (MLR) dan Artificial Neural Network (ANN) untuk meningkatkan
+     performa prediksi. Pendekatan gabungan dengan analisis komponen utama
+     juga diusulkan agar parameter tambahan seperti ketinggian air dan kualitas air
+     dapat diintegrasikan guna meningkatkan kualitas prediksi. Kesimpulannya,
+     metode MA sederhana terbukti dapat diandalkan untuk prediksi curah hujan
+     dalam konteks ini dan berpotensi mendukung mitigasi banjir dan pengelolaan
+     sumber daya air di wilayah Yogyakarta [26].
+2.1.4 Validation of Three Daily Satellite Rainfall Products in a Humid Tropic
+
+        Watershed, Brantas, Indonesia: Implications to Land Characteristics and
+        Hydrological Modelling
+
+              Penelitian yang dilakukan oleh Setiabudi dkk. (2021) bertujuan untuk
+     memvalidasi ketiga curah hujan harian berbasis satelit, yaitu CHIRPS, GPM,
+     dan PERSIANN, di wilayah DAS Brantas yang merupakan daerah tropis
+     lembab di Indonesia dengan karakteristik topografi yang kompleks.
+     Permasalahan utama dalam penelitian ini adalah keterbatasan data curah hujan
+     dari stasiun pengukur yang tersebar dan memiliki cakupan spasial serta
+     temporal yang terbatas, sehingga penggunaan data satelit menjadi alternatif
+     penting meskipun performanya masih dipertanyakan terutama pada wilayah
+     dengan pengaruh orografi yang kuat. Data yang digunakan meliputi catatan
+     curah hujan harian selama 30 tahun (1990­2020) dari enam lokasi di DAS
+     Brantas, dengan pengujian berbagai variabel fisik yang berkontribusi pada
+     kesalahan estimasi seperti suhu, elevasi, penggunaan lahan, kecepatan angin,
+     dan kelembaban tanah. Metode evaluasi yang diterapkan mencakup
+     pengukuran kuantitatif akurasi menggunakan koefisien korelasi (CC), Root
+     Mean Square Error (RMSE), Normalized RMSE (NRMSE), beserta analisis
+     kategori seperti Probability of Detection (POD) dan False Alarm Ratio (FAR),
+                                                                                                 13
+
+     serta pengujian dampak kualitas data satelit pada pemodelan hidrologi
+     menggunakan model SWAT. Hasil penelitian menunjukkan bahwa secara
+     umum performa produk satelit harian kurang memuaskan dengan nilai CC
+     harian hanya berkisar 0,22­0,36 dan RMSE harian mencapai 11­21 mm/hari.
+     CHIRPS dan PERSIANN cenderung meremehkan curah hujan pada tingkat
+     hujan tinggi, tetapi menunjukkan pola musiman yang lebih baik dibandingkan
+     GPM. GPM tampil lebih responsif dalam menangkap variabilitas curah hujan,
+     khususnya pada kejadian curah hujan ekstrem (>40 mm/hari) meskipun dengan
+     kecenderungan overestimasi secara signifikan. Selain itu, produk CHIRPS
+     memberikan hasil simulasi hidrologi terbaik dengan nilai Nash-Sutcliffe
+     Efficiency (NSE) harian sebesar 0,54, serta rasio komponen neraca air yang
+     paling mendekati satu, mendukung potensi penggabungan data satelit dengan
+     data pengukur stasiun sebagai solusi untuk meningkatkan estimasi curah hujan
+     di kawasan tropis dengan karakteristik orografi yang kompleks. Studi ini
+     memperkuat pentingnya pemahaman pengaruh karakteristik fisik wilayah
+     terhadap ketidakakuratan data satelit serta kebutuhan pengembangan metode
+     koreksi dan penggabungan menggunakan teknik machine learning dan
+     interpolasi statistik untuk meningkatkan kualitas estimasi curah hujan satelit di
+     wilayah tropis, terutama guna mendukung pengelolaan sumber daya air,
+     mitigasi bencana terkait hidrologi, dan perencanaan adaptasi perubahan iklim
+     di Indonesia [27].
+2.1.5 Comparison of Methods for Filling Daily and Monthly Rainfall Missing
+
+        Data: Statistical Models or Imputation of Satellite Retrievals?
+              Penelitian oleh Luíza Virgínia Duarte dkk. pada tahun 2022, dalam
+
+     studi ini bertujuan untuk mengevaluasi dan membandingkan efektivitas metode
+     imputasi data curah hujan yang hilang di wilayah tengah-barat Brasil dengan
+     menggunakan pendekatan berbasis statistik, yaitu regresi linier sederhana
+     (SLR), regresi linier berganda (MLR), serta metode imputasi langsung dari
+     produk satelit Global Precipitation Measurement (IMERG-GPM).
+     Permasalahan yang diangkat adalah kesulitan dalam mengisi data curah hujan
+     yang hilang, terutama pada skala harian dan bulanan, mengingat kompleksitas
+     pola curah hujan yang dipengaruhi oleh variasi iklim dan topografi di wilayah
+                                                                                           14
+
+studi yang mencakup daerah dengan iklim savana tropis dan kontur topografi
+yang bervariasi. Data yang digunakan terdiri dari rekaman hujan harian selama
+satu tahun penuh (2016­2017) dari 50 stasiun pengamat curah hujan yang
+tersebar di negara bagian Goiás, Brasil. Metode yang diterapkan mencakup
+pembuatan model regresi linier sederhana dan berganda dengan "donor"
+stasiun yang dipilih secara variabel dan tetap, serta metode imputasi langsung
+menggunakan data curah hujan hasil penginderaan jauh dari satelit IMERG-
+GPM yang telah dikonversi dan diolah sesuai skala waktu target. Hasil
+penelitian menunjukkan bahwa pada skala harian, metode imputasi langsung
+data satelit IMERG-GPM memberikan estimasi yang lebih akurat dengan
+koefisien korelasi rata-rata sebesar 0,53 dan RMSE rata-rata sebesar 9,7 mm,
+mengungguli kedua metode regresi yang memiliki keterbatasan dalam
+mereproduksi fluktuasi spasial dan kejadian hujan ekstrem yang dapat
+mencapai nilai curah hujan hingga lebih dari 70 mm per hari. Di sisi lain,
+metode regresi menampilkan bias estimasi yang lebih besar dan rentang nilai
+hujan yang terbatas, yakni berkisar antara 20­30 mm per hari, serta performa
+MLR yang tidak jauh berbeda signifikan dibandingkan SLR, sehingga
+peningkatan kompleksitas model tidak memberikan keuntungan yang berarti.
+Pada skala bulanan, ketiga metode menunjukan performa yang sebanding
+dalam hal nilai RMSE dan koefisien korelasi, namun regresi gagal menangkap
+pola musiman hujan dengan baik, sementara data satelit lebih mampu
+merepresentasikan variabilitas bulan ke bulan yang penting untuk penilaian
+kekeringan. Studi ini juga menyoroti perlunya prosedur koreksi bias pada data
+satelit sebelum digunakan sebagai imputasi untuk mengurangi overestimasi
+terutama pada kejadian hujan ekstrim dan meningkatkan ketepatan analisis
+frekuensi. Penelitian ini menegaskan manfaat potensial penggunaan data satelit
+IMERG-GPM sebagai sumber data alternatif dalam mengisi kekosongan data
+hujan di daerah dengan pola curah hujan kompleks, khususnya di wilayah
+tropis dengan topografi variatif, sekaligus mengusulkan pengembangan lebih
+lanjut berupa penerapan teknik koreksi bias guna meningkatkan akurasi
+estimasi pada waktu mendatang [28]. Berikut penelitian dan keterkaitannya
+dengan penelitian ini dapat dilihat pada Tabe 2.1 sebagai berikut.
+                                                                                                                     15
+
+                                      Tabel 2.1 Ringkasan Penelitian Terkait
+
+No  Judul                    Penulis  Masalah          Data                    Metode          Hasil                 Keterkaitan
+                             (tahun)                                                                                  Penelitian
+                             Edwin
+1 Orbit: Probabilistic       Ng dkk.  Forecasting time Data mencakup perjalanan Metode meliputi LGT dan DLT Orbit Penggunaan
+          Forecast with
+           Exponential         pada   series dengan Uber, pesanan Uber Eats, model LGT, unggul dalam                 metode DLT
+            Smoothing         tahun
+                              2021    data granularitas serta seri M3 dan M4. DLT, Prophet, SMAPE, misalnya          Bayesian
+
+                                      rendah                                   dan SARIMA. DLT mencatat 0.106 Time Series
+
+                                      membutuhkan                                              dibandingkan
+
+                                      model                                                    Prophet 0.121 pada
+
+                                      interpretatif.                                           data rider mingguan.
+
+2 Predicting rainfall        Yeasin   Prediksi curah    Data meteorologi dari  ML: RF, SVR,    DL (LSTM) unggul       Penelitian
+         using advanced       dkk.        hujan di     enam stasiun Himalaya    ANN, KNN       dengan RMSE 0.45-     curah hujan
+                             tahun                     Barat Laut (1980-2021)   DL: LSTM,      0.60 mm, ML
+     machine learning and     2024    Himalaya Barat    meliputi curah hujan,   Bidirectional  (ANN) lebih baik
+          deep learning                Laut penting    temperatur, angin, dan  LSTM, GRU,      dari time series
+                                                                                    RNN        (ARIMA, TBATS)
+        techniques across             untuk pertanian        kelembaban.                       yang memiliki
+      altitudinal gradients             dan mitigasi                                           akurasi terendah.
+      in the North-Western                bencana,
+                                      membutuhkan
+            Himalayas
+                                                                                                                 16
+
+No  Judul                  Penulis  Masalah            Data                  Metode         Hasil                Keterkaitan
+                           (tahun)                                                                                Penelitian
+                                    teknologi canggih                        Time Series: Data suhu altitudinal
+                           Nur Ain                                                                               Penggunaan
+                            Jama,   untuk akurasi                            ARIMA,         meningkatkan          data curah
+                             dkk.
+                            Tahun   lebih baik.                              TBATS.         akurasi.                 hujan
+                            2025                                                                                  Indonesia
+3 Assessment of Moving              Yogyakarta, Data hujan harian (2010­ Moving Average Model Moving
+          Average (MA)
+                                    daerah tropis      2019) dari 7 wilayah (MA) di Excel, Average (MA) di
+      Method for Rainfall
+          Prediction in             rawan hujan Gunungkidul, Yogyakarta, dievaluasi Gunungkidul
+           Yogyakarta,
+            Indonesia               tinggi dan banjir, diperoleh dari Badan  menggunakan menunjukkan:
+
+                                    memerlukan Statistik Gunungkidul dan MAE, NAE,          · MAE:
+
+                                    model prediksi     UM Surakarta.         RMSE, PA, R²,  7.115­
+
+                                    curah hujan yang                         dan IA.        12.211 mm
+
+                                    akurat untuk                                            (akurat)
+
+                                    mengantisipasi                                          · NAE: 0.498­
+
+                                    bencana                                                 0.603
+
+                                    hidrometeorologi,                                       (rendah)
+
+                                    meski                                                   · RMSE:
+
+                                    kompleksitas pola                                       10.721­
+
+                                    hujan dan data                                          18.278 mm
+                                                                                                                    17
+
+No  Judul                 Penulis      Masalah       Data                         Metode        Hasil               Keterkaitan
+                          (tahun)                                                                                    Penelitian
+                                   terbatas menjadi
+                                      tantangan.                                                (mendekati
+
+                                                                                                nilai aktual)
+
+                                                                                                · PA: 0.683­
+
+                                                                                                0.750 (68%-
+
+                                                                                                75% akurasi)
+
+                                                                                                · IA: 0.794­
+
+                                                                                                0.846
+
+                                                                                                (kesesuaian
+
+                                                                                                tinggi)
+
+4 Validation of Three Bagus        Indonesia         Data curah hujan darat       Menggunakan   CC produk satelit    Penelitian
+                                                                                   CC, RMSE,    0,22­0,36, RMSE     curah hujan
+    Daily Satellite       Setiabudi kekurangan data dari enam lokasi di DAS                     11­21 mm/hari, dan
+                                                                                     NRSME.     NRMSE 7­30%.
+    Rainfall Products in a Wiwoho, curah hujan darat. Brantas, Indonesia, selama     Analisis
+                                                                                    kesalahan
+    Humid Tropic          dkk. Produk satelit jadi 30 tahun (1990­2020),           berdasarkan
+                                                                                   musim. Uji
+    Watershed, Brantas, tahun      alternatif, tapi Tiga produk curah hujan
+
+    Indonesia:            2021 akurasinya perlu satelit harian: CHIRPS
+
+    Implications to Land           dievaluasi, (~5 km resolusi), GPM
+                                                                                                                  18
+
+No  Judul                 Penulis   Masalah                       Data        Metode                Hasil         Keterkaitan
+                          (tahun)                                                                                  Penelitian
+
+    Characteristics and    Luíza    terutama di DAS (~10 km resolusi), dan    dampak kualitas
+                          Virgínia
+    Hydrological          Duarte,   Brantas.          PERSIANN (~25 km        data dengan
+
+    Modelling               dkk.                      resolusi).              model SWAT.
+                           tahun
+5   Comparison of           2022    Data curah hujan Data curah hujan harian  Tiga metode Pada skala harian,      Penelitian
+
+    Methods for Filling             sering hilang dari 50 stasiun di Goiás,   pengisian data data satelit IMERG- curah hujan
+
+    Daily and Monthly               karena alat rusak Brasil (30+ tahun) dan  hilang           GPM lebih akurat   harian
+
+    Rainfall Missing                atau keterbatasan satelit IMERG-GPM       dibandingkan: dengan korelasi 0,53
+
+    Data: Statistical               pengukuran, (resolusi 0,1°×0,1°)          MLR, SLR, dan dan RMSE 9,7
+
+    Models or Imputation            menghambat digunakan untuk evaluasi       imputasi satelit mm/hari, meski
+
+    of Satellite                    analisis.         antara 1 Sep 2016­31    IMERG-GPM regresi lebih baik di
+
+    Retrievals?                     Tantangannya Agustus 2017.                tanpa koreksi stasiun dengan curah
+
+                                    adalah mencari                            bias, dievaluasi hujan ekstrem.
+
+                                    teknik pengisian                          dengan RMSE, Pada skala bulanan,
+
+                                    data hilang yang                          CC, dan pola ketiga metode
+
+                                    akurat dan                                curah hujan. serupa, namun data
+
+                                    otomatis.                                 Tiga metode satelit lebih baik
+
+                                                                              pengisian data dalam
+                                                                      19
+
+No  Judul  Penulis  Masalah  Data  Metode                  Hasil      Keterkaitan
+           (tahun)                                                     Penelitian
+
+                                   hilang            menggambarkan
+
+                                   dibandingkan: pola musiman,
+
+                                   MLR, SLR, dan meski perlu koreksi
+
+                                   imputasi satelit bias.
+
+                                   IMERG-GPM
+
+                                   tanpa koreksi
+
+                                   bias, dievaluasi
+
+                                   dengan RMSE,
+
+                                   CC, dan pola
+
+                                   curah hujan.
+                                                                                                 20
+
+2.2 Landasan Teori
+2.2.1 Curah hujan
+
+              Curah hujan didefinisikan dalam beberapa kategori, jumlah air hujan
+     yang jatuh di permukaan tanah datar dalam satuan milimeter (mm), yang
+     menggambarkan ketinggian air jika tidak ada infiltrasi, aliran, maupun
+     penyerapan. Pengukuran ini dilakukan untuk menggambarkan kondisi
+     atmosfer dan pola cuaca di suatu wilayah tertentu. Satuan milimeter dalam
+     pengukuran curah hujan menunjukkan bahwa setiap 1 mm curah hujan setara
+     dengan 1 liter air yang jatuh di area seluas satu meter persegi. Berdasarkan
+     klasifikasi yang dikeluarkan oleh Badan Meteorologi, Klimatologi, dan
+     Geofisika (BMKG), intensitas curah hujan dapat dibagi menjadi enam
+     kategori: berawan (0 mm/hari), hujan ringan (0,5­20 mm/hari), hujan sedang
+     (20­50 mm/hari), hujan lebat (50­100 mm/hari), hujan sangat lebat (100­150
+     mm/hari), dan hujan ekstrim (lebih dari 150 mm/hari) [29]. Pengukuran curah
+     hujan dilakukan menggunakan alat seperti penakar hujan (ombrometer) atau
+     sensor digital untuk merekam jumlah air hujan selama periode tertentu. Curah
+     hujan sangat bervariasi berdasarkan lokasi geografis, kondisi topografi, musim,
+     dan faktor atmosfer seperti angin, kelembapan udara, dan tekanan atmosfer
+     [30].
+2.2.2 Missing Values Data
+
+              Missing values merujuk pada kondisi di mana data yang seharusnya ada
+     dalam sebuah dataset tidak tersedia. Hal ini bisa terjadi karena berbagai faktor,
+     seperti kesalahan pengukuran atau kekurangan dalam proses pengumpulan
+     data. Dalam konteks data curah hujan, missing values sering ditemukan pada
+     data meteorologi yang dicatat oleh lembaga seperti Badan Meteorologi,
+     Klimatologi, dan Geofisika (BMKG), di mana beberapa pengukuran curah
+     hujan tidak tercatat atau hilang. Ketidaklengkapan data ini dapat
+     mempengaruhi hasil analisis dan performa model yang digunakan untuk
+     memprediksi curah hujan. Oleh karena itu, perlu diterapkan metode yang tepat
+     untuk menangani nilai hilang, seperti imputasi yang dapat memperkirakan nilai
+     yang hilang dengan memanfaatkan informasi dari variabel lain yang ada dalam
+     dataset [31].
+                                                                                                 21
+
+2.2.3 Forecasting Time Series
+              Forecasting umum merujuk pada proses memprediksi nilai atau
+
+     kejadian di masa depan berdasarkan data atau informasi yang ada saat ini. Ini
+     dapat diterapkan dalam berbagai bidang, seperti ekonomi, cuaca, penjualan,
+     atau bahkan kesehatan, dengan tujuan untuk memberikan gambaran yang lebih
+     jelas tentang apa yang mungkin terjadi di masa mendatang. Peramalan ini dapat
+     dilakukan menggunakan berbagai metode, baik yang berbasis statistik, seperti
+     regresi linier, ataupun menggunakan teknik-teknik lebih canggih seperti
+     pembelajaran mesin (machine learning) dan pembelajaran mendalam (deep
+     learning) [32]. Peramalan deret waktu adalah proses memprediksi nilai-nilai
+     masa depan berdasarkan pengamatan data historis yang tersusun secara
+     kronologis. Model statistik maupun metode pembelajaran mesin digunakan
+     untuk mengeksplorasi pola, tren, serta fluktuasi musiman dalam data,
+     selanjutnya digunakan untuk memperkirakan kejadian atau nilai di masa depan.
+     Proses peramalan ini penting untuk mendukung pengambilan keputusan di
+     bidang-bidang seperti perencanaan permintaan, prediksi harga saham, dan
+     kebutuhan energi, meskipun terdapat ketidakpastian yang melekat pada hasil
+     prediksi tersebut [33].
+2.2.4 Data Forecasting: Univariate, Multivariate Regression
+
+              Univariate merujuk pada analisis atau pendekatan yang melibatkan satu
+     variabel output model. Dalam konteks data time series univariate, hal ini
+     melibatkan satu variabel yang diamati dan dicatat secara berkala berdasarkan
+     waktu, seperti harian, bulanan, atau tahunan. Dalam univariate time series,
+     fokus analisisnya adalah pada pola atau tren dari satu variabel tersebut di masa
+     lalu untuk memprediksi nilainya di masa depan [34], [35]. Model peramalan
+     univariate merupakan pendekatan yang menggunakan output hanya satu
+     variabel saja sebagai dasar prediksi, yaitu data historis dari variabel target yang
+     dipelajari secara berurutan dalam rentang waktu tertentu. Pendekatan ini fokus
+     pada pola internal variabel tersebut tanpa mempertimbangkan pengaruh faktor
+     lain. Contoh model univariate meliputi DLT Bayesian Orbit, Holt­Winters,
+     SARIMA, Facebook Prophet, dan Long Short-Term Memory (LSTM). Model
+     multivariate memperluas pendekatan tersebut dengan memasukkan variabel
+                                                                                                 22
+
+     tambahan sebagai regresor, yaitu variabel bebas yang memberikan informasi
+     eksternal yang dapat memengaruhi variabel target. Dengan mengintegrasikan
+     beberapa variabel ini, model multivariate dapat menangkap hubungan yang
+     lebih kompleks dan faktor-faktor eksternal yang berpengaruh karena dapat
+     memprediksi lebih dari satu variabel, sehingga hasil prediksi menjadi lebih
+     responsif terhadap perubahan kondisi. Regressor dalam konteks DLT ini
+     berperan sebagai variabel input tambahan yang membantu menjelaskan
+     informasi tambahan kepada variabel target dalam proses peramalan. dengan
+     regresor, penerapan univariate forecasting yang memanfaatkan informasi
+     regresor untuk meningkatkan performa prediksi pada variabel target. Dengan
+     demikian, perbedaan utama antara kedua pendekatan ini adalah pada jumlah
+     variabel yang digunakan, di mana multivariate forecasting mampu
+     mengadaptasi dan menangkap dinamika yang lebih kompleks melalui
+     pemanfaatan informasi dari variabel eksternal yang relevan dalam
+     memprediksi [36].
+2.2.5 Damped Local Trend (DLT)
+
+             Damped Local Trend (DLT) adalah salah satu model utama dalam
+    keluarga model perataan eksponensial yang didukung oleh Orbit. Model ini
+    dirancang untuk menganalisis dan memprediksi data deret waktu dengan tren
+    lokal yang diredam. DLT merupakan perpaduan antara model ETS (Error,
+    Trend, and Seasonality) klasik dan penyempurnaan yang memanfaatkan ide-ide
+    dari Rigt. Model ini memiliki kemampuan untuk menangkap tren jangka
+    panjang yang tidak sepenuhnya linier melalui peredaman bertahap.
+
+             Model DLT diimplementasikan dalam paket Python bernama Orbit,
+    sebuah paket Python untuk pemodelan dan inferensi deret waktu Bayesian.
+    Orbit memanfaatkan bahasa pemrograman probabilistik seperti Pyro dan
+    CmdStanPy untuk mendukung estimasi parameter melalui Markov Chain
+    Monte Carlo (MCMC), (MAP) dan, (SVI).
+
+             DLT termasuk dalam kategori metode statistik, karena didasarkan pada
+    prinsip-prinsip peramalan deret waktu yang umum digunakan dalam statistika.
+    Namun, dengan integrasi komponen regresi dan penggunaan algoritma
+    optimasi, DLT juga memanfaatkan teknik machine learning untuk
+                                                                          23
+
+meningkatkan kinerjanya. Oleh karena itu, DLT dapat dianggap sebagai metode
+
+hibrida yang memadukan kedua pendekatan tersebut.
+
+DLT memungkinkan model untuk memberikan prediksi yang lebih
+
+stabil pada data dengan pola tidak teratur (fluktuatif) atau tingkat ketidakpastian
+
+tinggi. Inovasi utama dalam DLT terletak pada kemampuannya untuk
+
+menggabungkan komponen deterministik dan regresi ke dalam model ETS
+
+tradisional. Komponen deterministik dalam DLT mengacu pada elemen model
+
+yang menangkap pola tetap atau teratur dalam data, seperti tren linier atau pola
+
+musiman yang dapat diprediksi secara matematis. Komponen ini memberikan
+
+struktur yang terarah dan konsisten dalam peramalan. Penambahan komponen
+
+deterministik memungkinkan model untuk menangkap tren yang lebih
+
+kompleks, sementara komponen regresi memungkinkan penggunaan variabel
+
+eksternal sebagai prediktor dalam peramalan. Kombinasi ini meningkatkan
+
+fleksibilitas dan kinerja model dalam berbagai konteks peramalan. Selain itu,
+
+DLT diimplementasikan dalam kerangka Bayesian, yang memungkinkan
+
+estimasi parameter yang lebih robust dan kemampuan untuk mengukur
+
+ketidakpastian atau missing values dalam peramalan. Pendekatan ini
+
+memberikan keunggulan dibandingkan metode peramalan tradisional yang
+
+sering kali tidak mempertimbangkan aspek ketidakpastian [18], [19].
+
+Model Structure Damped Local Trend [18] :
+                      =  +  +  + 
+
+ =  +  - 1 +  - 1                                                    (1)
+
+  (, 0, )
+
+  (0, 0)
+
+Dengan proses pembaruan [18]:
+
+ = ()
+
+lt=l(yt-gt-st-rt)+(1-l)(lt-1+bt-1)
+
+bt=b(lt-lt-1)+(1-b)bt-1                                              (2)
+
+st+m=s(yt-lt-rt)+(1-s)st
+
+ = 
+                                                                                                 24
+
+    Keterangan:
+     : Nilai observasi pada waktu .
+     : Komponen trend (level dan tren) pada waktu .
+     : Komponen musiman pada waktu .
+     : Komponen regresi pada waktu  (sebagai fungsi dari ).
+     : Komponen error atau noise pada waktu , yang mengikuti distribusi.
+     : Proses trend deterministik.
+     : Komponen level pada waktu , diperbarui menggunakan parameter , 
+    dan bt-1.
+    Dengan proses pembaruan:
+    () proses tren deterministik yang digunakan dalam perhitungan  dan
+     regresi.
+
+                        Gambar 2. 1 Alur Pemrosesan missing values DLT Bayesian MCMC
+
+        Gambar 2. 1 alur proses imputasi data curah hujan menggunakan model
+Damped Local Trend (DLT) berbasis Bayesian Inference dengan MCMC. Proses
+dimulai dengan mengimpor data variabel utama dan variabel fitur untuk training
+model. Selanjutnya, dilakukan identifikasi terhadap nilai observasi yang hilang
+(missing). Model DLT kemudian digunakan untuk memisahkan nilai yang tersedia
+dan hilang, dengan struktur model yang mencakup komponen trend dan level,
+regressor, serta error yang diasumsikan mengikuti distribusi Student-t. Inferensi
+Bayesian dilakukan menggunakan Stan, di mana nilai yang tersedia digunakan
+                            25
+
+langsung, sementara nilai yang hilang diprediksi dari distribusi posterior melalui
+teknik sampling MCMC. Hasil akhirnya adalah nilai hilang diisi berdasarkan
+prediksi posterior, sedangkan nilai yang tersedia tetap tidak berubah.
+2.2.6 Loss
+
+              Loss adalah angka yang mengukur seberapa buruk prediksi model
+     dibandingkan dengan nilai sebenarnya. Fungsi loss memberikan penalti yang
+     semakin besar seiring semakin besar kesalahan prediksi, dan nilai loss menjadi
+     dasar optimisasi model untuk meningkatkan akurasi. Fungsi loss yang umum
+     digunakan dalam regresi meliputi Mean Squared Error (MSE), Mean Absolute
+     Error (MAE), dan Root Mean Squared Error (RMSE) sebagai metrik evaluasi
+     yang menghitung akar kuadrat rata-rata kesalahan kuadrat [37]
+2.2.7 RMSE (Root Mean Squared Error)
+
+              Root mean squared error (RMSE) merupakan hasil akar kuadrat dari
+     Mean Squared Error. Menghitung akar kuadrat dari MSE tidak mempengaruhi
+     cara membandingkan model-model, namun menghasilkan matriks yang
+     memiliki satuan yang sama dengan variabel yang sedang diprediksi sehingga
+     memudahkan untuk menghitung standart error atau normally distribution
+     errors [38]. Penggunaan RMSE sangat umum, dan dianggap sebagai matriks
+     evaluasi kesalahan tujuan umum yang sangat baik untuk prediksi numerik [39].
+     RMSE dapat dirumuskan sebagai berikut :
+
+  =  1    =1(  -  )2  [37]  (3)
+
+        
+
+    Keterangan:
+    n = jumlah sampel
+     = nilai pengamatan ke-i
+     = nilai prediksi ke-i
+2.2.8 Mean Absolute Error (MAE)
+
+              Mean Absolute Error (MAE) adalah metrik yang mengukur rata-rata
+     nilai absolut perbedaan antara nilai yang diprediksi dan nilai sebenarnya. MAE
+     memiliki nilai minimum 0 yang menandakan prediksi sempurna, dan semakin
+                                                      26
+
+besar nilai MAE menunjukkan kesalahan prediksi yang lebih besar. Formula
+
+MAE untuk n sampel sebagai berikut :
+
+               =              1  =1  | - | [37]       (4)
+                              
+
+Keterangan:
+
+    n = jumlah sampel
+     = nilai pengamatan ke-i
+     = nilai prediksi ke-i
+2.3 Kerangka Pemikiran
+
+Kerangka penelitian ini dapat dilihat pada Gambar 2.2. Penelitian ini
+
+bertujuan untuk mengevaluasi kinerja metode Damped Local Trend (DLT)
+
+Bayesian Time Series dalam menangani data curah hujan yang memiliki
+
+missing values, berdasarkan dataset curah hujan yang diperoleh dari BMKG.
+
+Langkah pertama adalah menginput dataset curah hujan, dilanjutkan dengan
+
+proses data preprocessing yang mencakup penanganan missing values melalui
+
+dua pendekatan: pendekatan dengan missing tanpa diisi (unfilled)
+
+dibandingkan dengan pendekatan missing values diisi (filled) pada data iklim.
+
+Metode diterapkan sebagai pembanding untuk mengidentifikasi keunggulan
+
+metode DLT dalam mengestimasi missing values pada data iklim pada
+
+forecasting curah hujan. Setelah tahap praproses selesai, data yang telah
+
+diproses digunakan untuk membangun model prediksi berbasis DLT Bayesian
+
+Time Series. Model ini memungkinkan penanganan dataset dengan pendekatan
+
+probabilistik, yang dirancang untuk meningkatkan forecasting sekaligus
+
+mempertimbangkan ketidakpastian dalam parameter dan data. Tahapan
+
+berikutnya adalah mengevaluasi kinerja model menggunakan dua metrik
+
+utama, yaitu Root Mean Square Error (RMSE) untuk mengukur rata-rata
+
+kesalahan kuadrat dari hasil prediksi, Mean Absolute Error (MAE) untuk
+
+mengevaluasi rata-rata kesalahan absolut antara nilai aktual dan nilai prediksi
+
+[37]. Kerangka pemikiran ini menunjukkan bagaimana metode DLT dapat
+
+dibandingkan dengan metode tradisional untuk menang.
+
+Hasil dari penelitian ini diharapkan dapat memberikan wawasan yang
+
+lebih komprehensif tentang efektivitas metode DLT Bayesian Time Series
+
+dalam menghasilkan forecasting curah hujan yang lebih akurat dan andal,
+                                                                                           27
+terutama ketika dihadapkan pada permasalahan missing values yang umum
+terjadi dalam data iklim cuaca.
+
+                                 Gambar 2.2 Kerangka Pemikiran
+                                              BAB III
+                                   METODE PENELITIAN
+3.1 Alat dan Bahan Penelitian
+                  Alat dan bahan yang digunakan dalam penelitian ini dapat dilihat
+         pada Tabel 3.1.
+
+                                     Tabel 3. 1 Alat dan Bahan Penelitian
+
+No Alat dan Bahan           Peruntukan
+
+1 Lenovo IdeaPad 3 14IML05 Media untuk perangkat lunak
+
+2 Python                    Bahasa pemrograman untuk prediksi data
+
+3 Visual Studio Code        Code Editor
+
+4 Microsoft Office          Penulisan laporan
+
+5 Mendeley                  Pengelola sitasi dan referensi
+
+6 Chrome                    Browser
+
+7 Dataset iklim harian      Dataset iklim harian
+
+Kalimantan Selatan di Kota
+
+Banjarmasin dari BMKG       untuk penelitian
+
+8 Orbit library DLT Method Library untuk metode penelitian
+
+3.2 Alur Penelitian
+              Proses penelitian terdiri dari serangkaian langkah yang harus dilakukan
+
+     secara terstruktur. Alur penelitian ini dapat dilihat pada Gambar 3.1, yang
+     dimulai dengan identifikasi masalah, dilanjutkan dengan studi literatur,
+     pengumpulan data, eksperimen dan penelitian, analisis hasil penelitian, dan
+     akhirnya mengimplementasikan temuan tersebut ke dalam sebuah sistem.
+
+                            28
+                                                                                                 29
+
+                                           Gambar 3.1 Alur Penelitian
+
+3.2.1 Identifikasi Masalah
+              Langkah pertama dalam penelitian ini adalah mengidentifikasi masalah
+
+     dengan pendekatan kualitatif melalui observasi mendalam untuk menemukan
+     permasalahan yang ada. Hasil pengamatan menunjukkan bahwa imputasi
+     kualitas data curah hujan menjadi sangat penting, terutama pada masalah
+     missing values data dalam meningkatkan hasil analisis forecasting, agar
+     pemangku kepentingan dapat membuat keputusan atau langkah-langkah yang
+     tepat untuk mengurangi dampak negatif pola curah hujan yang tidak terduga.
+     Sebagai solusi, penelitian ini mengusulkan untuk mencari metode dengan
+     kinerja terbaik yang dapat memberikan penanganan missing values yang dapat
+     memberikan forecasting curah hujan yang akurat.
+                                                                                 30
+
+3.2.2 Studi Literatur
+
+         Langkah kedua dalam penelitian ini adalah melakukan studi literatur,
+dimana peneliti mencari teori atau konsep yang dapat digunakan untuk
+
+mengatasi masalah yang ada. Studi literatur dalam penelitian ini fokus pada
+kesamaan permasalahan, penggunaan data, serta penerapan metode yang
+
+diperoleh dari jurnal ilmiah nasional dan internasional, makalah penelitian,
+artikel, E-book, dan berita.
+
+3.2.3 Pengumpulan Data
+              Langkah ketiga dari penelitian ini adalah pengumpulan data dengan
+
+     mengunduh data dari website BMKG yang menyediakan dataset data curah
+     hujan harian dari data online BMKG [15]. Adapun seluruh variabel iklim dan
+     RR sebagai variabel target dalam forecasting pada penelitian yang digunakan
+     meliputi pada Tabel 3.2 merupakan contoh dari data curah hujan harian Kota
+
+Banjarmasin yang digunakan pada penelitian ini.
+
+                   Tabel 3. 2 Data Iklim Curah Hujan Banjarmasin BMKG
+
+     TANG T T TA RH_A R S FF DDD FF_A DDD_
+      GAL N X VG VG R S _X _X VG CAR
+
+0    01-01- 2 30       25.9 89 3.9 - 7 250                             2    N
+
+     2015 4 .7
+
+1    02-01- 2 30       27  83      20. 6.  8 250                       3    N
+
+     2015 4 .6                     37
+
+2    03-01- 2          27 26.7 88 1.1  4.  14 250                      2    N
+
+     2015 5                            5
+
+3    04-01- 2 30       25.8 90 4.3     1.  5 240                       2    N
+
+     2015 4 .2                         2
+
+...  ... ...... ...        ... ......... ...                           ...  ...
+
+18 27-12- 2 33         -   -       88 1.   4 270                       2    W
+
+08 2019 4 .8                       88 1
+
+18 28-12- 2            33 28.6 84  0 8 4 260                           2    S
+
+09 2019 5
+
+18 29-12- 2            32 26.8 86  61. 6.  5 60                        2    C
+
+10 2019 2                          12
+
+18 30-12- 2 34         -   -       0.8 4 4 210                         2    NE
+
+11 2019 3 .6
+                                                                    31
+
+TANG T T TA RH_A R S FF DDD FF_A DDD_
+ GAL N X VG VG R S _X _X VG CAR
+
+18 31-12- 2 34  -  - 32  8.                4 120  2              N
+
+12 2019 4 .6             3
+
+                   1812 rows x 11 columns
+
+Alur pengumpulan data curah hujan dapat dilihat pada Gambar 3.2
+
+                              Gambar 3.2 Alur pengumpulan data curah hujan
+
+              Gambar 3.2 dilakukan pengunduhan dataset dari website BMKG yang
+     menyediakan data iklim dan curah hujan harian format excel yang dapat
+     diunduh manual di website https://dataonline.bmkg.go.id/dataonline-home,
+     untuk menentukan jumlah atau periode data yang akan digunakan pada
+     penelitian ini, perlu dilakukan proses exploration data dan processing dataset
+     iklim forecasting curah hujan, dapat dilihat dari langkah-langkah berikut:
+    1. Pengumpulan dataset iklim curah hujan dan variabel lainnya sebagai
+
+         regressor.
+    2. Inisialisasi missing values dataset iklim curah hujan.
+    3. Perhitungan jumlah missing values dan available dataset iklim curah hujan.
+    4. Perhitungan missing data hari berturut-turut harian dataset iklim curah
+
+         hujan
+    5. Memilih periode data yang relevan, 3-10 tahun, berdasarkan kualitas dan
+
+         kelengkapan data pada analisis seluruh dataset.
+    Eksplorasi ini akan membantu menentukan periode data yang paling relevan
+    dan jumlah data yang mencukupi untuk mendukung analisis yang valid.
+3.2.4 Eksperimen dan Penelitian
+
+              Tahapan ini digunakan model berbasis DLT Bayesian Time Series yang
+     terintegraasi dengan parameter MCMC menggunakan tools Google
+                                                                                                 32
+
+     Collaboratory bahasa pemrograman Python. Adapun tahapan proses
+     eksperimen dan penelitian ini dapat dilihat pada Gambar 3.3 dengan rincian
+     sebagai berikut:
+
+                                    Gambar 3.3 Eksperimen dan Penelitian
+
+3.2.4.1. Memasukkan Dataset (Input Dataset)
+              Tahapan ini, dilakukan pembacaan data iklim harian curah hujan yang
+
+     tersimpan dalam format file excel dan dimasukkan ke dalam objek Dataframe
+     menggunakan library pandas pada bahasa pemrograman Python.
+3.2.4.2. Prapemrosesan Data (Data Preprocessing)
+
+              Tahapan ini dimulai dengan pembersihan data, penyesuaian tipe data
+     format dataset tiap fitur atau regressor, dan perhitungan missing values data.
+
+              Penanganan missing values dengan dua pendekatan. Pendekatan
+     pertama menggunakan model Damped Local Trend (DLT) berbasis Bayesian
+     yang secara tidak langsung mampu menangani data tanpa perlu mengisi nilai
+     NaN (unfilled). Pada saat proses training, model DLT memperlakukan nilai
+     yang hilang sebagai "tidak teramati" (unobserved) dan mengakomodasi
+     ketidakpastian tersebut melalui estimasi parameter berbasis Markov Chain
+     Monte Carlo (MCMC).
+
+              Pendekatan kedua juga memanfaatkan model DLT berbasis Bayesian,
+     tetapi didahului oleh penggunaan metode imputasi missing values yang diisi
+                                                                                                 33
+
+     metodenya dijelaskan pada bab IV. Dengan demikian, kedua pendekatan ini
+     akan dibandingkan untuk melihat perbedaan kinerja hasil forecasting antara
+     missing values tanpa diisi (unfilled) dibandingkan dengan missing values diisi
+     (filled). Melalui tahapan preprocessing, diharapkan data yang diolah menjadi
+     lebih bersih, terstandarisasi, dan siap untuk menghasilkan perkiraan yang
+     akurat serta dapat diandalkan.
+3.2.4.3. Pembagian Data (Data Splitting)
+
+              Tahapan ini berupa pembagian dataset menjadi bagian training dan
+     testing merupakan langkah standar dalam proses pemodelan statistik maupun
+     pembelajaran mesin. Salah satu pembagian yang paling sering digunakan
+     adalah sekitar 80% untuk data training dan 20% untuk data testing. Pembagian
+     ini banyak dipilih karena mudah diterapkan dan cukup memberikan
+     keseimbangan antara data yang digunakan untuk melatih model dan data yang
+     digunakan untuk menguji performa model [40]. Pembagian data menjadi 80%
+     untuk pelatihan dan 20% untuk pengujian digunakan dalam penelitian ini guna
+     memastikan model memperoleh cukup data untuk belajar sekaligus
+     mempertahankan cukup data untuk evaluasi performa. Pembagian ini dipilih
+     untuk mengoptimalkan keseimbangan antara ketersediaan data pelatihan dan
+     validasi, mengingat pembagian yang terlalu kecil pada data pengujian dapat
+     menyebabkan evaluasi kurang akurat, sementara pembagian yang terlalu kecil
+     pada data pelatihan dapat mengurangi kualitas model [41].
+3.2.4.4. Implementasi Model (Model Implementation)
+
+              Implementasi model, agar dapat menggunakan metode DLT Bayesian
+     time series, perlu melakukan install library Orbit package Bayesian time series
+     terlebih dahulu, package ini dapat digunakan dan di install langsung (open
+     source) pada link berikut:
+     https://uber.github.io/orbit/tutorials/dlt.html?utm_source=chatgpt.com.
+     Setelah library sudah terunduh, dilanjutkan dengan inisialisasi parameter
+     DLT, dan data training akan dilatih menggunakan model berbasis DLT
+     Bayesian time series [20].
+3.2.4.5. Pengujian Model (Model Testing)
+                                                                                                 34
+
+              Tahap pengujian model, model DLT Bayesian Time Series dengan
+     konfigurasi yang telah dibuat sebelumnya diuji dengan menggunakan data
+     testing.
+3.2.4.6. Perhitungan Nilai Matriks Evaluasi (Calculation of Evaluation
+
+          Matrix)
+              Performa model prediksi dievaluasi menggunakan metrik Root Mean
+
+     Squared Error (RMSE), dan Mean Absolute Error (MAE). RMSE mengukur
+     akar dari rata-rata kuadrat selisih antara nilai prediksi dan observasi, sedangkan
+     MAE mengukur rata-rata selisih absolut antara nilai prediksi dan observasi,
+     keduanya memberikan gambaran kuantitatif tentang kesalahan prediksi yang
+     dihasilkan oleh model [42].
+3.2.4.7. Analisis dan Hasil
+
+              Analisis dan hasil difokuskan pada evaluasi kinerja metode Damped
+     Local Trend (DLT) berbasis Bayesian Time Series dalam menangani missing
+     values pada dataset iklim forecasting curah hujan. Pendekatan yang digunakan
+     melibatkan dua skenario utama:
+    1. Penerapan DLT Bayesian Time Series, missing tanpa diisi (unfilled), di
+
+         mana data yang hilang ditangani oleh mekanisme probabilistik DLT dengan
+         memanfaatkan parameter MCMC pada proses training data ditampilkan
+         saat forecasting model testing.
+    2. Penerapan DLT Bayesian Time Series, missing values diisi (filled) dengan
+         imputasi. Missing values terlebih dahulu diisi pada data preprocessing,
+         sebelum data dilanjutkan untuk digunakan pada training data.
+Kedua pendekatan ini dievaluasi berdasarkan dua metrik utama, yaitu Root Mean
+Square Error (RMSE), Mean Absolute Error (MAE), Nilai RMSE dan MAE yang
+dihasilkan mencerminkan tingkat kesalahan absolut dan kuadrat dari hasil prediksi,
+dengan RMSE memberikan penekanan lebih pada kesalahan besar, sementara MAE
+menunjukkan rata-rata deviasi absolut antara nilai aktual dan hasil prediksi. Hasil
+evaluasi dilihat berdasarkan perbandingan nilai RMSE, dan MAE dari kedua
+pendekatan tersebut untuk menilai efektivitas masing-masing metode dalam
+menghasilkan forecasting yang terbaik. Analisis ini diharapkan dapat memberikan
+wawasan mendalam mengenai perbedaan performa antara metode DLT yang
+                                                                                                 35
+
+menangani missing values secara tidak langsung melalui pendekatan probabilistik,
+yang dibandingkan dengan metode DLT yang bergantung pada imputasi missing
+values sebelum pemodelan.
+3.2.4.8. Implementasi Sistem
+
+         Model DLT berbasis Bayesian Time Series yang telah dikembangkan akan
+disimpan dalam format pkl. Format ini dipilih karena mendukung fleksibilitas untuk
+menyimpan struktur data model DLT Bayesian Time Series dari Orbit dengan
+parameter univariate yang sudah terlatih. Selanjutnya, model ini akan diunggah ke
+sebuah sistem yaitu platform streamlit, periode forecasting curah hujan akan
+dilakukan pada sistem adalah forecasting harian, yang memungkinkan pengguna
+untuk mengakses dan mendemonstrasikan kemampuan forecasting curah hujan
+secara langsung melalui antarmuka streamlit.
+                      BAB IV
+
+                      HASIL DAN PEMBAHASAN
+
+4.1 Pengumpulan Data
+
+         Data yang digunakan dalam penelitian ini bersumber dari data iklim harian
+yang diperoleh dari Badan Meteorologi, Klimatologi, dan Geofisika (BMKG).
+
+Dataset iklim harian diunduh melalui situs resmi                  BMKG
+(https://dataonline.bmkg.go.id/dataonline-home) pada Gambar 4.1.
+
+         Penentukan perioda dataset iklim pemodelan forecasting curah hujan,
+terlebih dahulu dilakukan pemeriksaan total data tersedia maupun total missing
+
+values pada variabel target RR (curah hujan) pada Tabel 4.1. Berdasarkan
+pemeriksaan missing values RR diputuskan periode data yang digunakan untuk
+
+dataset iklim yaitu 1 Januari 2015 hingga 31 Desember 2024 selama 10 tahun pada
+Tabel 4.2, missing values ditahun 2022, 2023, 2024 memiliki nilai missing values
+
+diatas 30% pertahunnya. Tujuan utama dari perhitungan ini adalah untuk
+menganalisis sejauh mana missing values mempengaruhi kualitas data dan untuk
+
+memastikan bahwa model dapat digunakan dapat mengatasi masalah missing
+values, untuk digunakan pada model forecasting
+
+Gambar 4. 1 Website BMKG Data Online [15]
+
+                      36
+                                                                             37
+
+     Tabel 4. 1 Pemeriksaan Missing Values Variabel Target RR Curah Hujan
+
+       Tahun Total       Missing      Available      % Missing  % Available
+1 2015 365                  63           302            17.26       82.74
+2 2016 366                  34           332            9.29        90.71
+3 2017 365                  53           312            14.52       85.48
+4 2018 365                  34           331            9.32        90.68
+5 2019 365                  50           315            13.70       86.30
+6 2020 366                 103           263            28.14       71.86
+7 2021 365                  88           277            24.11       75.89
+8 2022 365                 134           231            36.71       63.29
+9 2023 365                 114           251            31.23       68.77
+10 2024 366                114           252            31.15       68.85
+
+                         Tabel 4. 2 Dataset Iklim Harian
+
+     TANGG T T TAV RH_A R S FF_ DDD                             FF_A       DDD_C
+                                                                 VG          AR
+     AL      NX G                 VG R S X _X                                 N
+                                                                  2           N
+0    01-01-  24     30.  25.9 89 3.9 - 7 250                      3           N
+                                                                  2           N
+     2015           7                                             2           ...
+                                                                  ...        SW
+1    02-01-  24     30.  27       83  20. 6.         8 250        2            E
+                                                                  2          SW
+     2015           6                 37                          2          SW
+                                                                  3            S
+2    03-01-  25 27 26.7           88 1.1         4.  14 250       3
+
+     2015                                        5
+
+3    04-01-  24     30.  25.8 90 4.3             1.  5 240
+
+     2015           2                            2
+
+...  ...     ...... ...           ... ...... ... ...
+
+352 27-12- 24. 30.       26.9 86 0.6             3.  6 270
+
+6 2024 4 6                                       3
+
+352 28-12- 25.      32 27.1 87        0          3.  4 90
+
+7 2024 2                                         3
+
+352 29-12- 23. 32.       27.3 86      18. 2.         5 240
+
+8 2024 9 6                            42
+
+352 30-12- 24. 33.       27.6 84 2.4             6.  5 230
+
+9 2024 4 2                                       3
+
+353 31-12- 25. 32.       26.5 88 5.4             6.  6 250
+
+0 2024 2 4                                       1
+                                                                38
+
+TANGG T T TAV RH_A R S FF_ DDD FF_A DDD_C
+
+AL  NX G                VG R S X _X                     VG  AR
+
+3530 rows x 11 columns
+
+4.2 Pra-processing Data Target dan Regressor
+         Data yang telah dikumpulkan dan diseleksi sebelumnya di preprocess
+
+menggunakan library pandas menjadi menjadi dataframe iklim. Terdapat beberapa
+tahapan pada saat melakukan preprocessing:
+
+4.2.1 Penerapan Datetime dan Format Kolom TANGGAL
+Pra-pemrosesan pada kolom TANGGAL dalam dataset, sistem memastikan bahwa
+data pada kolom tersebut telah dikonversi ke dalam format datetime menggunakan
+fungsi pd.to_datetime dengan parameter errors='coerce' dan dayfirst=True untuk
+menangani format tanggal yang beragam. Setelah kolom TANGGAL berhasil
+dikenali sebagai objek datetime, formatnya diubah menjadi tahun/bulan/hari
+(yyyy/mm/dd) menggunakan method dt.strftime. Langkah ini dilakukan untuk
+menyamakan format tanggal demi memudahkan proses analisis deret waktu.
+Terakhir, dataset yang telah diperbarui disimpan kembali dalam format CSV tanpa
+menyertakan indeks, sehingga dapat digunakan untuk analisis selanjutnya.
+Penerapan datetime dapat dilihat pada Tabel 4.3.
+
+                             Tabel 4. 3 Penerapan datetime kolom TANGGAL
+
+                           TANGGAL         TANGGAL
+                              (Before)         (After)
+
+                        day-month-year  year-month-day
+
+                            01-01-2015      2015-01-01
+
+4.2.2 Inisialisasi Missing Values
+         Eksplorasi data iklim harian BMKG, dilakukan identifikasi terhadap
+
+keberadaan missing values curah hujan harian dan variabel fitur (regressor).
+Berdasarkan format standar dari BMKG, nilai-nilai yang dianggap sebagai missing
+tidak langsung ditampilkan sebagai kosong, melainkan diwakili oleh angka seperti
+8888, 9999 dan -. Nilai-nilai tersebut tidak mencerminkan data iklim aktual dan
+dapat menimbulkan bias jika tidak ditangani dengan benar. Oleh karena itu, seluruh
+                                                                39
+
+nilai 8888, 9999, dan - pada kolom curah hujan diubah menjadi NaN (Not a
+Number) agar dapat dikenali sebagai data hilang (missing values) oleh sistem dan
+diproses dengan benar dalam analisis lanjutan dapat dilihat pada Tabel 4.4,
+
+                                  Tabel 4. 4 Nilai Inisialisasi Missing Values
+
+   Missing Values  Converted to
+         8888           NaN
+         9999           NaN
+            -           NaN
+
+4.2.3 Penyesuaian Tipe Data Dataset Iklim Harian
+         Penyesuaian tipe data pada fitur-fitur iklim dilakukan untuk memastikan
+
+format data sesuai dengan jenis variabel masing-masing (numerik). Variabel TN,
+TX, TAVG, RH_AVG, RR, dan SS diubah menjadi tipe float karena merupakan
+data numerik kontinu. Sementara itu, variabel FF_X, DDD_X, dan FF_AVG
+diubah menjadi tipe int64. Untuk variabel DDD_CAR, awalnya diubah menjadi
+tipe kategori, tetapi tidak dimasukkan dalam pemodelan karena sifatnya yang
+melibatkan arah (misalnya, 0° dan 360° sebenarnya menunjukkan arah yang sama).
+Arah seperti ini perlu perlakuan khusus agar dapat dianalisis dengan benar,
+misalnya dengan menggunakan perhitungan matematika tertentu. Selain itu,
+DDD_X dianggap sudah cukup untuk mewakili arah angin, jadi DDD_CAR
+dihapus untuk menyederhanakan data dan menghindari adanya informasi yang
+berulang. Hasil akhir disimpan dalam format CSV untuk analisis lebih lanjut.
+Penyesuaian tipe data dapat dilihat pada Tabel 4.5.
+
+                                    Tabel 4. 5 Tipe Data Variabel Dataset
+
+   Nama Variabel                Keterangan           Tipe Data
+                       Temperatur minimum (°C)          float
+1  TN                 Temperatur maksimum (°C)          float
+                        Temperatur rata-rata (°C)       float
+2  TX                   Kelembapan rata-rata (%)        float
+                                                        float
+3  TAVG                     Curah hujan (mm)            float
+                  Lamanya penyinaran matahari (jam)     Int64
+4  RH_AVG          Kecepatan angin maksimum (m/s)
+
+5  RR
+
+6  SS
+
+7  FF_X
+                                                                                  40
+
+      Nama Variabel                 Keterangan               Tipe Data
+                                                                Int64
+   8        DDD_X     Arah angin saat kecepatan maksimum(°)     Int64
+
+   9        FF_AVG    Kecepatan angin rata-rata (m/s)
+
+4.2.4 Perhitungan Missing Values
+
+   Perhitungan pada missing values dan available data pada dataset iklim
+
+forecasting curah hujan . Jumlah dan persentase data yang hilang (missing values)
+
+di setiap kolom dalam DataFrame bernama df. Pertama, df.isna().sum() digunakan
+
+untuk menghitung total nilai yang hilang per kolom dan disimpan dalam variabel
+
+total_missing. Selanjutnya, persentase data hilang dihitung dengan membagi
+
+jumlah missing values dengan panjang dataset (len(df)), lalu dikalikan 100, dan
+
+hasilnya disimpan dalam percent_missing. Kedua informasi ini kemudian
+
+digabungkan ke dalam sebuah DataFrame baru bernama missing_values, yang
+
+memuat kolom Total Missing dan Percent Missing untuk masing-masing variabel,
+
+berikut jumlah missing values pada Tabel 4.6 :
+
+                      Tabel 4. 6 Pemeriksaan Missing Values
+
+   Kolom       Total  Percent                   Keterangan Variabel
+
+               Missing Missing (%)
+
+1 TANGGAL      0      0.000000                  Tanggal pencatatan data
+
+2     TN       268    7.592068                  Temperatur minimum harian (°C)
+
+3     TX       262    7.422096                  Temperatur maksimum harian (°C)
+
+4 TAVG         506    14.334278                 Temperatur rata-rata harian (°C)
+
+5 RH_AVG       497    14.079320     Kelembapan udara rata-rata harian (%)
+
+6     RR       566    16.033994                 Curah hujan harian (mm)
+
+7     SS       150    4.249292      Lama penyinaran matahari harian (jam)
+
+8     FF_X     0      0.000000      Kecepatan angin maksimum harian (m/s)
+
+9 FF_AVG       0      0.000000      Kecepatan angin rata-rata harian (m/s)
+
+   Missing values sebesar 16,03% atau 566 titik data termasuk dalam jumlah
+
+yang kecil hinggal sedang dibandingkan dengan studi dari Oriani (2020), yang
+
+menguji metode imputasi untuk data dengan tingkat kehilangan natural missing
+
+30%­40% [43].
+                                                  41
+
+4.2.5 Pemeriksaan Panjang Missing Data Hari Berturut-turut
+         Pemeriksaan panjang hari missing values data berturut-turut dilakukan
+
+dengan menghitung panjang maksimum kemunculan data hilang (NaN) secara
+berturut-turut pada setiap kolom fitur atau variabel dalam dataset. Proses ini
+dilakukan dengan mengidentifikasi urutan nilai NaN yang muncul tanpa jeda,
+kemudian menghitung jumlah hari berturut-turut tersebut dan mengambil nilai
+maksimum dari setiap kolom. Hasil perhitungan ini memberikan gambaran
+mengenai seberapa lama suatu variabel kehilangan data secara berurutan, yang
+dapat menjadi pertimbangan penting dalam menentukan metode imputasi atau
+strategi penanganan data hilang pada tahap prapemrosesan, detail panjang missing
+values data dapat dilihat pada Tabel 4.7.
+
+                              Tabel 4. 7 Missing Values Hari Berturut Pertahun
+
+    Kolom      Panjang Berturut-turut NaN (Hari)
+                                     0
+1   TANGGAL                          4
+                                     4
+2   TN                              12
+                                    12
+3   TX                               6
+                                     3
+4   TAVG                             0
+                                     0
+5   RH_AVG                           0
+                                     0
+6   RR
+
+7   SS
+
+8   FF_X
+
+9   FF_AVG
+
+10  month
+
+11  dayofyear
+
+         Tabel 4. 7 menampilkan bahwa panjang missing values berturut turut adalah
+12 hari, pada penelitian missing values time series penggunaan interpolasi linear
+dalam mengisi missing value atau nilai hilang. Interpolasi linear merupakan salah
+satu metode statistik sederhana namun efektif yang banyak digunakan dalam
+imputasi nilai hilang pada data deret waktu, Dalam studi yang dilakukan oleh Flore
+dkk (2024), interpolasi linear yang dikombinasikan dengan teknik moving averages
+terbukti mampu memberikan hasil imputasi yang kompetitif, bahkan jika
+                                    42
+
+dibandingkan dengan metode deep learning seperti GRU dan LSTM. Salah satu
+keunggulan dari interpolasi linear adalah kemampuannya dalam menangani
+berbagai ukuran gap data. Penelitian ini menyebutkan bahwa metode berbasis
+interpolasi linear dapat menyaingi bahkan mengungguli model statistik lainnya
+seperti ARIMA dalam hal metrik evaluasi seperti RMSE dan MAPE [44]. Pada
+penelitian ini diterapkan metode Damped Local Trend Bayesian Time Series yang
+merupakan metode statistik berbasis inferensi Bayesian. Penggunaan interpolasi
+linear sebagai teknik imputasi nilai hilang menjadi relevan karena karakteristiknya
+yang sederhana, efisien, dan selaras dengan pendekatan statistik yang seperti model
+Damped Local Trend. Penelitian Wangwongchai (2023) yang mempelajari
+imputasi data curah hujan harian yang hilang di wilayah pegunungan utara
+Thailand, Multiple Linear Regression (MLR) terbukti sebagai metode yang paling
+efektif menghasilkan error yang rendah di berbagai stasiun hujan [17].
+4.2.6 Penambahan Fitur Month, dan Dayofyear
+
+         Penambahan fitur month dan dayofyear dilakukan untuk merepresentasikan
+informasi musiman dan siklus tahunan dalam data iklim forecasting curah hujan.
+Fitur month mencerminkan variasi musiman yang umum terjadi pada periode
+tertentu dalam setahun, sementara dayofyear memberikan informasi posisi relatif
+suatu hari dalam kalender tahunan. Kedua fitur ini penting dalam konteks
+pemodelan deret waktu cuaca karena curah hujan sering dipengaruhi oleh pola
+musiman dan tren tahunan yang bersifat periodik, fitur ini pada Tabel 4.8.
+
+                             Tabel 4. 8 Penambahan Fitur month dan dayofyear
+
+   TANGG          TA  RH        FF  DD FF m day
+
+   AL      TN TX  VG  _A RR SS  _X  D_ _A on ofy
+
+                      VG            X VG th ear
+
+0  01-01-  24 30.7 25.9 89 3.9 - 7 250 2 1 1
+
+   2015
+
+1  02-01-  24 30.6 27 83 20.3 6.7 8 250 3 1 2
+
+   2015
+
+2  03-01-  25 27 26.7 88 1.1 4.5 14 250 2 1 3
+
+   2015
+
+3  04-01-  24 30.2 25.8 90 4.3 1.2 5 240 2 1 4
+
+   2015
+                                       43
+
+      TANGG          TA  RH        FF  DD FF m day
+
+      AL      TN TX  VG  _A RR SS  _X  D_ _A on ofy
+
+                         VG            X VG th ear
+
+...   ...     ... ... ... ... ... ... ... ... .........
+
+3526  27-12-  24.4 30.6 26.9 86 0.6 3.3 6 270 2 12 362
+       2024
+
+3527  28-12-  25.2 32 27.1 87  0 3.3 4 90 2 12 363
+       2024
+
+3528  29-12-  23.9 32.6 27.3 86 18.4 2.2 5 240 2 12 364
+       2024
+
+3529  30-12-  24.4 33.2 27.6 84 2.4 6.3 5 230 3 12 365
+       2024
+
+3530  31-12-  25.2 32.4 26.5 88 5.4 6.1 6 250 3 12 366
+       2024
+
+4.2.7 Pemilihan Fitur Penelitian
+         Fitur dalam penelitian ini dapat dilihat pada Tabel sebelumnya yaitu pada
+
+Tabel 4.8, mencakup variabel-variabel iklim harian seperti temperatur minimum
+(TN), temperatur maksimum (TX), temperatur rata-rata (TAVG), kelembapan rata-
+rata (RH_AVG), curah hujan (RR), lamanya penyinaran matahari (SS), kecepatan
+angin maksimum (FF_X), arah angin saat kecepatan maksimum (DDD_X),
+kecepatan angin rata-rata (FF_AVG), serta dua fitur berbasis waktu yaitu bulan
+(month) dan hari ke-berapa dalam setahun (dayofyear). Seluruh fitur ini dipilih
+berdasarkan relevansi logis dan ilmiah terhadap pola curah hujan BMKG, tanpa
+dilakukan analisis korelasi antarvariabel.
+4.2.8 Data Splitting
+
+    Dataset dibagi menjadi dua bagian, yaitu training set dan testing set, dengan
+proporsi 80:20. Dengan menghitung indeks pemisah berdasarkan panjang dataset,
+kemudian memisahkan data menjadi dua bagian: 80% untuk trasining dan 20%
+untuk testing. Setiap subset data kemudian direset indeksnya untuk memastikan
+urutan yang konsisten. Setelah membagi data, ini juga menyimpan kedua subset ke
+dalam file CSV terpisah di lokasi yang telah ditentukan. Hasilnya adalah pembagian
+data yang siap digunakan untuk pelatihan dan pengujian model.
+                                                        44
+
+4.2.9 Penerapan Log Tranform Data RR Curah Hujan
+         Transformasi log diterapkan hanya pada variabel target, yaitu curah hujan
+
+(RR), dan tidak dilakukan pada variabel regresor. Hal ini dilakukan untuk
+mengurangi skala dan fluktuasi besar pada data curah hujan yang memiliki rentang
+nilai yang sangat bervariasi dan fluktuatif. Dengan menggunakan transformasi log,
+model menjadi lebih stabil dalam menangani data yang memiliki perbedaan nilai
+yang besar terutama distribusi nilai 0. Regresor tetap dipertahankan dalam skala
+aslinya, karena variabel-variabel tersebut umumnya sudah berada pada skala yang
+sesuai untuk analisis tanpa perlu adanya perubahan skala. Setelah model
+menghasilkan prediksi dalam skala log, hasilnya dikembalikan ke skala asli dengan
+menggunakan fungsi pembalikan transformasi log, yang memungkinkan untuk
+diinterpretasikan dalam satuan yang sama dengan data curah hujan mm (milimeter)
+yang digunakan. Dokumentasi package orbit menyarankan menggunakan log-
+transorformed pada data target, dijelaskan bahwa biasanya menghasilkan hasil
+yang lebih baik [20]. Berikut output perubahan data skala log tranform pada Tabel
+4.9 sebagai berikut.
+
+                             Tabel 4. 9 Perubahan Data RR ke Log-transformed
+
+      TANGGAL                                 Skala
+                  RR
+
+                                       Log-transformed
+
+0     2015-01-01  3.9   1.589235
+
+1     2015-01-02  20.3  3.058707
+
+2     2015-01-03  1.1   0.741937
+
+3     2015-01-04  4.3   1.667707
+
+....  ....        ....  ....
+
+4.2.10 Handling Missing Values Data RR (Unfilled) DLT Bayesian
+         Penerapan DLT Bayesian Time Series, missing values tanpa diisi (unfilled),
+
+di mana data yang hilang langsung ditangani oleh mekanisme probabilistik DLT
+dengan memanfaatkan parameter MCMC pada proses training data. Berikut nilai
+missing values data RR pada pendekataan unfilled pada Gambar 4.2 sebagai berikut.
+                                                                                                 45
+
+                  Gambar 4. 2 Total Missing Values dan Available data RR (Unfilled)
+
+         Gambar 4.2 Penerapan DLT Bayesian Time Series, missing values tanpa
+diisi (unfilled), pada gambar tersebut, data hilang (missing values) pada curah hujan
+(RR) bernilai dengan total 566 titik data yaitu dalam persen bernilai 16.033994%
+dan data tersedia (available data) pada data curah hujan (RR) bernilai total 2964
+titik data, dalam persen bernilai 83.966006%.
+
+         Fitur atau regressor keseluruhan memiliki nilai hilang (missing values)
+masing masing bernilai dengan total 0 titik data atau 0%, data tersedia dengan total
+3530 titik data, dalam persen bernilai 100%, data terisi penuh karena missing values
+sudah diisi pada proses praprocessing menggunakan interpolasi linear.
+4.2.11 Handling Missing Values Data RR (Filled) DLT Bayesian
+
+         Penerapan DLT Bayesian Time Series, missing values diisi (filled) dengan
+imputasi. Missing values terlebih dahulu diisi pada data preprocessing
+menggunakan interpolasi linear, penggunaan interpolasi linear pada penelitian ini
+berdasarkan panjang missing values berturut turut yang dijelaskan pada bagian
+pemeriksaan panjang missing values hari berturut-turut. Data missing values yang
+telah teriisi semua dilanjutkan untuk digunakan pada training data. Berikut nilai
+missing values data pada pendekatan filled pada Gambar 4.3 sebagai berikut.
+
+                    Gambar 4. 3 Total Missing Values dan Available data RR (Filled)
+                                                                                                 46
+
+         Gambar 4.3 Penerapan DLT Bayesian Time Series, missing values diisi
+(filled), pada gambar tersebut, data hilang (missing values) pada curah hujan (RR)
+maupun variabel lainnya atau fitur (regressor) keseluruhan memiliki nilai hilang
+(missing values) masing masing bernilai dengan total 0 titik data atau 0%, data
+tersedia dengan total 3530 titik data, dalam persen bernilai 100%, seluruh dataset
+terisi penuh karena missing values sudah diisi pada proses praprocessing
+menggunakan interpolasi linear.
+4.3 Implementasi Model Damped Local Trend Bayesian
+
+     Implementasi model pada penelitian ini di mulai setelah pembagian dataset
+menjadi data training dan data testing. Data training digunakan untuk melatih
+model yang kemudian akan di evaluasi menggunakan data testing dan diukur nilai
+evaluation matrix seperti RMSE, MAE. Library yang digunakan dalam melakukan
+implementasi model pada penelitian ini sebagai berikut:
+
+     1. Pandas
+         Pandas adalah library utama yang digunakan dalam penelitian ini untuk
+         mengelola dan memanipulasi data, digunakan untuk membaca dan menulis
+         file CSV dan excel, mengubah tipe data, mengisi nilai yang hilang (NaN),
+         serta membuat kolom baru untuk analisis data lebih lanjut. Pada penelitian
+         ini fungsi Pandas yang digunakan sebagai berikut.
+              a. pd.read_csv(), membaca data dari file CSV untuk diproses lebih
+                  lanjut.
+              b. pd.to_datetime(), mengubah kolom tanggal ke format datetime
+                  yang bisa digunakan untuk analisis lebih lanjut.
+              c. df.replace(), mengganti nilai tertentu dalam DataFrame dengan
+                  nilai NaN untuk menangani data yang tidak valid.
+              d. df.apply(), digunakan untuk menghitung panjang berturut-turut
+                  NaN dalam kolom tertentu.
+              e. df.interpolate(), mengisi nilai NaN dengan interpolasi linear untuk
+                  menghindari kehilangan data dalam analisis.
+
+     2. Numpy
+              Numpy (Numerical Python) adalah library untuk operasi numerik dan
+
+     array multidimensi. Dalam penelitian ini, numpy digunakan untuk melakukan
+                                                                                           47
+
+operasi matematis, seperti log-transform data dan mengelola nilai NaN pada
+dataset. Pada penelitian ini fungsi Numpy yang digunakan sebagai berikut.
+
+        a. np.nan, untuk mengganti nilai yang tidak valid atau hilang dengan
+            NaN dalam dataset.
+
+        b. np.log1p(), fungsi logaritma natural dari 1 + nilai (log(1+x)) untuk
+            mengatasi nilai nol atau data yang sangat kecil, seperti pada variabel
+            'RR' (curah hujan).
+
+        c. np.expm1(), fungsi untuk menghitung hasil dari exp(x) - 1,
+            digunakan untuk mengembalikan data yang telah melalui log-
+            transform.
+
+        d. np.sqrt(), digunakan untuk menghitung Root Mean Squared Error
+            (RMSE), salah satu metrik evaluasi model.
+
+3. Matplotlib
+         Matplotlib adalah library python yang umum digunakan untuk
+
+memberikan visualisasi data agar data tersebut menjadi lebih mudah dipahami.
+Dalam penelitian ini, library ini digunakan untuk plot perbandingan antara data
+aktual dan prediksi pada dataset pelatihan dan pengujian. Pada penelitian ini
+fungsi Matplotlib yang digunakan sebagai berikut.
+
+        a. plt.plot(), untuk membuat grafik garis untuk menampilkan data
+            aktual dan prediksi dari model.
+
+        b. plt.xlabel(), plt.ylabel(), plt.title(), untuk memberikan label pada
+            sumbu x, y, dan judul grafik.
+
+        c. plt.legend(), untuk menambahkan legenda pada grafik untuk
+            membedakan antara data aktual dan data prediksi.
+
+        d. plt.grid(), untuk menambahkan grid pada grafik untuk
+            meningkatkan keterbacaan.
+
+        e. plt.tight_layout(), untuk menyesuaikan layout grafik agar lebih rapih
+            dan tidak terpotong.
+
+4. Orbit
+         Orbit adalah pustaka Python sumber terbuka yang dikembangkan oleh
+
+    Uber untuk pemodelan dan peramalan deret waktu berbasis Bayesian. Pada
+    penelitian ini, Orbit digunakan untuk membangun model forecasting pada
+                                                                                           48
+
+    penelitian ini dengan variabel-variabel yang telah dipilih dan melakukan
+    pembelajaran menggunakan data deret waktu curah hujan. Pada penelitian
+    ini fungsi Orbit yang digunakan sebagai berikut.
+
+         a. DLT(), digunakan untuk membangun model deret waktu dengan
+             menggunakan Damped Local Trend
+
+         b. model.fit(), untuk melatih model menggunakan data pelatihan yang
+             sudah disiapkan.
+
+         c. model.predict(), untuk memprediksi nilai deret waktu berdasarkan
+             data pelatihan atau pengujian.
+
+5. Hyperopt
+    Hyperopt adalah library untuk optimasi hyperparameter dengan
+    menggunakan metode pencarian ruang parameter secara otomatis. Dalam
+    penelitian ini, Hyperopt digunakan untuk menemukan parameter terbaik
+    bagi model DLT dengan menggunakan optimasi berbasis Bayesian. Pada
+    penelitian ini fungsi Hyperopt yang digunakan sebagai berikut.
+         a. fmin(), fungsi utama untuk melakukan optimasi hyperparameter.
+         b. tpe.sugges, algoritma Tree of Parzen Estimators (TPE) yang
+             digunakan untuk menyarankan nilai terbaik dari parameter yang
+             dioptimasi.
+         c. hp.choice() dan hp.uniform(), digunakan untuk menentukan ruang
+             pencarian untuk hyperparameter seperti seasonality,
+             damped_factor, dan lain-lain.
+         d. Trials(), menyimpan riwayat eksperimen selama pencarian
+             hyperparameter.
+
+6. Scikit-Learn
+         Scikit-Learn atau Sklearn adalah library yang umum digunakan untuk
+
+melakukan tugas machine learning dimana library ini menyediakan berbagai
+algoritma dan fungsi yang efisien dan mudah digunakan seperti klasifikasi,
+regresi, pemrosesan data, evaluasi model dan lain-lain. Pada penelitian ini
+digunakan untuk evaluasi model dengan menggunakan metrik seperti RMSE
+dan MAE. Sklearn menyediakan fungsi-fungsi untuk menghitung kesalahan
+prediksi yang membantu dalam mengukur performa model.
+                                                                                                 49
+
+     7. IPython
+              IPython adalah Library yang digunakan untuk menampilkan
+
+     DataFrame atau output lainnya secara lebih interaktif dalam notebook,
+     memudahkan analisis hasil model secara langsung. Pada penelitian ini
+     menggunakan fungsi display(), untuk menampilkan hasil secara langsung
+     dalam bentuk DataFrame di dalam source code.
+     8. Fungsi lainnya pada penelitian
+
+         a. Transformasi log, diterapkan pada data curah hujan (RR) untuk
+              menangani nilai nol atau sangat kecil akibat tidak hujan. Ini membantu
+              membuat distribusi data lebih normal dan mempermudah model dalam
+              memproses data.
+
+         b. Optimization, Optimasi dilakukan menggunakan Bayesian
+              Optimization untuk mencari hyperparameter terbaik, yang bertujuan
+              meningkatkan performa model dengan menemukan kombinasi
+              parameter yang optimal.
+
+4.4 Eksperimen Model
+     Eksperimen model pendekatan missing values unfilled maupun filled
+
+menerapakan parameter dan inisialisasi yang sama, yang membedakan hanya pada
+titik data missing values yang tidak diisi (unfilled) dan diisi (filled) pada data curah
+hujan (RR) dan penggunaan regressor sebagai berikut.
+
+    1. Unfilled missing values without regressor (tanpa fitur)
+    2. Filled missing values without regressor (tanpa fitur)
+    3. Unfilled missing values with regressor (penggunaan fitur)
+    4. Unfilled missing values without regressor (penggunaan fitur)
+4.4.1 Inisialisasi Parameter Model DLT Bayesian
+
+              Tabel 4. 10 Source Code Hyperparameter Bayesian Optimization stan-map
+        # Objective function for Bayesian Optimization
+        def objective(params):
+
+               train_copy = train_data.copy()
+               model = DLT(
+
+                      response_col='value',
+                      date_col='date',
+                      estimator='stan-map',
+                      seasonality=int(params['seasonality']),
+                      damped_factor=params['damped_factor'],
+                                                                                                 50
+
+                      level_sm_input=params['level_sm_input'],
+                      slope_sm_input=params['slope_sm_input'],
+                      seasonality_sm_input=params['seasonality_sm_input'],
+                      global_trend_option=loglinear,
+                      seed=42
+               )
+               model.fit(df=train_copy)
+               pred_df = model.predict(df=train_copy)
+               train_copy['predicted_value'] = pred_df['prediction']
+               train_copy.dropna(inplace=True)
+               rmse = np.sqrt(mean_squared_error(train_copy['value'],
+        train_copy['predicted_value']))
+               return rmse
+
+        space = {
+               'seasonality': hp.choice('seasonality', [7, 14,
+
+        min_seasonality]),
+               'damped_factor': hp.uniform('damped_factor', 0.3, 1.0),
+               'level_sm_input': hp.uniform('level_sm_input', 0.001,
+
+        0.5),
+               'slope_sm_input': hp.uniform('slope_sm_input', 0.001,
+
+        0.5),
+               'seasonality_sm_input':
+
+        hp.uniform('seasonality_sm_input', 0.001, 0.5)
+        }
+        # Run Bayesian Optimization
+        trials = Trials()
+        best_params = fmin(fn=objective, space=space,
+        algo=tpe.suggest, max_evals=50, trials=trials)
+
+         Tabel 4.10 merupakan source code pada tahap inisialisasi parameter model
+
+DLT, ini dilakukan di dua bagian tahap, pertama pada tahap optimisasi
+hyperparameter tuning best parameters (parameter terbaik) menggunakan
+Bayesian Optimization stan-map untuk menentukan inisialisasi awal best
+parameters model DLT, penggunaan parameter model DLT pada source code
+
+menyesuaikan dengan dokumentasi resmi package orbit [18]. Penggunaan stan-
+map untuk penentuan inisialisasi parameter awal membutuhkan kisaran waktu
+
+optimasi hanya 5 menit dapat dilihat pada Gambar 4.4, sedangkan stan-mcmc
+memerlukan sumber daya waktu yang sangat lama hingga berhari-hari hanya pada
+
+penentuan best parameters saja. Oleh karena itu penelitian ini diterapkan
+menggunakan stan-map untuk efesiensi waktu. Output best parameters dapat
+
+dilihat pada Gambar 4.5 . Output best parameters stan-map akan diteruskan pada
+tahap training model menggunakan stan-mcmc.
+                                                                                                 51
+
+           Gambar 4. 4 Proses Bayesian Optimization stan-map inisialisasi best parameters
+
+           Gambar 4. 5 Output Bayesian Optimization stan-map inisialisasi best parameters
+
+         Tahap kedua dilanjutkan dengan proses training model dengan stan-mcmc
+yang memerlukan waktu kurang lebih 4 hingga 5 jam dalam sekali training model,
+waktu lamanya proses iterasi, didasari dari jumlah dari total dataset dan
+kompleksitas parameter DLT yang digunakan. Berikut source code training model
+DLT Bayesian stan-mcmc pada Tabel 4. 11.
+
+                  Tabel 4. 11 Source Code Training Model DLT Bayesian Stan-mcmc
+ # Train model using best parameters with MCMC
+ model = DLT(
+
+        response_col='value',
+        date_col='date',
+        estimator='stan-mcmc',
+        seasonality=int([7,14,
+         min_seasonality][best_params['seasonality']]),
+        damped_factor=best_params['damped_factor'],
+        level_sm_input=best_params['level_sm_input'],
+        slope_sm_input=best_params['slope_sm_input'],
+        seasonality_sm_input=best_params['seasonality_sm_input'],
+        global_trend_option=loglinear,
+        num_warmup=1500,
+        num_sample=3000,
+        seed=42
+ )
+ model.fit(df=train_data)
+                                                                                                 52
+
+         Proses stan-mcmc dalam mengiterasi parameter dan data pada proses
+training model, dapat dilihat pada Gambar 4.6 sebagai berikut.
+
+   Gambar 4. 6 Proses Training model DLT Stan-mcmc Iterasi
+
+         Proses training model pada Gambar 4.6 merupakan proses stan-mcmc
+dalam proses training secara tidak langsung dapat menangani missing values pada
+proses training data target curah hujan RR, namun tidak secara eksplisit
+ditampilkan proses kerjanya dalam penanganan missing values.
+4.4.2 Eksperimen dan Evaluasi Model without Regressor (Unfilled)
+
+                   Tabel 4. 12 Nilai Evaluasi RMSE MAE without Regressor Unfilled
+
+No Eksperimen             RMSE      MAE       RMSE          MAE
+                          Training  Training  Testing       Testing
+
+1  Without Log Transform  17.9724   10.8918   17.0849 10.3229
+
+2  Log Transform          16.4028   7.8612    16.9773 9.0813
+
+                  Z-score 15.7679   8.1255    17.0885       9.4035
+                                    9.5028    17.7003       10.3529
+3  Normalization
+
+                  Min-Max 16.0771
+
+   Tabel 4.12 menampilkan penerapan log transform terbukti memberikan
+
+penurunan nilai loss, baik dari sisi RMSE maupun MAE, dibandingkan dengan
+
+metode tanpa transformasi. Oleh karena itu, pendekatan log transform juga dicoba
+
+diterapkan bersama dengan Normalisasi Min-Max maupun Z-Score untuk melihat
+
+apakah dapat menghasilkan model yang lebih baik. Namun terlihat bahwa
+
+penerapan normalisasi justru membuat nilai loss kembali membesar, terutama pada
+
+data testing. Dengan kata lain, efek positif dari Log Transform tidak dapat
+
+dipertahankan ketika dikombinasikan dengan normalisasi. Oleh sebab itu, untuk
+
+model dengan data unfilled missing values, pendekatan yang paling optimal dan
+
+digunakan selanjutnya adalah log transform tanpa normalisasi, karena
+
+menghasilkan nilai error yang paling kecil dan performa yang paling konsisten.
+
+4.4.3.1 Forecasting dan Actual Testing Terbaik Without Regressor (Unfilled)
+                                                                                           53
+
+      Tabel 4. 13 Forecasting dan Actual Testing RR without Regressor (Unfilled)
+
+      TANGGAL     Actual_RR  Forecasted_RR
+                      3.2        5.658173
+0     2022-12-19      NaN        1.544217
+                      1.5        2.766346
+1     2022-12-21      15.7       0.701344
+                      15.7       1.164369
+2     2022-12-22      0.7       29.272341
+                      7.1       11.701299
+3     2022-12-23      13.7       0.860828
+                      0.9        2.477815
+4     2022-12-24      NaN        1.779440
+                      0.0        4.479042
+5     2022-12-26      0.0       18.420030
+                      5.2        2.113794
+6     2022-12-27      19.0       0.289090
+                      NaN        3.469262
+7     2022-12-28      27.0       7.409266
+                      NaN        3.062002
+8     2022-12-29      NaN        7.261427
+                      0.4        3.386568
+9     2022-12-31      18.5       5.272008
+                      NaN        0.369430
+10    2023-01-01      1.6        0.846020
+                       ....          ....
+11    2023-01-02       ....          ....
+
+12    2023-01-03
+
+13    2023-01-06
+
+14    2023-01-08
+
+15    2023-01-09
+
+16    2023-01-10
+
+17    2023-01-11
+
+18    2023-01-14
+
+19    2023-01-16
+
+20    2023-01-17
+
+21    2023-01-18
+
+....  ....
+
+....  ....
+
+Gambar 4. 7 Plot Forecasting Actual Testing dan Missing Values without Regressor Unfilled
+                                                                                                 54
+
+         Tabel 4.13 menunjukkan adanya nilai NaN (missing values) pada kolom
+"Actual_RR," yang mengindikasikan bahwa data curah hujan aktual tidak tercatat
+pada beberapa tanggal tertentu. Sebagai contoh, pada tanggal 2022-12-21, 2022-
+12-31, 2023-01-08, 2023-01-10, 2023-01-11, dan 2023-01-17, tidak terdapat nilai
+curah hujan yang dapat digunakan sebagai nilai aktual. Namun, nilai-nilai ini telah
+diestimasi dengan model prediksi DLT, memungkinkan pola data tetap dapat
+dianalisis. Nilai prediksi ini ditampilkan pada kolom "Forecasted_RR" untuk setiap
+tanggal, dengan pola fluktuasi nilai yang sesuai dengan tren data yang tersedia.
+
+         Gambar 4.7 memperlihatkan plot atau grafik yang menggambarkan tiga
+elemen utama, yaitu:
+
+    · Curah hujan aktual (titik hitam), titik-titik hitam menunjukkan nilai curah
+         hujan yang tercatat pada tanggal tertentu. Nilainya sangat bervariasi, mulai
+         dari nilai kecil seperti 0.0 (pada 2023-01-01 dan 2023-01-02) hingga nilai
+         tinggi seperti 27.0 (pada 2023-01-09), yang mengindikasikan pola
+         perubahan intensitas hujan dari hari ke hari.
+
+    · Curah hujan yang diprediksi (garis putus-putus hijau), garis putus-putus
+         hijau ini merepresentasikan nilai curah hujan yang diprediksi oleh model.
+         Secara umum pola ini mengikuti pola nilai yang tercatat, tetapi terdapat
+         perbedaan signifikan di beberapa titik. Contohnya, nilai prediksi untuk
+         tanggal 2022-12-26 sangat tinggi (29.27), sementara nilai aktual hanya
+         sebesar 0.7, yang mengindikasikan tingkat kesalahan prediksi yang
+         signifikan.
+
+    · Nilai yang hilang (titik merah), titik merah menandakan tanggal dengan
+         nilai aktual yang hilang (NaN). Nilai-nilai ini telah diisi dengan nilai
+         estimasi dari model prediksi guna memungkinkan analisis pola data yang
+         lebih menyeluruh.
+
+    4.4.3.2 Analisis Performa Model Pendekatan Unfilled without Regressor
+         Analisis dari Tabel 4.13 dan Gambar 4.7, dapat disimpulkan bahwa model
+
+    prediksi dengan pendekatan missing values (unfilled) berhasil memberikan
+    estimasi nilai curah hujan untuk tanggal dengan data yang hilang. Model ini
+    dapat menangkap pola tren dari nilai yang tercatat dengan relatif baik, terutama
+    untuk nilai dengan intensitas rendah (contohnya 2023-01-01 dan 2023-01-02).
+                                                                            55
+
+    Namun, terdapat juga tanggal dengan selisih nilai signifikan, seperti 2022-12-
+    26, di mana nilai prediksi (29.27) jauh lebih tinggi dibanding nilai aktual (0.7),
+    dan 2023-01-09, yang nilai prediksinya (7.41) jauh lebih rendah dibanding nilai
+    aktual (27.0). Secara keseluruhan, model ini dapat digunakan sebagai
+    pendekatan awal untuk menangani nilai yang hilang, tetapi membutuhkan
+    penyesuaian lebih lanjut agar dapat memodelkan nilai dengan pola ekstrem
+    lebih akurat. Dengan kata lain, metode ini dapat memberikan gambaran pola
+    data yang cukup memadai, tetapi belum sepenuhnya dapat diandalkan untuk
+    nilai-nilai dengan variabilitas tinggi.
+4.4.3 Eksperimen dan Evaluasi Model without Regressor (Filled)
+
+                    Tabel 4. 14 Nilai Evaluasi RMSE MAE without Regressor Filled
+
+No Eksperimen                          RMSE      MAE     RMSE      MAE
+                                       Training                    Testing
+                                                 Training Testing
+
+        Handling  Linear               17.4658 10.6810 17.0641 10.2723
+1 Missing         Interpolate          17.8138 10.4503 17.3181 10.4022
+                  MLR
+        Values
+
+2 Without Log Transform                17.4658 10.6810 17.0641 10.2723
+
+3 Log Transform                        16.2495   7.9405  16.4492   8.2579
+                                       16.8492   8.4531  16.5740   7.8277
+                              Min-Max  17.1158   8.3524  16.6230   7.8255
+4 Normalization
+
+                              Z-Score
+
+         Tabel 4.14 menampilkan penerapan log transform memberikan penurunan
+nilai loss, baik dari sisi RMSE maupun MAE, dibandingkan dengan metode tanpa
+
+transformasi. Oleh karena itu, pendekatan log transform juga dicoba diterapkan
+bersama dengan Normalisasi Min-Max maupun Z-Score untuk melihat apakah
+
+dapat menghasilkan model yang lebih baik. Namun terlihat bahwa penerapan
+normalisasi justru membuat nilai loss kembali membesar, terutama pada data
+
+testing. Dengan kata lain, efek positif dari log transform tidak dapat dipertahankan
+ketika dikombinasikan dengan normalisasi. Oleh sebab itu, untuk model dengan
+data filled missing values, pendekatan yang paling optimal dan digunakan
+selanjutnya adalah log transform tanpa normalisasi, karena menghasilkan nilai error
+yang paling kecil dan performa yang paling konsisten.
+
+4.4.3.1 Forecasting dan Actual Testing Terbaik Without Regressor (Filled)
+
+Tabel 4. 15 Forecasting dan Actual Testing RR without Regressor (Filled)
+      TANGGAL     Actual_RR                   56
+                      3.2
+0     2022-12-19      2.4    Forecasted_RR
+                      1.5        3.113726
+1     2022-12-21      15.7       3.235141
+                      15.7       2.148120
+2     2022-12-22      0.7        1.439804
+                      7.1        2.524767
+3     2022-12-23      13.7      17.148873
+                      0.9        7.963799
+4     2022-12-24      0.4        0.722308
+                      0.0        3.006918
+5     2022-12-26      0.0        3.658364
+                      5.2        3.754099
+6     2022-12-27      19.0       7.937715
+                      23.0       1.143217
+7     2022-12-28      27.0       0.802369
+                      18.1       2.717320
+8     2022-12-29      9.3        3.040640
+                      0.4        1.959808
+9     2022-12-31                 3.685302
+                      18.5       2.341436
+10    2023-01-01      10.0
+                      1.6        1.293972
+11    2023-01-02       ....      0.263097
+                       ....      0.573790
+12    2023-01-03
+                                     ....
+13    2023-01-06                     ....
+
+14    2023-01-08
+
+15    2023-01-09
+
+16    2023-01-10
+
+17    2023-01-11
+
+18    2023-01-14
+
+19    2023-01-16
+
+20    2023-01-17
+
+21    2023-01-18
+
+....  ....
+
+....  ....
+
+     Gambar 4. 8 Plot Forecasting Actual Testing dan Missing Values without Regressor Filled
+
+         Tabel 4.15 menunjukkan nilai curah hujan aktual (Actual_RR) dan nilai
+yang diprediksi (Forecasted_RR) untuk periode 2022-12-19 hingga 2023-01-18.
+                                                                                                 57
+
+Berbeda dengan pendekatan unfilled, data yang digunakan dalam metode filled ini
+telah melalui proses imputasi nilai hilang sebelum digunakan sebagai input model.
+Dengan kata lain, nilai-nilai yang semula hilang dari data awal telah diisi terlebih
+dahulu, sehingga tidak terdapat nilai NaN maupun titik merah (missing values)
+yang terlihat pada grafik maupun tabel. Pada tabel terlihat bahwa nilai prediksi
+(Forecasted_RR) relatif lebih halus dan stabil dibandingkan nilai aktual
+(Actual_RR). Beberapa contoh nilai dapat dicermati: 2022-12-24: nilai aktual
+sebesar 15,7 mm, sedangkan nilai prediksi berada di angka 2,52 mm, yang
+mengindikasikan bahwa model belum sepenuhnya menangkap pola nilai tinggi.
+2023-01-09: nilai aktual berada di angka 27,0 mm, tetapi nilai prediksi hanya
+sebesar 3,04 mm, yang juga mengindikasikan kesenjangan signifikan. 2022-12-19:
+nilai aktual 3,2 mm dan nilai prediksi 3,11 mm, yang menunjukkan tingkat
+kedekatan yang cukup baik.
+
+         Gambar 4.8 memperlihatkan plot atau grafik yang menggambarkan tiga
+elemen utama, yaitu:
+
+    · Curah hujan aktual (titik hitam), nilai yang tercatat dari pengukuran
+         langsung. Nilai-nilai ini menunjukkan pola fluktuasi dengan beberapa nilai
+         yang sangat tinggi (contohnya 27,0 mm pada 2023-01-09) dan nilai sangat
+         rendah hingga nol (contohnya 2023-01-01 dan 2023-01-02).
+
+    · Curah hujan yang diprediksi (garis putus-putus hijau), nilai dari model
+         forecasting, yang mengikuti pola tren umum tetapi belum sepenuhnya dapat
+         menangkap nilai ekstrem yang tercatat.
+
+    · Nilai yang hilang (titik merah), nilai-nilai yang semula hilang (NaN) dan
+         telah diisi dengan nilai estimasi dari model. Hal ini memungkinkan model
+         dapat digunakan bahkan ketika data awal tidak lengkap.
+
+    4.4.3.2 Analisis Performa Model Pendekatan Filled without Regressor
+         Analisis dari Tabel 4.15 dan Gambar 4.8 memperlihatkan bahwa model
+
+    dapat memprediksi pola tren curah hujan dengan relatif baik untuk nilai-nilai
+    kecil hingga sedang, tetapi belum dapat sepenuhnya menangkap pola nilai
+    ekstrem yang sangat tinggi (contohnya nilai 27,0 mm pada 2023-01-09). Hal ini
+    dapat disebabkan oleh pola nilai ekstrem yang sulit dijadikan acuan dari nilai-
+    nilai yang diisi (interpolate linear). Namun, dengan tidak adanya nilai yang
+                                         58
+
+    hilang (NaN), model dapat memanfaatkan seluruh data untuk membuat
+    prediksi, memungkinkan pola tren dapat tetap terlihat dengan baik dari awal
+    hingga akhir periode. Secara keseluruhan, metode filled ini memberikan model
+    dataset yang lengkap dan memungkinkan evaluasi pola dari waktu ke waktu,
+    tetapi tetap memerlukan peningkatan metode atau algoritma agar nilai-nilai
+    ekstrem dapat diprediksi dengan lebih baik.
+4.4.4 Eksperimen Model with Regressor
+
+         Hasil eksperimen sebelumnya metode log transform dapat menghasilkan
+nilai loss yang lebih baik, maka pada tahap eksperimen dengan penerapan fitur atau
+regressor, metode log transform langsung digunakan sebagai langkah awal
+transformasi data. selain itu, dari pengujian model dlt tanpa fitur regressor juga
+terlihat bahwa penerapan normalisasi tidak memberikan perbaikan signifikan,
+bahkan dapat membuat nilai error kembali membesar. atas pertimbangan tersebut,
+maka dalam eksperimen dengan penerapan regressor, data tidak dikenakan
+normalisasi, melainkan hanya diterapkan log transform guna memaksimalkan
+kinerja model dan menjaga nilai error yang lebih rendah. sementara itu, untuk
+penanganan nilai hilang (missing values) dengan skema filled missing values,
+metode interpolasi linear digunakan secara langsung. keputusan ini didasarkan
+pada hasil eksperimen awal (tanpa fitur) yang menunjukkan bahwa metode
+interpolasi linear memberikan nilai loss paling kecil dibandingkan dengan metode
+lainnya.
+4.4.4.1 Forecasting dan Actual Testing Terbaik With Regressor (Unfilled)
+
+               Tabel 4. 16 Forecasting dan Actual Testing RR with Regressor (Unfilled)
+
+   TANGGAL     Actual_RR  Forecasted_RR
+                   3.2        1.601465
+0  2022-12-19      NaN        0.984706
+                   1.5        2.213175
+1  2022-12-21      15.7       5.892712
+                   15.7       3.009227
+2  2022-12-22      0.7       12.583320
+                   7.1        8.461765
+3  2022-12-23      13.7       1.646016
+                   0.9        3.022493
+4  2022-12-24      NaN        2.639500
+
+5  2022-12-26
+
+6  2022-12-27
+
+7  2022-12-28
+
+8  2022-12-29
+
+9  2022-12-31
+      TANGGAL     Actual_RR                   59
+                      0.0
+10    2023-01-01      0.0    Forecasted_RR
+                      5.2        0.810026
+11    2023-01-02      19.0       8.591029
+                      NaN        1.835387
+12    2023-01-03      27.0       1.503550
+                      NaN        1.092610
+13    2023-01-06      NaN        7.893398
+                                 2.908125
+14    2023-01-08      0.4       10.236135
+                                 4.340008
+15    2023-01-09      18.5      12.367170
+                      NaN        4.496070
+16    2023-01-10      1.6        4.045145
+                       ....          ....
+17    2023-01-11       ....          ....
+
+18    2023-01-14
+
+19    2023-01-16
+
+20    2023-01-17
+
+21    2023-01-18
+
+....  ....
+
+....  ....
+
+     Gambar 4. 9 Plot Forecasting Actual Testing dan Missing Values with Regressor Unfilled
+
+         Tabel 4.16 menunjukkan adanya nilai NaN (missing values) pada kolom
+"Actual_RR," yang mengindikasikan bahwa data curah hujan aktual tidak tercatat
+pada beberapa tanggal tertentu. Sebagai contoh, pada tanggal 2022-12-21, 2022-
+12-31, 2023-01-08, 2023-01-10, 2023-01-11, dan 2023-01-17, tidak tercatat nilai
+curah hujan yang aktual. Namun, nilai NaN ini telah ditangani dengan estimasi
+menggunakan model Bayesian MCMC (Markov Chain Monte Carlo), yang
+bertujuan menggantikan data yang hilang dengan prediksi berdasarkan pola data
+lainnya. Di sisi lain, data curah hujan yang diprediksi (Forecasted_RR) tersedia
+untuk setiap tanggal dan menunjukkan fluktuasi meskipun konsisten pada
+                                                                                                 60
+
+umumnya. Perbedaan antara nilai curah hujan aktual dan yang diprediksi
+memberikan gambaran mengenai akurasi model prediksi yang digunakan.
+
+         Gambar 4.9 memperlihatkan plot atau grafik yang menggambarkan tiga
+elemen utama, yaitu:
+
+    · Curah hujan aktual (titik hitam), titik-titik hitam menunjukkan nilai curah
+         hujan yang tercatat pada setiap tanggal. Variasi nilai curah hujan yang
+         tercatat cukup besar, dengan beberapa nilai yang sangat tinggi (misalnya
+         pada 2023-01-09) dan beberapa nilai yang sangat rendah (seperti pada 2023-
+         01-01 dan 2023-01-02).
+
+    · Curah hujan yang diprediksi (garis putus-putus hijau), garis putus-putus
+         hijau menggambarkan nilai curah hujan yang diprediksi oleh model.
+         Meskipun mengikuti tren umum, ada perbedaan yang jelas antara nilai yang
+         diprediksi dan yang tercatat. Sebagai contoh, pada tanggal 2023-01-09,
+         prediksi curah hujan jauh lebih rendah dibandingkan dengan nilai yang
+         tercatat.
+
+    · Nilai yang hilang (titik merah), titik merah menunjukkan tanggal di mana
+         data curah hujan aktual hilang (NaN). Nilai-nilai ini telah diisi dengan
+         estimasi berdasarkan model Bayesian MCMC, yang menggantikan data
+         yang hilang dengan prediksi berbasis pola yang ada dalam data lainnya.
+
+    4.4.4.2 Analisis Performa Model Pendekatan Unfilled with Regressor
+         Analisis dari Tabel 4.16 dan grafik pada Gambar 4.9, dapat disimpulkan
+
+    bahwa model prediksi curah hujan menunjukkan beberapa ketidakakuratan
+    dalam memprediksi curah hujan yang tercatat, terutama pada tanggal-tanggal
+    tertentu. Beberapa tanggal menunjukkan perbedaan yang signifikan antara nilai
+    prediksi dan nilai aktual, seperti pada 2023-01-09, yang menunjukkan adanya
+    kekurangan dalam akurasi model. Namun, terdapat juga tanggal-tanggal di
+    mana prediksi cukup mendekati nilai yang tercatat, seperti pada 2023-01-01,
+    yang menunjukkan bahwa model ini dapat memberikan hasil yang cukup baik
+    dalam kondisi tertentu. Secara keseluruhan, meskipun model prediksi
+    memberikan hasil yang cukup memadai pada beberapa tanggal, ada ruang untuk
+    perbaikan lebih lanjut.
+                                                                                       61
+
+4.4.4.3 Forecasting dan Actual Testing Terbaik With Regressor (Fillled)
+
+                Tabel 4. 17 Forecasting dan Actual Testing RR with Regressor (Filled)
+
+      TANGGAL     Actual_RR  Forecasted_RR
+                      3.2        1.346210
+0     2022-12-19      2.4        2.573326
+                      1.5        1.715529
+1     2022-12-21      15.7       6.046692
+                      15.7       4.105866
+2     2022-12-22      0.7       11.107903
+                      7.1        6.726626
+3     2022-12-23      13.7       1.057290
+                      0.9        3.673848
+4     2022-12-24      0.4        2.557710
+                      0.0        1.477978
+5     2022-12-26      0.0        9.078614
+                      5.2        1.309412
+6     2022-12-27      19.0       2.764185
+                      23.0       3.910666
+7     2022-12-28      27.0       4.793771
+                      18.1       2.884688
+8     2022-12-29      9.3        7.067586
+
+9     2022-12-31      0.4        5.225444
+
+10    2023-01-01      18.5       4.893665
+                      10.0       3.473010
+11    2023-01-02      1.6        2.595275
+                       ....
+12    2023-01-03       ....          ....
+                                     ....
+13    2023-01-06
+
+14    2023-01-08
+
+15    2023-01-09
+
+16    2023-01-10
+
+17    2023-01-11
+
+18    2023-01-14
+
+19    2023-01-16
+
+20    2023-01-17
+
+21    2023-01-18
+
+....  ....
+
+....  ....
+
+      Gambar 4. 10 Plot Forecasting Actual Testing dan Missing Values with Regressor Filled
+                                                                                                 62
+
+         Tabel 4. 17 dapat dilihat performa model prediksi curah hujan dengan
+membandingkan curah hujan aktual (Actual_RR), terlihat bahwa nilai curah hujan
+yang diprediksi menunjukkan fluktuasi yang lebih stabil dibandingkan dengan data
+curah hujan aktual. Pada beberapa tanggal, perbedaan antara nilai aktual dan yang
+diprediksi sangat signifikan, seperti pada tanggal 2022-12-23 dan 2023-01-09, di
+mana curah hujan aktual jauh lebih tinggi daripada yang diprediksi. Sebaliknya,
+pada tanggal 2023-01-01, 2023-01-02, dan beberapa tanggal lainnya, curah hujan
+yang diprediksi lebih tinggi daripada yang tercatat.
+
+         Gambar 4.10 Plot atau grafik memiliki tiga elemen yang digambarkan yaitu
+sebagai berikut:
+
+    · Curah hujan aktual (titik hitam), data curah hujan aktual menunjukkan
+         fluktuasi yang lebih tajam, dengan beberapa nilai yang sangat tinggi seperti
+         pada 2023-01-09 dan 2023-01-06. Tanggal lainnya menunjukkan nilai yang
+         lebih rendah atau hampir nol, seperti pada 2023-01-01.
+
+    · Curah hujan yang diprediksi (garis putus-putus hijau), garis hijau
+         menunjukkan tren prediksi curah hujan yang relatif lebih stabil dan
+         cenderung meramalkan curah hujan yang lebih rendah pada sebagian besar
+         tanggal. Misalnya, pada 2023-01-09, prediksi curah hujan jauh lebih rendah
+         daripada nilai aktual.
+
+    · Nilai yang hilang (titik merah), titik merah menunjukkan tanggal di mana
+         data curah hujan aktual hilang (NaN). Hal ini menunjukkan bahwa ada
+         kekurangan data pada tanggal-tanggal tersebut, yang telah diatasi dengan
+         model estimasi atau imputasi interpolasi linier sebelumnya.
+
+    4.4.4.4 Analisis Performa Model Pendekatan Filled with Regressor
+         Analisis pada Tabel 4.17 dan Gambar 4.10 model prediksi menunjukkan
+
+    beberapa perbedaan yang signifikan dengan data aktual, di mana perbedaan
+    antara nilai prediksi dan nilai aktual sangat besar. Ini menunjukkan bahwa
+    model ini mungkin tidak sepenuhnya akurat dalam meramalkan fluktuasi curah
+    hujan yang lebih ekstrem. Konsistensi prediksi meskipun terdapat
+    ketidaktepatan pada beberapa tanggal, model ini berhasil menjaga konsistensi
+    dengan memprediksi curah hujan secara lebih stabil. Namun missing values data
+    yang hilang pada beberapa tanggal sudah diestimasi, namun model prediksi juga
+                                                                  63
+
+    belum mampu memberikan prediksi lebih baik untuk mendapatkan hasil yang
+    lebih akurat.
+4.4.5 Evaluasi dan Hasil Model RMSE MAE DLT Bayesian
+
+                   Tabel 4. 18 Nilai Evaluasi Model RMSE dan MAE DLT Bayesian
+
+             Pendekatan      RMSE     RMSE       MAE      MAE
+                            Training  Testing  Training  Testing
+          Unfilled without
+1                           16.4028   16.9773   7.8612   9.0813
+
+               regressor    16.2495   16.4492  7.9405    8.2579
+
+            Filled without  17.0929   16.3105  8.4906    7.8979
+2
+                            16.3840   17.0598  8.2376    8.0224
+               regressor
+
+            Unfilled with
+3
+
+               regressor
+
+                 Filled
+4
+
+            with regressor
+
+         Hasil evaluasi nilai RMSE dan MAE Tabel 4.18 dari keempat pendekatan
+yang diuji, dapat disimpulkan bahwa metode unfilled with regressor menghasilkan
+performa prediksi yang paling baik dibandingkan metode lainnya. Hal ini terlihat
+dari nilai RMSE Testing sebesar 16.3105 dan MAE Testing sebesar 7.8979, yang
+merupakan nilai error paling rendah di antara seluruh skenario yang diuji.
+Sementara itu, metode unfilled without regressor dan filled without regressor
+menghasilkan nilai error yang relatif lebih tinggi, dengan MAE Testing masing-
+masing sebesar 9.0813 dan 8.2579, mengindikasikan bahwa model kurang dapat
+menangkap pola perubahan nilai curah hujan dengan baik ketika regressor tidak
+digunakan. Penggunaan regressor juga terbukti memberikan efek positif bagi
+model, bahkan ketika nilai hilang tidak diisi (unfilled), di mana nilai error dapat
+ditekan secara signifikan dibandingkan metode lainnya. Adapun metode filled with
+regressor juga menunjukkan nilai error yang cukup rendah, tetapi belum dapat
+mengungguli metode unfilled with regressor. Secara keseluruhan, dapat
+disimpulkan bahwa pendekatan dengan memanfaatkan regressor dan membiarkan
+nilai target yang hilang tidak diisi (unfilled with regressor) memberikan
+                                                                                                 64
+
+kemampuan prediksi yang paling andal dan direkomendasikan untuk digunakan
+dalam studi selanjutnya.
+4.5 Implementasi System Prediction Curah Hujan (Rainfall)
+
+                                   Gambar 4. 11 Sistem Prediction Rainfall
+
+         Rainfall Prediction System digunakan untuk memprediksi curah hujan
+berdasarkan data cuaca harian yang diunggah pengguna dalam format CSV. Untuk
+menggunakan aplikasi ini, pengguna perlu menyiapkan file CSV yang berisi kolom-
+kolom seperti tanggal, suhu (TN, TX, TAVG), kelembapan (RH_AVG), curah
+hujan (RR), penyinaran (SS), serta data angin (FF_X, DDD_X, FF_AVG). File
+diunggah melalui sidebar sebelah kiri pada bagian "Input Data". Setelah file
+berhasil diunggah, aplikasi akan menampilkan cuplikan data dan otomatis
+menjalankan proses prediksi menggunakan model statistik berbasis Bayesian Time
+Series. Hasil prediksi ditampilkan dalam bentuk tabel dan grafik perbandingan
+antara curah hujan aktual dan hasil prediksi. Pengguna juga dapat mengunduh hasil
+prediksi dalam format CSV dengan satu klik. Jika terjadi kesalahan seperti struktur
+data tidak sesuai, aplikasi akan memberikan pesan error agar pengguna bisa
+memperbaikinya. Aplikasi ini dirancang agar mudah digunakan oleh siapa saja
+tanpa perlu latar belakang teknis.
+                                             BAB V
+                              KESIMPULAN DAN SARAN
+5.1 Kesimpulan
+         Berdasarkan eksperimen model penelitian ini dapat disimpulkan
+    1. Penelitian ini, metode DLT Bayesian Time Series digunakan untuk
+         forecasting curah hujan menunjukkan bahwa metode unfilled dengan
+         regressor menghasilkan nilai error paling rendah, dengan RMSE Testing
+         16.3105 dan MAE Testing 7.8979, model lainnya yaitu unfilled tanpa
+         regressor (RMSE Testing 16.9773, MAE Testing 9.0813), filled tanpa
+         regressor (RMSE Testing 16.4492, MAE Testing 8.2579), dan filled dengan
+         regressor (RMSE Testing 17.0598, MAE Testing 8.0224).
+    2. Perbedaan nilai evaluasi metode dengan regressor, nilai RMSE testing
+         unfilled sebesar 16.3105 dan MAE testing 7.8979, lebih rendah
+         dibandingkan metode filled dengan regressor yang menghasilkan RMSE
+         testing 17.0598 dan MAE testing 8.0224. Sebaliknya, pada metode tanpa
+         regressor, nilai RMSE testing unfilled sebesar 16.9773 dan MAE testing
+         9.0813, lebih tinggi dibandingkan metode filled tanpa regressor dengan
+         RMSE testing 16.4492 dan MAE testing 8.2579. Hal ini menunjukkan
+         bahwa untuk metode dengan regressor, pendekatan unfilled memberikan
+         error testing yang lebih kecil, sedangkan untuk metode tanpa regressor,
+         pendekatan filled menghasilkan error testing yang lebih rendah.
+
+5.2 Saran
+    1. Penelitian menggunakan data dari beberapa stasiun untuk hasil yang lebih
+         representatif.
+    2. Peneliti dapat mengeksplorasi imputasi pada variabel regresor untuk
+         melihat dampaknya.
+    3. Peneliti dapat membandingkan DLT dengan metode lain untuk evaluasi
+         yang lebih baik.
+    4. Evaluasi model dapat ditambah dengan metrik lain agar analisis lebih
+         lengkap.
+
+                                                65
+                              DAFTAR PUSTAKA
+[1] D. R. N. MP, Pengantar nutrisi tanaman. UnisriPress, 2021.
+[2] T. Purba dkk., Tanah dan nutrisi tanaman. Yayasan Kita Menulis, 2021.
+[3] L. R. E. Malau, K. R. Rambe, N. A. Ulya, dan A. G. Purba, "Dampak
+
+        perubahan iklim terhadap produksi tanaman pangan di indonesia,"
+        Jurnal Penelitian Pertanian Terapan, vol. 23, no. 1, hlm. 34­46, 2023.
+[4] M. A. Saleh, H. M. Rasel, dan B. Ray, "A comprehensive review
+        towards resilient rainfall forecasting models using artificial intelligence
+        techniques," Green Technologies and Sustainability, hlm. 100104,
+        2024.
+[5] C. D. Usman, A. P. Widodo, K. Adi, dan R. Gernowo, "Rainfall
+        prediction model in Semarang City using machine learning," Indonesian
+        Journal of Electrical Engineering and Computer Science, vol. 30, no. 2,
+        hlm. 1224­1231, 2023.
+[6] T. T. Tin, E. H. C. Sheng, L. S. Xian, L. P. Yee, dan Y. S. Kit, "Machine
+        learning classification of rainfall forecasts using Austin weather data,"
+        International Journal of Innovative Research and Scientific Studies, vol.
+        7, no. 2, hlm. 727­741, 2024.
+[7] A. A. Alsumaiei, "Long-term Rainfall Forecasting in Arid Climates
+        Using Artificial Intelligence and Statistical Recurrent Models," Journal
+        of Engineering Research, 2024.
+[8] S. D. Latif, D. O. Mohammed, dan A. Jaafar, "Developing an innovative
+        machine learning model for rainfall prediction in a semi-arid region,"
+        Journal of Hydroinformatics, vol. 26, no. 4, hlm. 904­914, 2024.
+[9] C. M. Liyew dan H. A. Melese, "Machine learning techniques to predict
+        daily rainfall amount," J Big Data, vol. 8, hlm. 1­11, 2021.
+[10] V. Kumar, N. Kedam, K. V. Sharma, K. M. Khedher, dan A. E.
+        Alluqmani, "A comparison of machine learning models for predicting
+        rainfall in urban metropolitan cities," Sustainability, vol. 15, no. 18, hlm.
+        13724, 2023.
+
+                                           66
+                                                               67
+
+[11] S. Raniprima, N. Cahyadi, dan V. Monita, "Rainfall Prediction Using
+
+Random Forest and Decision Tree Algorithms," Journal of Informatics
+and Communication Technology (JICT), vol. 6, no. 1, hlm. 110­119,
+
+2024.
+
+[12] G. T. Harilal, A. Dixit, dan G. Quattrone, "Establishing hybrid deep
+
+learning models for regional daily rainfall time series forecasting in the
+United Kingdom," Eng Appl Artif Intell, vol. 133, hlm. 108581, 2024.
+
+[13] J. Nithyashri, R. K. Poluru, S. Balakrishnan, M. A. Kumar, P. Prabu, dan
+
+S. Nandhini, "IOT based prediction of rainfall forecast in coastal regions
+using deep reinforcement model," Measurement: Sensors, vol. 29, hlm.
+
+100877, 2023.
+
+[14] C. Fagandini, V. Todaro, M. G. Tanda, J. L. Pereira, L. Azevedo, dan A.
+        Zanini, "Missing rainfall daily data: a comparison among gap-filling
+
+approaches," Math Geosci, vol. 56, no. 2, hlm. 191­217, 2024.
+
+[15] "Data Online - Direktorat Data dan Komputasi BMKG." Diakses: 22
+
+Desember       2024.  [Daring].                 Tersedia       pada:
+
+https://dataonline.bmkg.go.id/dataonline-home
+
+[16] T. Hirca dan G. Eryilmaz Türkkan, "Assessment of different methods
+
+for estimation of missing rainfall data," Water Resources Management,
+hlm. 1­28, 2024.
+
+[17] A. Wangwongchai, M. Waqas, P. Dechpichai, P. T. Hlaing, S. Ahmad,
+
+dan U. W. Humphries, "Imputation of missing daily rainfall data; A
+comparison between artificial intelligence and statistical techniques,"
+
+MethodsX, vol. 11, hlm. 102459, 2023.
+
+[18] "Damped Local Trend (DLT) -- orbit 1.1.4.9 documentation." Diakses:
+
+27 Juni 2025. [Daring]. Tersedia pada: https://orbit-
+
+ml.readthedocs.io/en/stable/tutorials/dlt.html
+
+[19] E. Ng, Z. Wang, H. Chen, S. Yang, dan S. Smyl, "Orbit: probabilistic
+
+forecast with exponential  smoothing,"          arXiv          preprint
+arXiv:2004.08492, 2020.
+                                                                                           68
+
+[20] "Damped Local Trend (DLT) -- orbit 1.1.4.9 documentation." Diakses:
+        6 Mei 2025. [Daring]. Tersedia pada: https://orbit-
+        ml.readthedocs.io/en/stable/tutorials/dlt.html
+
+[21] M. Mamenun, H. Pawitan, dan A. Sopaheluwakan, "Validasi dan
+        koreksi data satelit trmm pada tiga pola hujan di indonesia," Jurnal
+        Meteorologi dan Geofisika, vol. 15, no. 1, 2014.
+
+[22] E. L. Ramadhani dan I. Setiawan, "Analisis Dampak Banjir Terhadap
+        Ketahanan Pangan di Kalimantan Selatan," Jurnal Teknologi
+        Berkelanjutan, vol. 11, no. 02, hlm. 76­82, 2022.
+
+[23] "Evaluation Metrics for Time Series Forecasting - ML Pills." Diakses:
+        22 Desember 2024. [Daring]. Tersedia pada:
+        https://mlpills.dev/cheatsheets/evaluation-metrics-for-time-series-
+        forecasting/?utm_source=chatgpt.com
+
+[24] "Evaluating Regression Models: A Comprehensive Guide to RMSE |
+        33rd Square." Diakses: 25 Mei 2025. [Daring]. Tersedia pada:
+        https://33rdsquare.com/tech/ai/evaluation-metric-for-regression-
+        models/#google_vignette
+
+[25] O. A. Wani dkk., "Predicting rainfall using machine learning, deep
+        learning, and time series models across an altitudinal gradient in the
+        North-Western Himalayas," Sci Rep, vol. 14, no. 1, hlm. 27876, 2024.
+
+[26] N. A. Jamal, N. Mohamed Noor, I. A. M. Jafri, dan G. J. Wibowo,
+        "Assessment of Moving Average (MA) Method for Rainfall Prediction
+        in Yogyakarta, Indonesia," Environmental and Earth Sciences
+        Proceedings, vol. 33, no. 1, hlm. 5, 2025.
+
+[27] B. S. Wiwoho, I. S. Astuti, I. A. G. Alfarizi, dan H. R. Sucahyo,
+        "Validation of three daily satellite rainfall products in a humid tropic
+        watershed, Brantas, Indonesia: implications to land characteristics and
+        hydrological modelling," Hydrology, vol. 8, no. 4, hlm. 154, 2021.
+
+[28] L. V. Duarte, K. T. M. Formiga, dan V. A. F. Costa, "Comparison of
+        methods for filling daily and monthly rainfall missing data: statistical
+        models or imputation of satellite retrievals?," Water (Basel), vol. 14, no.
+        19, hlm. 3144, 2022.
+                                                           69
+
+[29] "Probabilistik Curah Hujan 20 mm (tiap 24 jam) | BMKG." Diakses: 25
+
+November      2024.  [Daring].       Tersedia              pada:
+
+https://www.bmkg.go.id/cuaca/probabilistik-curah-
+
+hujan.bmkg?utm_source=chatgpt.com
+
+[30] "Mengenal Fungsi Ombrometer dalam Pengukuran Curah Hujan."
+
+Diakses: 25 November 2024. [Daring]. Tersedia pada:
+https://www.sentrakalibrasiindustri.com/mengenal-fungsi-ombrometer-
+
+dalam-pengukuran-curah-hujan/?utm_source=chatgpt.com
+
+[31] W. Agwil, D. Agustina, H. Fransiska, dan I. Abdurrohim Hasani,
+        "Meningkatkan Kinerja Model Klasifikasi Curah Hujan Melalui
+
+Penanggulangan Missing Value Dengan Imputasi Berbasis Model,"
+Innovative: Journal Of Social Science Research, vol. 4, hlm. 11773­
+
+11783, 2024.
+
+[32] "Time Series Forecasting: Definition & Examples | Tableau." Diakses:
+        25 November 2024. [Daring]. Tersedia pada:
+
+https://www.tableau.com/analytics/time-series-forecasting
+
+[33] W. Li dan K. L. E. Law, "Deep Learning Models for Time Series
+
+Forecasting: A Review," 2024, Institute of Electrical and Electronics
+Engineers Inc. doi: 10.1109/ACCESS.2024.3422528.
+
+[34] F. Petropoulos dan E. Spiliotis, "The Wisdom of the Data: Getting the
+
+Most Out of Univariate Time Series Forecasting," 1 September 2021,
+
+MDPI. doi: 10.3390/forecast3030029.
+
+[35] J. D. Borrero dan J. Mariscal, "Elevating Univariate Time Series
+
+Forecasting: Innovative SVR-Empowered Nonlinear Autoregressive
+Neural Networks," Algorithms, vol. 16, no. 9, Sep 2023, doi:
+
+10.3390/a16090423.
+
+[36] E. E. Etu dkk., "A Comparison of Univariate and Multivariate
+
+Forecasting Models Predicting Emergency Department Patient Arrivals
+
+during the COVID-19 Pandemic," Healthcare (Switzerland), vol. 10,
+
+no. 6, Jun 2022, doi: 10.3390/healthcare10061120.
+
+[37] J. Terven, D. M. Cordova-Esparza, J. A. Romero-González, A. Ramírez-
+        Pedraza, dan E. A. Chávez-Urbiola, "A comprehensive survey of loss
+                                                                                           70
+
+        functions and metrics in deep learning," Artif Intell Rev, vol. 58, no. 7,
+        Jul 2025, doi: 10.1007/s10462-025-11198-7.
+[38] T. O. Hodson, "Root mean square error (RMSE) or mean absolute error
+        (MAE): When to use them or not," Geoscientific Model Development
+        Discussions, vol. 2022, hlm. 1­10, 2022.
+[39] D. Christie dan S. P. Neill, "Measuring and observing the ocean
+        renewable energy resource," Comprehensive renewable energy, vol. 8,
+        hlm. 149­175, 2022.
+[40] V. R. Joseph, "Optimal ratio for data splitting," Statistical Analysis and
+        Data Mining: The ASA Data Science Journal, vol. 15, no. 4, hlm. 531­
+        538, 2022.
+[41] V. Oliveira Santos, P. A. Costa Rocha, J. Scott, J. V. G. Thé, dan B.
+        Gharabaghi, "A new graph-based deep learning model to predict
+        flooding with validation on a case study on the humber river," Water
+        (Basel), vol. 15, no. 10, hlm. 1827, 2023.
+[42] A. Y. Barrera-Animas, L. O. Oyedele, M. Bilal, T. D. Akinosho, J. M.
+        D. Delgado, dan L. A. Akanbi, "Rainfall prediction: A comparative
+        analysis of modern machine learning algorithms for time-series
+        forecasting," Machine Learning with Applications, vol. 7, hlm. 100204,
+        Mar 2022, doi: 10.1016/j.mlwa.2021.100204.
+[43] F. Oriani, S. Stisen, M. C. Demirel, dan G. Mariethoz, "Missing data
+        imputation for multisite rainfall networks: a comparison between
+        geostatistical interpolation and pattern-based estimation on different
+        terrain types," J Hydrometeorol, vol. 21, no. 10, hlm. 2325­2341, 2020.
+[44] A. Flores, H. Tito-Chura, O. Cuentas-Toledo, V. Yana-Mamani, dan D.
+        Centty-Villafuerte, "PM2. 5 Time Series Imputation with Moving
+        Averages, Smoothing, and Linear Interpolation," Computers, vol. 13,
+        no. 12, hlm. 312, 2024.
+                                                                                                 71
+Lampiran 1. Lembar Konsultasi
+                                                                                                 72
+Lampiran 2. Website Dokumentasi Metode DLT Bayesian Time Series
+
+Lampiran 3. Dataset Iklim BMKG Excel
+
+Lampiran 4. Source Code Model DLT Terbaik
+       import pandas as pd
+       # Baca file Excel
+       excel_path = r'D:\python\multivariate\rr_raw_data.xlsx'
+       df = pd.read_excel(excel_path)
+       # Simpan sebagai CSV
+       csv_path = r'D:\python\multivariate\rr.csv'
+       df.to_csv(csv_path, index=False)
+       print(f"File berhasil disimpan sebagai: {csv_path}")
+                                                                                          73
+
+#run 1 kali aja
+
+import pandas as pd
+
+# Baca file CSV
+csv_path = r'D:\python\multivariate\rr.csv'
+df = pd.read_csv(csv_path)
+
+# Jika kolom TANGGAL sudah dalam format yang benar,
+lanjutkan ke format baru
+df['TANGGAL'] = pd.to_datetime(df['TANGGAL'],
+errors='coerce', dayfirst=True)
+
+# Ubah format TANGGAL menjadi TAHUN/BULAN/HARI
+(yyyy/mm/dd)
+df['TANGGAL'] = df['TANGGAL'].dt.strftime('%Y/%m/%d')
+
+# Simpan kembali ke file CSV
+df.to_csv(csv_path, index=False)
+
+print("Format kolom TANGGAL telah berhasil diubah
+menjadi yyyy/mm/dd dan disimpan ke file.")
+
+# running 2 kali
+
+import pandas as pd
+import numpy as np
+
+# Baca file CSV
+csv_path = r'D:\python\multivariate\rr.csv'
+df = pd.read_csv(csv_path)
+
+# Ganti nilai 8888, 9999, dan '-' dengan NaN di seluruh
+DataFrame
+df.replace([8888, 9999, '-'], np.nan, inplace=True)
+
+# Simpan hasil ke file CSV
+df.to_csv(csv_path, index=False)
+
+print("Nilai 8888, 9999, dan '-' telah diganti dengan
+NaN di seluruh kolom.")
+
+import pandas as pd
+
+# Baca file CSV
+csv_path = r'D:\python\multivariate\rr.csv'
+                                                                                          74
+
+df = pd.read_csv(csv_path)
+
+# Ubah kolom numerik sesuai dengan tipe data yang
+sesuai
+df['TN'] = pd.to_numeric(df['TN'], errors='coerce') #
+Temperatur minimum (float)
+df['TX'] = pd.to_numeric(df['TX'], errors='coerce') #
+Temperatur maksimum (float)
+df['TAVG'] = pd.to_numeric(df['TAVG'],
+errors='coerce') # Temperatur rata-rata (float)
+df['RH_AVG'] = pd.to_numeric(df['RH_AVG'],
+errors='coerce') # Kelembapan rata-rata (float)
+df['RR'] = pd.to_numeric(df['RR'], errors='coerce') #
+Curah hujan (float)
+df['SS'] = pd.to_numeric(df['SS'], errors='coerce') #
+Lamanya penyinaran matahari (float)
+df['FF_X'] = pd.to_numeric(df['FF_X'],
+errors='coerce') # Kecepatan angin maksimum (float)
+df['DDD_X'] = pd.to_numeric(df['DDD_X'],
+errors='coerce') # Arah angin saat kecepatan maksimum
+(int)
+df['FF_AVG'] = pd.to_numeric(df['FF_AVG'],
+errors='coerce') # Kecepatan angin rata-rata (float)
+
+# Kolom DDD_CAR tetap sebagai kategori
+df['DDD_CAR'] = df['DDD_CAR'].astype('category') #
+Arah angin terbanyak (kategori)
+
+# Simpan ke file CSV
+df.to_csv(csv_path, index=False)
+
+print("Tipe data kolom telah diubah dan disesuaikan.")
+
+import pandas as pd
+
+# Baca file CSV dengan memastikan 'TANGGAL' menjadi
+datetime dan 'DDD_CAR_label' menjadi kategori
+csv_path = r'D:\python\multivariate\rr.csv'
+
+df = pd.read_csv(csv_path, parse_dates=['TANGGAL'])
+
+print(df.dtypes)
+import pandas as pd
+
+# Hitung total missing values per kolom
+total_missing = df.isna().sum()
+                                                                                          75
+
+# Hitung persentase missing values per kolom
+percent_missing = (df.isna().sum() / len(df)) * 100
+
+# Gabungkan total dan persentase missing values
+missing_values = pd.DataFrame({
+
+       'Total Missing': total_missing,
+       'Percent Missing': percent_missing
+})
+
+# Tampilkan hasil
+print(missing_values)
+
+import pandas as pd
+
+# Fungsi untuk menghitung NaN berurutan terpanjang
+def max_consecutive_nans(series):
+
+       return
+series.isna().astype(int).groupby(series.notna().astype
+(int).cumsum()).sum().max()
+
+# Hitung panjang berturut-turut NaN paling panjang
+untuk setiap kolom
+max_nans = df.apply(max_consecutive_nans)
+
+# Tampilkan hasil
+print("Panjang berturut-turut NaN terpanjang (dalam
+hari) pada tiap kolom:")
+print(max_nans)
+
+import pandas as pd
+
+# Daftar kolom yang mengandung NaN
+kolom_nan = ['TN', 'TX', 'TAVG', 'RH_AVG', 'SS']
+
+# Lakukan interpolasi linear hanya pada kolom yang
+mengandung NaN
+df[kolom_nan] =
+df[kolom_nan].interpolate(method='linear')
+
+# Bulatkan hasil interpolasi ke 1 angka di belakang
+koma
+df[kolom_nan] = df[kolom_nan].round(1)
+
+# Simpan kembali file
+df.to_csv("D:/python/multivariate/rr.csv", index=False)
+                                                                                          76
+
+import pandas as pd
+
+# Membaca dataset
+data = pd.read_csv("D:/python/multivariate/rr.csv")
+
+# Mengonversi kolom TANGGAL menjadi tipe datetime
+data['TANGGAL'] = pd.to_datetime(data['TANGGAL'])
+
+# Menambahkan kolom 'month' dan 'dayofyear'
+data['month'] = data['TANGGAL'].dt.month
+data['dayofyear'] = data['TANGGAL'].dt.dayofyear
+
+# Menyimpan dataset yang telah ditambahkan fitur ke
+file CSV baru
+data.to_csv("D:/python/multivariate/rr_with_features.cs
+v", index=False)
+
+# Menampilkan hasil
+print(data.head())
+
+import pandas as pd
+
+# Hitung total missing values per kolom
+total_missing = df.isna().sum()
+
+# Hitung persentase missing values per kolom
+percent_missing = (df.isna().sum() / len(df)) * 100
+
+# Gabungkan total dan persentase missing values
+missing_values = pd.DataFrame({
+
+       'Total Missing': total_missing,
+       'Percent Missing': percent_missing
+})
+
+# Tampilkan hasil
+print(missing_values)
+
+import pandas as pd
+
+# Baca data
+df =
+pd.read_csv(r'D:\python\multivariate\rr_with_features.c
+sv')
+
+# Hitung indeks pemisah 80:20
+split_index = int(len(df) * 0.8)
+                                                                                          77
+
+# Split data
+train_df = df.iloc[:split_index].reset_index(drop=True)
+test_df = df.iloc[split_index:].reset_index(drop=True)
+
+# Cek hasil
+print("Jumlah data total :", len(df))
+print("Training set :", len(train_df), "baris")
+print("Testing set :", len(test_df), "baris")
+
+# (Opsional) Simpan hasil split
+train_df.to_csv(r'D:\python\multivariate\train_rr_unfil
+l.csv', index=False)
+test_df.to_csv(r'D:\python\multivariate\test_rr_unfill.
+csv', index=False)
+
+print("Data berhasil displit dan disimpan.")
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error,
+mean_absolute_error
+import numpy as np
+from orbit.models import DLT
+from hyperopt import fmin, tpe, hp, Trials
+from IPython.display import display
+
+# Load training dataset
+train_file_path =
+r'D:\python\multivariate\train_rr_unfill.csv'
+df_train = pd.read_csv(train_file_path)
+df_train['TANGGAL'] =
+pd.to_datetime(df_train['TANGGAL'])
+train_data = df_train.rename(columns={'TANGGAL':
+'date', 'RR': 'value'})
+
+# Load testing dataset
+test_file_path =
+r'D:\python\multivariate\test_rr_unfill.csv'
+df_test = pd.read_csv(test_file_path)
+df_test['TANGGAL'] = pd.to_datetime(df_test['TANGGAL'])
+test_data = df_test.rename(columns={'TANGGAL': 'date',
+'RR': 'value'})
+
+# Tambahkan fitur waktu
+for df in [train_data, test_data]:
+
+       df['month'] = df['date'].dt.month
+                                                                                          78
+
+       df['dayofyear'] = df['date'].dt.dayofyear
+
+# Urutkan dan hapus tanggal duplikat
+train_data =
+train_data.sort_values('date').drop_duplicates(subset='
+date')
+test_data =
+test_data.sort_values('date').drop_duplicates(subset='d
+ate')
+
+# Log-transform target
+train_data['value'] = np.log1p(train_data['value'])
+test_data['value'] = np.log1p(test_data['value'])
+
+# Regressors
+regressors = ['TN', 'TX', 'TAVG', 'RH_AVG', 'SS',
+'FF_X','DDD_X','FF_AVG','month', 'dayofyear']
+
+# Validasi kolom regressor
+for col in regressors:
+
+       for df in [train_data, test_data]:
+              if col not in df.columns:
+                     raise ValueError(f"Missing regressor
+
+column: {col}")
+              if df[col].isnull().any():
+                     raise ValueError(f"Missing values found in
+
+regressor column: {col}")
+
+min_seasonality = min(len(train_data), 30)
+
+# Objective function for Bayesian Optimization
+def objective(params):
+
+       train_copy = train_data.copy()
+       model = DLT(
+
+              response_col='value',
+              date_col='date',
+              estimator='stan-map',
+              seasonality=int(params['seasonality']),
+              damped_factor=params['damped_factor'],
+              level_sm_input=params['level_sm_input'],
+              slope_sm_input=params['slope_sm_input'],
+              seasonality_sm_input=params['seasonality_sm_inp
+ut'],
+              global_trend_option='logistic',
+              regressor_col=regressors,
+              seed=42
+       )
+                                                                                          79
+
+       model.fit(df=train_copy)
+       pred_df = model.predict(df=train_copy)
+       train_copy['predicted_value'] =
+pred_df['prediction']
+       train_copy.dropna(inplace=True)
+       rmse =
+np.sqrt(mean_squared_error(train_copy['value'],
+train_copy['predicted_value']))
+       return rmse
+
+# Search space
+space = {
+
+       'seasonality': hp.choice('seasonality', [7, 14,
+min_seasonality]),
+
+       'damped_factor': hp.uniform('damped_factor', 0.3,
+1.0),
+
+       'level_sm_input': hp.uniform('level_sm_input',
+0.001, 0.5),
+
+       'slope_sm_input': hp.uniform('slope_sm_input',
+0.001, 0.5),
+
+       'seasonality_sm_input':
+hp.uniform('seasonality_sm_input', 0.001, 0.5)
+}
+
+# Run Bayesian Optimization
+trials = Trials()
+best_params = fmin(fn=objective, space=space,
+algo=tpe.suggest, max_evals=50, trials=trials)
+
+# Train model using best parameters with MCMC
+model = DLT(
+
+       response_col='value',
+       date_col='date',
+       estimator='stan-mcmc',
+       seasonality=int([7, 14,
+min_seasonality][best_params['seasonality']]),
+       damped_factor=best_params['damped_factor'],
+       level_sm_input=best_params['level_sm_input'],
+       slope_sm_input=best_params['slope_sm_input'],
+       seasonality_sm_input=best_params['seasonality_sm_in
+put'],
+       global_trend_option='logistic',
+       regressor_col=regressors,
+       num_warmup=1500,
+       num_sample=3000,
+       seed=42
+)
+                                                                                          80
+
+model.fit(df=train_data)
+
+# Perform predictions
+train_predicted_df = model.predict(df=train_data)
+test_predicted_df = model.predict(df=test_data)
+
+# Convert back from log scale
+train_data['predicted_value'] =
+np.expm1(train_predicted_df['prediction'])
+test_data['predicted_value'] =
+np.expm1(test_predicted_df['prediction'])
+train_data['value'] = np.expm1(train_data['value'])
+test_data['value'] = np.expm1(test_data['value'])
+
+# Drop NaNs for evaluation
+train_eval = train_data.dropna(subset=['value',
+'predicted_value'])
+test_eval = test_data.dropna(subset=['value',
+'predicted_value'])
+
+# Evaluation metrics
+rmse_train =
+np.sqrt(mean_squared_error(train_eval['value'],
+train_eval['predicted_value']))
+mae_train = mean_absolute_error(train_eval['value'],
+train_eval['predicted_value'])
+rmse_test =
+np.sqrt(mean_squared_error(test_eval['value'],
+test_eval['predicted_value']))
+mae_test = mean_absolute_error(test_eval['value'],
+test_eval['predicted_value'])
+
+# Display evaluation results
+print(f"\nBest Parameters: {best_params}")
+print(f"RMSE Training: {rmse_train:.4f}, MAE Training:
+{mae_train:.4f}")
+print(f"RMSE Testing: {rmse_test:.4f}, MAE Testing:
+{mae_test:.4f}")
+
+# Create DataFrame for test: actual vs predicted
+test_result_df = test_eval[['date', 'value',
+'predicted_value']].copy()
+test_result_df.rename(columns={'value': 'Actual_RR',
+'predicted_value': 'Predicted_RR'}, inplace=True)
+
+# Display sample of test result
+print("\nSample Forecasting Results on Test Data:")
+display(test_result_df.head())
+                                                                                                 81
+
+       # Plot actual vs predicted
+       plt.figure(figsize=(12, 6))
+       plt.plot(train_eval['date'], train_eval['value'],
+       label='Train Actual', linestyle='dashed', marker='o',
+       alpha=0.6)
+       plt.plot(train_eval['date'],
+       train_eval['predicted_value'], label='Train Predicted',
+       marker='x', alpha=0.8)
+       plt.plot(test_eval['date'], test_eval['value'],
+       label='Test Actual', linestyle='dashed', marker='o',
+       alpha=0.6)
+       plt.plot(test_eval['date'],
+       test_eval['predicted_value'], label='Test Predicted',
+       marker='x', alpha=0.8)
+
+       plt.xlabel('Date')
+       plt.ylabel('Rainfall (RR)')
+       plt.title('Actual vs Predicted Rainfall (Train &
+       Test)')
+       plt.xticks(rotation=45)
+       plt.legend()
+       plt.grid(True)
+       plt.tight_layout()
+       plt.show()
+
+Lampiran 5. Soure Code Sistem Prediction curah hujan (Rainfall)
+       import streamlit as st
+       import pandas as pd
+       import numpy as np
+       import joblib
+       import plotly.express as px
+       from datetime import datetime
+       import warnings
+
+       warnings.filterwarnings("ignore")
+
+       st.set_page_config(
+              page_title="Rainfall Prediction App",
+              page_icon=" ",
+              layout="wide",
+              initial_sidebar_state="expanded",
+
+       )
+
+       st.title(" Rainfall Prediction System")
+       st.markdown("---")
+
+       @st.cache_resource
+       def load_model():
+
+              try:
+                                                                                          82
+
+              return
+joblib.load(r"D:\python\multivariate\my_strealit_app\mo
+del\unfilled_dlt_model.pkl")
+
+       except Exception as e:
+              st.error(f" Gagal memuat model: {str(e)}")
+              return None
+
+def preprocess_data(df):
+       df = df.copy()
+       df.replace([8888, 9999, "-"], np.nan, inplace=True)
+       numeric_cols = ["TN", "TX", "TAVG", "RH_AVG", "RR",
+
+"SS", "FF_X", "DDD_X", "FF_AVG"]
+       for col in numeric_cols:
+              if col in df:
+                     df[col] = pd.to_numeric(df[col],
+
+errors="coerce")
+       if "TANGGAL" in df:
+              df["TANGGAL"] = pd.to_datetime(df["TANGGAL"],
+
+errors="coerce")
+              df = df.dropna(subset=["TANGGAL"])
+              df["month"] = df["TANGGAL"].dt.month
+              df["dayofyear"] = df["TANGGAL"].dt.dayofyear
+
+       return df
+
+st.sidebar.header(" Input Data")
+uploaded_file = st.sidebar.file_uploader(
+
+       "Upload CSV: TANGGAL, TN, TX, TAVG, RH_AVG, SS,
+FF_X, DDD_X, FF_AVG", type=["csv"]
+)
+
+if uploaded_file:
+       try:
+              df_raw = pd.read_csv(uploaded_file)
+              st.subheader(" Data yang Diupload")
+              st.dataframe(df_raw.head())
+
+              df_processed = preprocess_data(df_raw)
+              df_processed =
+df_processed.sort_values("TANGGAL").drop_duplicates("TA
+NGGAL")
+
+              # Rename kolom 'TANGGAL' menjadi 'date' untuk
+keperluan model
+
+              df_pred =
+df_processed.rename(columns={"TANGGAL": "date"})
+
+              st.write(
+                     f"Data untuk prediksi: kolom 'date' masih
+
+ada? {'date' in df_pred.columns}"
+              )
+
+              model = load_model()
+              if model:
+                                                                                          83
+
+                     try:
+                             preds = model.predict(df=df_pred)
+                             df_pred["Predicted_RR"] = np.expm1(
+                                    preds["prediction"]
+                             ) # hasil inverse log1p
+
+                             st.success(" Prediksi berhasil!")
+
+                             # Gabungkan hasil aktual dan prediksi
+                             display_df = df_pred[["date", "RR",
+"Predicted_RR"]].copy()
+                             display_df["date"] =
+display_df["date"].dt.strftime("%Y-%m-%d")
+                             display_df["RR"] =
+display_df["RR"].round(2)
+                             display_df["Predicted_RR"] =
+display_df["Predicted_RR"].round(2)
+                             st.dataframe(display_df,
+use_container_width=True)
+
+                             # Tombol download
+                             csv_data =
+display_df.to_csv(index=False).encode("utf-8")
+                             st.download_button(
+
+                                    " Download Hasil",
+                                    data=csv_data,
+                                    file_name=f"rainfall_{datetime.now(
+):%Y%m%d_%H%M%S}.csv",
+                                    mime="text/csv",
+                             )
+
+                             # Plot prediksi dan aktual
+                             fig = px.line(
+
+                                    display_df.melt(id_vars="date",
+value_vars=["RR", "Predicted_RR"]),
+
+                                    x="date",
+                                    y="value",
+                                    color="variable",
+                                    title="Perbandingan Curah Hujan
+Aktual vs Prediksi",
+                                    labels={
+
+                                           "value": "Curah Hujan (mm)",
+                                           "date": "Tanggal",
+                                           "variable": "Jenis",
+                                    },
+                             )
+                             fig.update_layout(xaxis_title="Tanggal"
+, yaxis_title="Curah Hujan (mm)")
+                             st.plotly_chart(fig,
+use_container_width=True)
+
+                     except Exception as e:
+                             st.error(f" Error prediksi: {e}")
+                                                                                          84
+
+       except Exception as e:
+              st.error(f" Gagal baca CSV: {e}")
+
+st.markdown("---")
+st.markdown(
+
+       "<div style='text-align:center'> Rainfall
+Forecasting System | Streamlit & Orbit</div>",
+
+       unsafe_allow_html=True,
+)
+

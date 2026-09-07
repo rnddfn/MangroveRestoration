@@ -1,7 +1,7 @@
 import time
 import numpy as np
 from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import BaseCallback
+from stable_baselines3.common.callbacks import BaseCallback, CallbackList
 from stable_baselines3.common.vec_env import DummyVecEnv
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.wrappers import ActionMasker
@@ -49,6 +49,46 @@ class ProgressLatih(BaseCallback):
         return True
 
 
+class SimpanIICterbaik(BaseCallback):
+    def __init__(self, env_kw, model_path, eval_every=10_000):
+        super().__init__()
+        self.env_kw = dict(env_kw or {})
+        self.model_path = Path(model_path)
+        self.eval_every = int(eval_every)
+        self.berikutnya = self.eval_every
+        self.iic_terbaik = -np.inf
+
+    def _evaluasi(self):
+        env = RestorasiEnv(pakai_penalti=False, reward_scale=1.0, **self.env_kw)
+        obs, info = env.reset(seed=10_000)
+        selesai = False
+        while not selesai:
+            action = self.model.predict(
+                obs,
+                deterministic=True,
+                action_masks=env.mask_aksi(),
+            )[0]
+            obs, _, term, trunc, info = env.step(action)
+            selesai = term or trunc
+        return float(info["iic"])
+
+    def _on_step(self):
+        if self.num_timesteps < self.berikutnya:
+            return True
+        iic = self._evaluasi()
+        if iic > self.iic_terbaik:
+            self.iic_terbaik = iic
+            self.model_path.parent.mkdir(parents=True, exist_ok=True)
+            self.model.save(self.model_path)
+        print(
+            f"\n[eval] step={self.num_timesteps}  iic={iic:.8f}  "
+            f"best={self.iic_terbaik:.8f}"
+        )
+        while self.berikutnya <= self.num_timesteps:
+            self.berikutnya += self.eval_every
+        return True
+
+
 def _factory(jenis, env_kw, reward_scale):
     def buat():
         kw = dict(env_kw or {})
@@ -68,6 +108,9 @@ def latih(
     reward_scale=REWARD_SCALE,
     model_path=None,
     run_name=None,
+    algo_kw=None,
+    select_best=False,
+    eval_every=10_000,
 ):
     steps = TIMESTEPS if timesteps is None else timesteps
     Algo, nama = (PPO, "PPO") if jenis == "ppo" else (MaskablePPO, "MaskablePPO")
@@ -75,27 +118,38 @@ def latih(
     log_dir = Path(__file__).resolve().parents[1] / "outputs" / "tb"
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    model = Algo(
-        "MlpPolicy",
-        vec,
-        seed=seed,
-        verbose=0,
-        n_steps=256,
-        gamma=GAMMA,
-        ent_coef=ENT_COEF,
-        policy_kwargs=dict(net_arch=NET_ARCH),
-        tensorboard_log=str(log_dir),
-    )
+    model_kw = {
+        "seed": seed,
+        "verbose": 0,
+        "n_steps": 256,
+        "gamma": GAMMA,
+        "ent_coef": ENT_COEF,
+        "policy_kwargs": dict(net_arch=NET_ARCH),
+        "tensorboard_log": str(log_dir),
+    }
+    model_kw.update(algo_kw or {})
+    model = Algo("MlpPolicy", vec, **model_kw)
     t0 = time.time()
+    progress = ProgressLatih(steps, f"{nama} seed={seed}")
+    pilih_terbaik = bool(select_best and jenis == "mask" and model_path is not None)
+    if pilih_terbaik:
+        callback = CallbackList(
+            [progress, SimpanIICterbaik(env_kw, model_path, eval_every)]
+        )
+    else:
+        callback = progress
     model.learn(
         total_timesteps=steps,
-        callback=ProgressLatih(steps, f"{nama} seed={seed}"),
+        callback=callback,
         tb_log_name=run_name or f"{nama}_seed{seed}",
     )
     print()
     if model_path is not None:
         model_path = Path(model_path)
         model_path.parent.mkdir(parents=True, exist_ok=True)
-        model.save(model_path)
+        if pilih_terbaik and model_path.with_suffix(".zip").exists():
+            model = Algo.load(model_path, env=vec)
+        else:
+            model.save(model_path)
         print(f"Model tersimpan: {model_path}")
     return model, time.time() - t0

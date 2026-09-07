@@ -52,6 +52,38 @@ MANGROVE_CODES = [5, 76]
 RESTORABLE_CODES = [13, 21]
 LOCKED_CODES = [31, 40, 33, 0]
 
+SKENARIO_LAHAN = {
+    "utama": {
+        "restorable_codes": [13, 21],
+        "biaya_tambahan": {},
+    },
+    "s2": {
+        "restorable_codes": [13, 21, 31, 40],
+        "biaya_tambahan": {31: 3, 40: 3},
+    },
+}
+
+PRESET_RL = {
+    "default": {
+        "env": {},
+        "algo": {},
+    },
+    "s2-tuned": {
+        "env": {"reward_per_biaya": True},
+        "select_best": True,
+        "eval_every": 10_000,
+        "algo": {
+            "learning_rate": 1e-4,
+            "n_steps": 512,
+            "batch_size": 128,
+            "n_epochs": 5,
+            "gae_lambda": 1.0,
+            "ent_coef": 0.003,
+            "target_kl": 0.02,
+        },
+    },
+}
+
 # Kelas biaya restorasi
 KODE_MURAH = 13
 KODE_MAHAL = 21
